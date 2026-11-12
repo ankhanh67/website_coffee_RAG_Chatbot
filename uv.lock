@@ -1375,6 +1375,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
+    { name = "httpx2" },
     { name = "neo4j" },
     { name = "openai" },
     { name = "pandas" },
@@ -1397,6 +1398,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.110" },
+    { name = "httpx2", specifier = ">=2.0" },
     { name = "neo4j", specifier = ">=5.20" },
     { name = "openai", specifier = ">=1.30" },
     { name = "pandas", specifier = ">=2.2" },

@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     # LLM API
     llm_api_key: SecretStr
     llm_base_url: str = "https://openrouter.ai/api/v1"
-    llm_router_model: str = "google/gemini-2.5-flash"
+    llm_decisions_url: str = "https://openrouter.ai/api/alpha/decisions"
+    llm_router_model: str = "~typesafe/jev-latest"  # Jev (System One) via OpenRouter Decisions API
     llm_generator_model: str = "google/gemini-2.5-flash"
     embedding_model: str = "gemini-embedding-001"
     vector_dimensions: int = Field(768, gt=0)
@@ -29,6 +30,7 @@ class Settings(BaseSettings):
     llm_timeout_seconds: float = Field(30.0, gt=0)
     llm_max_retries: int = Field(2, ge=0)
     cache_similarity_threshold: float = Field(0.90, ge=0.0, le=1.0)
+    router_confidence_threshold: float = Field(0.5, ge=0.0, le=1.0)
 
 
 @lru_cache

@@ -9,6 +9,7 @@ dependencies = [
     "pydantic>=2.6",
     "pydantic-settings>=2.2",
     "openai>=1.30",
+    "httpx2>=2.0",
     "neo4j>=5.20",
     "redis>=5.0",
     "pandas>=2.2",
@@ -35,6 +36,7 @@ include = ["src*"]
 testpaths = ["tests"]
 pythonpath = ["."]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff]
 line-length = 100

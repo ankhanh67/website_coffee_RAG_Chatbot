@@ -45,7 +45,7 @@ Client (Web UI)
   -> API (FastAPI)
   -> ChatService
   -> Semantic Cache (Redis / Vector lookup)
-  -> Router (LLM API + Structured Output)
+  -> Router (Jev System One qua OpenRouter Decisions API, typed `choice`)
   -> OrderAgent | ConsultantAgent | FAQAgent | Ignore
   -> Business Service / Graph RAG (Neo4j Aura)
   -> Generator LLM API
@@ -96,7 +96,8 @@ API
 
 ### 2.3 Ranh giới sử dụng LLM (LLM Boundary)
 
-- **Dùng LLM API cho:** Phân loại luồng (Router), trích xuất thông tin đặt hàng/ý định (Extraction), trích xuất thực thể tài liệu (Entity Extraction), viết lời tư vấn và sinh câu trả lời tự nhiên.
+- **Dùng Jev (TypeSafe System One, qua OpenRouter `POST /api/alpha/decisions`, cùng API key) cho:** Phân loại luồng (Router) bằng câu hỏi `choice`. Jev trả về lựa chọn + xác suất + `confidence`, rẻ và nhanh hơn LLM. Nếu Jev lỗi/timeout hoặc `confidence < ROUTER_CONFIDENCE_THRESHOLD` thì fallback về `ignore`.
+- **Dùng LLM API (OpenRouter) cho:** Trích xuất thông tin đặt hàng/ý định (Extraction), trích xuất thực thể tài liệu (Entity Extraction), viết lời tư vấn và sinh câu trả lời tự nhiên.
 - **Dùng Code tất định (Deterministic Code) cho:** Tính tổng tiền đơn hàng, áp mã giảm giá, lọc giá tiền $\le$ ngân sách, kiểm tra timeout, retry, ngưỡng tương đồng cache (similarity threshold) và chuyển trạng thái.
 - **Bắt buộc:** Mọi đầu ra có cấu trúc từ LLM đều phải được parse và xác thực qua Pydantic Schema trước khi đưa vào logic nghiệp vụ.
 
@@ -331,7 +332,7 @@ Hãy thực hiện tuần tự từng Phase. Trên Antigravity IDE, bạn có th
 ---
 
 ### Phase 1: Hợp đồng dữ liệu (Schemas) & API Router
-**Mục tiêu:** Nhận 1 câu chat bất kỳ và phân loại chính xác vào 4 luồng (`order`, `consultant`, `faq`, `ignore`) qua LLM API.
+**Mục tiêu:** Nhận 1 câu chat bất kỳ và phân loại chính xác vào 4 luồng (`order`, `consultant`, `faq`, `ignore`) qua Jev (OpenRouter Decisions API).
 **Thứ tự tạo file:**
 1. `src/schema/__init__.py`, `src/schema/common.py`, `src/schema/router.py`, `src/schema/chat.py`
 2. `src/prompt/__init__.py`, `src/prompt/router.py`
@@ -492,8 +493,8 @@ Ngay sau khi lát cắt này chạy thông suốt, chuyển sang **Phase 3** đ�
 ## 7. Checklist theo dõi tiến độ (Phase Tracking Checklist)
 
 ```text
-[ ] Phase 0: Khởi tạo Repository & Lọc dữ liệu từ fi_ai_mas_llm_dataset
-[ ] Phase 1: Core Schemas & API-based Router (Structured Output)
+[x] Phase 0: Khởi tạo Repository & Lọc dữ liệu từ fi_ai_mas_llm_dataset
+[x] Phase 1: Core Schemas & Jev Router (OpenRouter Decisions API) — baseline 87.8% trên router_test.json
 [ ] Phase 2: Minimal API & Orchestrator Vertical Slice
 [ ] Phase 3: Kết nối Neo4j Aura & Nạp dữ liệu Menu (menu.csv)
 [ ] Phase 4: Hoàn thiện Order Agent (Logic tính tiền tất định + Tra cứu Neo4j)
