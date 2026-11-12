@@ -12,3 +12,4 @@ class ConsultantFilter(BaseModel):
     vegan_only: bool = False
     exclude_allergens: list[str] = Field(default_factory=list)
     taste_preferences: list[str] = Field(default_factory=list)
+

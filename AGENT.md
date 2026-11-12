@@ -48,11 +48,10 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Độ chính xác baseline: **87.8% (351/400)** (`ignore`: 95%, `consultant`: 90%, `order`: 84%, `faq`: 82%).
     - Latency: p50 = `0.80s`, p95 = `0.97s`. Tổng chi phí 400 câu: `$0.00931`.
     - Điểm có thể cải thiện sau: các câu hỏi phương thức thanh toán kèm tính tiền (*"Thanh toán bằng QR được không em, tính tiền giúp cô"*) đang bị Jev phân vào `faq` thay vì `order`.
-- **[~] Phase 2 — Luồng API & Orchestrator tối thiểu (Vertical Slice đầu tiên):**
-  - **[x] Feature 2.1 — Subagents Base, Domain Schemas & DeepAgent Orchestrator:**
-    - `src/schema/order.py` (tiền VNĐ bắt buộc kiểu `int`), `src/schema/consultant.py`, `src/schema/faq.py`.
-    - `src/subagents/base.py` (`BaseSubAgent`, `StubSubAgent`).
-    - `src/agent/subagent_registry.py` (`SubAgentRegistry`), `src/agent/deep_agent.py` (`DeepAgent`).
-    - `tests/unit/agent/test_deep_agent.py` (24/24 unit tests pass).
-  - **[ ] Feature 2.2 — ChatService & FastAPI `/api/v1/chat` endpoint + DI:** Đang chuẩn bị thực hiện.
+- **[x] Phase 2 — Luồng API & Orchestrator tối thiểu (Vertical Slice đầu tiên):**
+  - **[x] Feature 2.1 — Subagents Base, Domain Schemas & DeepAgent Orchestrator** (Commit `9284a55`).
+  - **[x] Feature 2.2 — ChatService & FastAPI `/api/v1/chat` endpoint + DI:**
+    - `src/services/chat_service.py`, `src/api/dependencies.py`, `src/api/routes/chat.py`, cập nhật `src/main.py` (lifespan đóng `ModelClient` an toàn).
+    - `tests/unit/api/test_chat_route.py` (kiểm thử toàn luồng HTTP `/api/v1/chat` và `/health/live` qua `httpx2.ASGITransport`).
+- **[ ] Phase 3 — Kết nối Neo4j Aura & Nạp dữ liệu Menu (`menu.csv`):** Bước tiếp theo (cần user điền `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD` thật vào `.env`).
 

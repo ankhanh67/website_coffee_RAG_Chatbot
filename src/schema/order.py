@@ -39,3 +39,4 @@ class OrderCalculation(BaseModel):
     discount_vnd: int = Field(default=0, ge=0)
     total_vnd: int = Field(default=0, ge=0)
     unmatched_items: list[str] = Field(default_factory=list)
+

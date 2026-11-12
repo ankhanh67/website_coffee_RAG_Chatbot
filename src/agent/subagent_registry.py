@@ -30,3 +30,4 @@ class SubAgentRegistry:
         for action, reply in DEFAULT_STUB_REPLIES.items():
             registry.register(StubSubAgent(action=action, reply_template=reply))
         return registry
+

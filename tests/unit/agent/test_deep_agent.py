@@ -53,3 +53,4 @@ def test_menu_match_line_total_uses_exact_int_math():
     item = MenuMatch(item_id="M001", name_vi="Phin Sữa Đá", size="M", unit_price_vnd=39000, quantity=3)
     assert item.line_total_vnd == 117000
     assert isinstance(item.line_total_vnd, int)
+

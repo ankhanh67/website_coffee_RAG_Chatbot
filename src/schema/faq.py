@@ -13,3 +13,4 @@ class FAQAnswer(BaseModel):
     answer: str
     is_grounded: bool
     grounded_sources: list[SourceReference] = Field(default_factory=list)
+

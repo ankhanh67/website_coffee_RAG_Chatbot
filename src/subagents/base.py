@@ -22,3 +22,4 @@ class StubSubAgent(BaseSubAgent):
 
     async def handle(self, message: str, session_id: str) -> str:
         return self._reply_template
+
