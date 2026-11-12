@@ -5,7 +5,7 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
 ---
 
 ## 1. Quy tắc làm việc bắt buộc (Workflow Rules)
-1. **Commit theo từng feature / bugfix nhỏ:** Không đợi hết cả Phase mới commit. Mỗi khi thêm một feature nhỏ hoặc sửa lỗi xong và pass test là tạo commit ngay.
+1. **Commit theo từng feature / bugfix nhỏ:** Không đợi hết cả Phase mới commit. Mỗi khi thêm một feature nhỏ hoặc sửa lỗi xong và pass test là tạo commit ngay. Commit message chỉ viết **1 dòng ngắn gọn, cô đọng nhất có thể**.
 2. **Báo nội dung commit trước khi `git push`:** Luôn hiển thị rõ commit message (và danh sách file chính) cho user xem trước khi đẩy lên `origin/main`.
 3. **Cập nhật `AGENT.md`:** Sau mỗi phần hoàn thành hoặc khi có quyết định/lưu ý mới, cập nhật ngay vào file này để session sau nắm được context.
 4. **Quản lý package bằng `uv`:** Luôn dùng `uv` (`.venv\Scripts\python.exe`, `uv add`, `uv sync`), không dùng `pip` trực tiếp.
@@ -48,4 +48,11 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Độ chính xác baseline: **87.8% (351/400)** (`ignore`: 95%, `consultant`: 90%, `order`: 84%, `faq`: 82%).
     - Latency: p50 = `0.80s`, p95 = `0.97s`. Tổng chi phí 400 câu: `$0.00931`.
     - Điểm có thể cải thiện sau: các câu hỏi phương thức thanh toán kèm tính tiền (*"Thanh toán bằng QR được không em, tính tiền giúp cô"*) đang bị Jev phân vào `faq` thay vì `order`.
-- **[ ] Phase 2 — Luồng API & Orchestrator tối thiểu (Vertical Slice đầu tiên):** Chưa bắt đầu (bước tiếp theo).
+- **[~] Phase 2 — Luồng API & Orchestrator tối thiểu (Vertical Slice đầu tiên):**
+  - **[x] Feature 2.1 — Subagents Base, Domain Schemas & DeepAgent Orchestrator:**
+    - `src/schema/order.py` (tiền VNĐ bắt buộc kiểu `int`), `src/schema/consultant.py`, `src/schema/faq.py`.
+    - `src/subagents/base.py` (`BaseSubAgent`, `StubSubAgent`).
+    - `src/agent/subagent_registry.py` (`SubAgentRegistry`), `src/agent/deep_agent.py` (`DeepAgent`).
+    - `tests/unit/agent/test_deep_agent.py` (24/24 unit tests pass).
+  - **[ ] Feature 2.2 — ChatService & FastAPI `/api/v1/chat` endpoint + DI:** Đang chuẩn bị thực hiện.
+
