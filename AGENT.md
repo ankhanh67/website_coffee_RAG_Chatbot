@@ -54,5 +54,12 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - **[x] Feature 2.3 — Per-Job File Logging (`src/observability/logging.py`):**
     - Mỗi request/job có `job_id` riêng qua `contextvars` (`job_context`), ghi toàn bộ các bước của job đó vào `logs/YYYY-MM-DD/<job_id>.log` và trả header `X-Job-ID`.
     - Bổ sung log xuyên suốt `ChatService` -> `DeepAgent` -> `Router` -> `ModelClient`.
-- **[ ] Phase 3 — Kết nối Neo4j Aura & Nạp dữ liệu Menu (`menu.csv`):** Bước tiếp theo (cần user điền `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD` thật vào `.env`).
+- **[~] Phase 3 — Kết nối Neo4j Aura & Nạp dữ liệu Menu (`menu.csv`):**
+  - **[x] Feature 3.1 — Neo4j Client, Schema & Repository:**
+    - `src/schema/retrieval.py` (`MenuItemRecord`, `VectorSearchResult`).
+    - `src/rag/graph/queries.py` (Cypher queries cho uniqueness constraints, vector index, upsert món + category `BELONGS_TO`, get món theo ID).
+    - `src/rag/graph/client.py` (`Neo4jClient` quản lý connection pool & session bất đồng bộ).
+    - `src/rag/graph/repository.py` (`Neo4jRepository` thực thi Cypher, bọc `RetrievalError` và ghi log chi tiết từng stage).
+    - Unit tests: `tests/unit/rag/test_retrieval_schema.py`, `tests/unit/rag/test_queries_syntax.py`, `tests/unit/rag/test_neo4j_repository.py` (tổng suite: 39/39 tests pass).
+  - **[ ] Feature 3.2 — Embeddings & Menu Ingestion Script (`scripts/ingest.py`):** Bước tiếp theo.
 
