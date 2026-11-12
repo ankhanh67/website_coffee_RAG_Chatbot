@@ -1,0 +1,115 @@
+{
+ "note": "Khi nguon thay doi -> xoa cac group_id tuong ung khoi cache. 'menu:*' = bat ky thay doi menu.csv; 'faq:<topic_id>' = dong faq.csv; 'doc:<doc_id>' = tai lieu.",
+ "map": {
+  "faq:birthday_party": [
+   "G01"
+  ],
+  "doc:policy": [
+   "G01",
+   "G02",
+   "G06",
+   "G07",
+   "G10",
+   "G11",
+   "G14",
+   "G15",
+   "G16",
+   "G17",
+   "G19",
+   "G20",
+   "G28"
+  ],
+  "faq:reservation": [
+   "G02"
+  ],
+  "faq:wifi": [
+   "G03"
+  ],
+  "faq:hours": [
+   "G04"
+  ],
+  "doc:branch": [
+   "G04",
+   "G09",
+   "G18"
+  ],
+  "faq:payment": [
+   "G05"
+  ],
+  "faq:vat_invoice": [
+   "G06"
+  ],
+  "faq:delivery": [
+   "G07"
+  ],
+  "faq:delivery_fee": [
+   "G07",
+   "G08"
+  ],
+  "faq:parking": [
+   "G09"
+  ],
+  "faq:loyalty_earn": [
+   "G10"
+  ],
+  "faq:loyalty_redeem": [
+   "G11"
+  ],
+  "faq:student": [
+   "G12"
+  ],
+  "doc:promo": [
+   "G12",
+   "G13"
+  ],
+  "faq:promotions": [
+   "G13"
+  ],
+  "faq:gift_card": [
+   "G14"
+  ],
+  "faq:birthday_cake": [
+   "G15"
+  ],
+  "faq:complaint": [
+   "G16"
+  ],
+  "faq:pets": [
+   "G17"
+  ],
+  "faq:quiet_space": [
+   "G18"
+  ],
+  "faq:power": [
+   "G18"
+  ],
+  "faq:refund": [
+   "G19"
+  ],
+  "faq:allergens": [
+   "G20"
+  ],
+  "menu:*": [
+   "G20",
+   "G21",
+   "G22",
+   "G23",
+   "G24",
+   "G25",
+   "G26",
+   "G27",
+   "G28",
+   "G29",
+   "G30"
+  ],
+  "faq:sugar_ice": [
+   "G23"
+  ],
+  "faq:decaf": [
+   "G24"
+  ],
+  "faq:vegan": [
+   "G25"
+  ]
+ }
+}
