@@ -13,3 +13,4 @@ def test_queries_exist_and_non_empty():
     assert "$item_id" in queries.UPSERT_MENU_ITEM
     assert "BELONGS_TO" in queries.UPSERT_MENU_ITEM
     assert "$item_id" in queries.GET_MENU_ITEM_BY_ID
+

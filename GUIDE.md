@@ -496,7 +496,7 @@ Ngay sau khi lát cắt này chạy thông suốt, chuyển sang **Phase 3** đ�
 [x] Phase 0: Khởi tạo Repository & Lọc dữ liệu từ fi_ai_mas_llm_dataset
 [x] Phase 1: Core Schemas & Jev Router (OpenRouter Decisions API) — baseline 87.8% trên router_test.json
 [x] Phase 2: Minimal API & Orchestrator Vertical Slice (`/api/v1/chat` -> `ChatService` -> `DeepAgent` -> `Router` -> `StubSubAgent`)
-[ ] Phase 3: Kết nối Neo4j Aura & Nạp dữ liệu Menu (menu.csv)
+[x] Phase 3: Kết nối Neo4j Aura & Nạp dữ liệu Menu (menu.csv) — 120 món, 10 danh mục, Vector Index 768d
 [ ] Phase 4: Hoàn thiện Order Agent (Logic tính tiền tất định + Tra cứu Neo4j)
 [ ] Phase 5: Nạp dữ liệu FAQ, Documents & Watch Mode lên Neo4j Aura
 [ ] Phase 6: Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker)
