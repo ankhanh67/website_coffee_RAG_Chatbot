@@ -42,6 +42,7 @@ async def test_post_chat_routes_and_returns_response(action: RouterAction, expec
         app.dependency_overrides.clear()
 
     assert resp.status_code == 200
+    assert "x-job-id" in resp.headers
     assert resp.json() == {
         "session_id": "sess-1",
         "action": action.value,
@@ -64,3 +65,4 @@ async def test_health_live():
         resp = await client.get("/health/live")
     assert resp.status_code == 200
     assert resp.json() == {"status": "ok"}
+

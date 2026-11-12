@@ -7,4 +7,5 @@ __pycache__/
 .ruff_cache/
 /data/processed/
 /data/inbox/
+/logs/
 GUIDE.md

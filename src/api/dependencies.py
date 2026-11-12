@@ -31,3 +31,4 @@ def get_chat_service() -> ChatService:
     )
     deep_agent = DeepAgent(router=router, registry=SubAgentRegistry.with_default_stubs())
     return ChatService(deep_agent=deep_agent)
+

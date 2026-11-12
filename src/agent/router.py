@@ -6,6 +6,7 @@ from pydantic import ValidationError
 
 from src.exceptions import ModelServiceUnavailableError, RouterOutputError
 from src.infrastructure.model_client import ModelClient
+from src.observability.logging import dump_json
 from src.prompt.router import ROUTE_QUESTION_KEY, build_router_questions
 from src.schema.router import RouterAction, RouterDecision
 
@@ -20,16 +21,32 @@ class Router:
         self._questions = build_router_questions()
 
     async def route(self, message: str) -> RouterDecision:
+        logger.info(
+            "STAGE Router.route INPUT: %s",
+            dump_json({"message": message, "model": self._model, "threshold": self._threshold}),
+        )
         try:
             raw = await self._client.decide(self._model, {"message": message}, self._questions)
             decision = self._parse(raw)
         except (ModelServiceUnavailableError, RouterOutputError) as e:
-            logger.warning("Router fallback to ignore: %s", e)
-            return RouterDecision(action=RouterAction.IGNORE, confidence=0.0, is_fallback=True)
+            fallback = RouterDecision(action=RouterAction.IGNORE, confidence=0.0, is_fallback=True)
+            logger.warning(
+                "STAGE Router.route FALLBACK (error=%s) OUTPUT: %s",
+                e,
+                dump_json(fallback.model_dump(mode="json")),
+            )
+            return fallback
 
         if decision.confidence < self._threshold:
-            logger.info("Low router confidence %.2f for %s", decision.confidence, decision.action)
-            return decision.model_copy(update={"action": RouterAction.IGNORE, "is_fallback": True})
+            fallback = decision.model_copy(update={"action": RouterAction.IGNORE, "is_fallback": True})
+            logger.info(
+                "STAGE Router.route FALLBACK (low_confidence=%.2f < %.2f) OUTPUT: %s",
+                decision.confidence,
+                self._threshold,
+                dump_json(fallback.model_dump(mode="json")),
+            )
+            return fallback
+        logger.info("STAGE Router.route OUTPUT: %s", dump_json(decision.model_dump(mode="json")))
         return decision
 
     @staticmethod

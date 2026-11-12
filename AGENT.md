@@ -5,7 +5,7 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
 ---
 
 ## 1. Quy tắc làm việc bắt buộc (Workflow Rules)
-1. **Commit theo từng feature / bugfix nhỏ:** Không đợi hết cả Phase mới commit. Mỗi khi thêm một feature nhỏ hoặc sửa lỗi xong và pass test là tạo commit ngay. Commit message chỉ viết **1 dòng ngắn gọn, cô đọng nhất có thể**.
+1. **Commit theo từng feature / bugfix nhỏ:** Không đợi hết cả Phase mới commit. Mỗi khi thêm một feature nhỏ hoặc sửa lỗi xong và pass test là tạo commit ngay. Commit message chỉ viết **1 dòng cực ngắn gọn** (ví dụ: `feat/add logging`, `fix/...`).
 2. **Báo nội dung commit trước khi `git push`:** Luôn hiển thị rõ commit message (và danh sách file chính) cho user xem trước khi đẩy lên `origin/main`.
 3. **Cập nhật `AGENT.md`:** Sau mỗi phần hoàn thành hoặc khi có quyết định/lưu ý mới, cập nhật ngay vào file này để session sau nắm được context.
 4. **Quản lý package bằng `uv`:** Luôn dùng `uv` (`.venv\Scripts\python.exe`, `uv add`, `uv sync`), không dùng `pip` trực tiếp.
@@ -50,8 +50,9 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Điểm có thể cải thiện sau: các câu hỏi phương thức thanh toán kèm tính tiền (*"Thanh toán bằng QR được không em, tính tiền giúp cô"*) đang bị Jev phân vào `faq` thay vì `order`.
 - **[x] Phase 2 — Luồng API & Orchestrator tối thiểu (Vertical Slice đầu tiên):**
   - **[x] Feature 2.1 — Subagents Base, Domain Schemas & DeepAgent Orchestrator** (Commit `9284a55`).
-  - **[x] Feature 2.2 — ChatService & FastAPI `/api/v1/chat` endpoint + DI:**
-    - `src/services/chat_service.py`, `src/api/dependencies.py`, `src/api/routes/chat.py`, cập nhật `src/main.py` (lifespan đóng `ModelClient` an toàn).
-    - `tests/unit/api/test_chat_route.py` (kiểm thử toàn luồng HTTP `/api/v1/chat` và `/health/live` qua `httpx2.ASGITransport`).
+  - **[x] Feature 2.2 — ChatService & FastAPI `/api/v1/chat` endpoint + DI** (Commit `7db1b45`).
+  - **[x] Feature 2.3 — Per-Job File Logging (`src/observability/logging.py`):**
+    - Mỗi request/job có `job_id` riêng qua `contextvars` (`job_context`), ghi toàn bộ các bước của job đó vào `logs/YYYY-MM-DD/<job_id>.log` và trả header `X-Job-ID`.
+    - Bổ sung log xuyên suốt `ChatService` -> `DeepAgent` -> `Router` -> `ModelClient`.
 - **[ ] Phase 3 — Kết nối Neo4j Aura & Nạp dữ liệu Menu (`menu.csv`):** Bước tiếp theo (cần user điền `NEO4J_URI`, `NEO4J_USERNAME`, `NEO4J_PASSWORD` thật vào `.env`).
 
