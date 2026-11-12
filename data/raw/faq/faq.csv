@@ -1,0 +1,161 @@
+﻿faq_id,topic_id,category,language,question,answer
+F001,wifi,Tiện ích,vi,Wifi tên gì vậy?,"Wifi của quán tên là Highlands_Free, mật khẩu là coffee2026 ạ."
+F002,wifi,Tiện ích,vi,Cho mình xin mật khẩu wifi với.,"Wifi của quán tên là Highlands_Free, mật khẩu là coffee2026 ạ."
+F003,wifi,Tiện ích,en,What's the wifi name?,The wifi network is Highlands_Free and the password is coffee2026.
+F004,wifi,Tiện ích,en,Can I get the wifi password?,The wifi network is Highlands_Free and the password is coffee2026.
+F005,hours,Giờ hoạt động,vi,Mấy giờ quán đóng cửa vậy?,"Hầu hết chi nhánh mở cửa từ 07:00 đến 22:00 mỗi ngày. Một số chi nhánh trong trung tâm thương mại theo giờ của trung tâm, bạn cho mình biết chi nhánh để mình kiểm tra chính xác nhé."
+F006,hours,Giờ hoạt động,vi,Quán mở cửa lúc mấy giờ?,"Hầu hết chi nhánh mở cửa từ 07:00 đến 22:00 mỗi ngày. Một số chi nhánh trong trung tâm thương mại theo giờ của trung tâm, bạn cho mình biết chi nhánh để mình kiểm tra chính xác nhé."
+F007,hours,Giờ hoạt động,en,What time do you close?,"Most branches are open from 07:00 to 22:00 every day. Branches inside shopping malls follow the mall's hours, so tell me which branch and I will check."
+F008,hours,Giờ hoạt động,en,What are your opening hours?,"Most branches are open from 07:00 to 22:00 every day. Branches inside shopping malls follow the mall's hours, so tell me which branch and I will check."
+F009,hours_late,Giờ hoạt động,vi,Quán có mở khuya không?,"Chi nhánh đóng cửa trễ nhất là Bạch Đằng, Trần Phú, mở đến 23:00. Các chi nhánh Nguyễn Huệ và Cầu Giấy đóng lúc 22:30, còn lại đóng lúc 22:00."
+F010,hours_late,Giờ hoạt động,vi,Chi nhánh nào mở cửa trễ nhất?,"Chi nhánh đóng cửa trễ nhất là Bạch Đằng, Trần Phú, mở đến 23:00. Các chi nhánh Nguyễn Huệ và Cầu Giấy đóng lúc 22:30, còn lại đóng lúc 22:00."
+F011,hours_late,Giờ hoạt động,en,Are you open late at night?,"The latest closing time is 23:00 at Bạch Đằng, Trần Phú. Nguyen Hue and Cau Giay close at 22:30, and the rest close at 22:00."
+F012,hours_late,Giờ hoạt động,en,Which branch closes the latest?,"The latest closing time is 23:00 at Bạch Đằng, Trần Phú. Nguyen Hue and Cau Giay close at 22:30, and the rest close at 22:00."
+F013,hours_holiday,Giờ hoạt động,vi,Dịp Tết quán có mở cửa không?,"Quán mở cửa vào ngày lễ. Dịp Tết Nguyên Đán giờ mở cửa có thể thay đổi theo từng chi nhánh, thông tin được cập nhật trên ứng dụng và gọi hotline 1900 1234 để biết thêm."
+F014,hours_holiday,Giờ hoạt động,vi,Ngày lễ quán có làm việc không?,"Quán mở cửa vào ngày lễ. Dịp Tết Nguyên Đán giờ mở cửa có thể thay đổi theo từng chi nhánh, thông tin được cập nhật trên ứng dụng và gọi hotline 1900 1234 để biết thêm."
+F015,hours_holiday,Giờ hoạt động,en,Are you open on public holidays?,"We are open on public holidays. During Lunar New Year the hours may change by branch, and updates are posted in the app or via our hotline 1900 1234."
+F016,hours_holiday,Giờ hoạt động,en,Do you open during Tet?,"We are open on public holidays. During Lunar New Year the hours may change by branch, and updates are posted in the app or via our hotline 1900 1234."
+F017,payment,Thanh toán,vi,Quán nhận thanh toán bằng gì?,"Quán nhận tiền mặt, thẻ Visa, Mastercard, JCB, thẻ nội địa, và các ví MoMo, ZaloPay, VNPay QR ạ."
+F018,payment,Thanh toán,vi,Có quẹt thẻ hay trả bằng Momo được không?,"Quán nhận tiền mặt, thẻ Visa, Mastercard, JCB, thẻ nội địa, và các ví MoMo, ZaloPay, VNPay QR ạ."
+F019,payment,Thanh toán,en,What payment methods do you accept?,"We accept cash, Visa, Mastercard, JCB, domestic cards, and the MoMo, ZaloPay and VNPay QR wallets."
+F020,payment,Thanh toán,en,Can I pay by card or e-wallet?,"We accept cash, Visa, Mastercard, JCB, domestic cards, and the MoMo, ZaloPay and VNPay QR wallets."
+F021,split_bill,Thanh toán,vi,Có tách hóa đơn được không?,"Bạn có thể tách hóa đơn tối đa 4 phần cho một bàn, vui lòng báo nhân viên trước khi thanh toán."
+F022,split_bill,Thanh toán,vi,Nhóm mình muốn chia tiền riêng thì sao?,"Bạn có thể tách hóa đơn tối đa 4 phần cho một bàn, vui lòng báo nhân viên trước khi thanh toán."
+F023,split_bill,Thanh toán,en,Can we split the bill?,You can split the bill into up to 4 parts per table. Please tell the staff before paying.
+F024,split_bill,Thanh toán,en,Is it possible to pay separately?,You can split the bill into up to 4 parts per table. Please tell the staff before paying.
+F025,vat_invoice,Thanh toán,vi,Làm sao để xuất hóa đơn VAT?,"Bạn yêu cầu xuất hóa đơn VAT trước 22:00 cùng ngày, cung cấp mã số thuế và email. Hóa đơn điện tử được gửi qua email trong vòng 24 giờ."
+F026,vat_invoice,Thanh toán,vi,Mình cần hóa đơn công ty thì làm thế nào?,"Bạn yêu cầu xuất hóa đơn VAT trước 22:00 cùng ngày, cung cấp mã số thuế và email. Hóa đơn điện tử được gửi qua email trong vòng 24 giờ."
+F027,vat_invoice,Thanh toán,en,How do I get a VAT invoice?,Request a VAT invoice before 22:00 on the same day with your tax code and email. The e-invoice is emailed within 24 hours.
+F028,vat_invoice,Thanh toán,en,Can I get a company invoice?,Request a VAT invoice before 22:00 on the same day with your tax code and email. The e-invoice is emailed within 24 hours.
+F029,price_vat,Thanh toán,vi,Giá trên menu đã gồm thuế chưa?,Giá niêm yết trên menu đã bao gồm thuế VAT. Quán không thu phí dịch vụ.
+F030,price_vat,Thanh toán,vi,Có phụ thu phí dịch vụ không?,Giá niêm yết trên menu đã bao gồm thuế VAT. Quán không thu phí dịch vụ.
+F031,price_vat,Thanh toán,en,Do menu prices include tax?,Menu prices already include VAT. There is no service charge.
+F032,price_vat,Thanh toán,en,Is there any service charge?,Menu prices already include VAT. There is no service charge.
+F033,reservation,Đặt bàn,vi,Mình muốn đặt bàn cho nhóm đông thì làm sao?,Nhóm từ 8 người trở lên vui lòng đặt trước ít nhất 2 giờ qua hotline 1900 1234. Quán giữ bàn tối đa 15 phút so với giờ hẹn.
+F034,reservation,Đặt bàn,vi,Đặt bàn trước bao lâu và giữ bàn bao lâu?,Nhóm từ 8 người trở lên vui lòng đặt trước ít nhất 2 giờ qua hotline 1900 1234. Quán giữ bàn tối đa 15 phút so với giờ hẹn.
+F035,reservation,Đặt bàn,en,How do I reserve a table for a big group?,Groups of 8 or more should book at least 2 hours ahead via hotline 1900 1234. We hold the table for up to 15 minutes after the booking time.
+F036,reservation,Đặt bàn,en,How far ahead should I book and how long do you hold the table?,Groups of 8 or more should book at least 2 hours ahead via hotline 1900 1234. We hold the table for up to 15 minutes after the booking time.
+F037,birthday_party,Đặt bàn,vi,Quán có nhận tổ chức tiệc sinh nhật không?,"Quán nhận tiệc sinh nhật cho nhóm từ 10 người, vui lòng đặt trước 1 ngày qua hotline. Quán tặng trang trí bóng bay cơ bản miễn phí."
+F038,birthday_party,Đặt bàn,vi,Đặt bàn tiệc sinh nhật cần chuẩn bị gì?,"Quán nhận tiệc sinh nhật cho nhóm từ 10 người, vui lòng đặt trước 1 ngày qua hotline. Quán tặng trang trí bóng bay cơ bản miễn phí."
+F039,birthday_party,Đặt bàn,en,Do you host birthday parties?,We host birthday parties for groups of 10 or more. Please book 1 day ahead via the hotline. Basic balloon decoration is free.
+F040,birthday_party,Đặt bàn,en,What do I need to book a birthday party?,We host birthday parties for groups of 10 or more. Please book 1 day ahead via the hotline. Basic balloon decoration is free.
+F041,birthday_cake,Đặt bàn,vi,Quán có bán bánh sinh nhật nguyên cái không?,"Quán nhận đặt bánh sinh nhật nguyên cái, đặt trước 1 ngày, giá từ 250.000đ."
+F042,birthday_cake,Đặt bàn,vi,Đặt bánh sinh nhật giá bao nhiêu?,"Quán nhận đặt bánh sinh nhật nguyên cái, đặt trước 1 ngày, giá từ 250.000đ."
+F043,birthday_cake,Đặt bàn,en,Do you sell whole birthday cakes?,"We take orders for whole birthday cakes with 1 day's notice, starting from 250,000 VND."
+F044,birthday_cake,Đặt bàn,en,How much is a birthday cake order?,"We take orders for whole birthday cakes with 1 day's notice, starting from 250,000 VND."
+F045,delivery,Giao hàng,vi,Quán có giao hàng tận nơi không?,"Quán có giao hàng qua ứng dụng Highlands, GrabFood và ShopeeFood."
+F046,delivery,Giao hàng,vi,Đặt giao hàng qua đâu được?,"Quán có giao hàng qua ứng dụng Highlands, GrabFood và ShopeeFood."
+F047,delivery,Giao hàng,en,Do you deliver?,"Yes, we deliver through the Highlands app, GrabFood and ShopeeFood."
+F048,delivery,Giao hàng,en,Where can I order delivery?,"Yes, we deliver through the Highlands app, GrabFood and ShopeeFood."
+F049,delivery_fee,Giao hàng,vi,Phí giao hàng là bao nhiêu?,Đơn từ 100.000đ trong bán kính 3km được miễn phí giao hàng. Ngoài ra phí giao hàng là 15.000đ.
+F050,delivery_fee,Giao hàng,vi,Khi nào được miễn phí ship?,Đơn từ 100.000đ trong bán kính 3km được miễn phí giao hàng. Ngoài ra phí giao hàng là 15.000đ.
+F051,delivery_fee,Giao hàng,en,How much is the delivery fee?,"Orders of 100,000 VND or more within 3 km get free delivery. Otherwise the delivery fee is 15,000 VND."
+F052,delivery_fee,Giao hàng,en,When is delivery free?,"Orders of 100,000 VND or more within 3 km get free delivery. Otherwise the delivery fee is 15,000 VND."
+F053,takeaway,Giao hàng,vi,Mình mua mang đi được không?,"Bạn có thể mua mang đi, ly và túi đều không tính thêm phí."
+F054,takeaway,Giao hàng,vi,Mang về có tính thêm phí không?,"Bạn có thể mua mang đi, ly và túi đều không tính thêm phí."
+F055,takeaway,Giao hàng,en,Can I get my order to go?,"Yes, takeaway is available and cups and bags are free of charge."
+F056,takeaway,Giao hàng,en,Is there an extra charge for takeaway?,"Yes, takeaway is available and cups and bags are free of charge."
+F057,cancel_order,Giao hàng,vi,Mình muốn hủy đơn thì có được không?,Đơn đặt qua ứng dụng được hủy trong 3 phút sau khi đặt. Tại quầy bạn có thể hủy trước khi món được pha chế.
+F058,cancel_order,Giao hàng,vi,Đặt nhầm món có hủy được không?,Đơn đặt qua ứng dụng được hủy trong 3 phút sau khi đặt. Tại quầy bạn có thể hủy trước khi món được pha chế.
+F059,cancel_order,Giao hàng,en,Can I cancel my order?,Orders in the app can be cancelled within 3 minutes. At the counter you can cancel before the drink is prepared.
+F060,cancel_order,Giao hàng,en,"I ordered by mistake, can I cancel?",Orders in the app can be cancelled within 3 minutes. At the counter you can cancel before the drink is prepared.
+F061,loyalty_earn,Thành viên,vi,Tích điểm thành viên như thế nào?,"Với thẻ HL Rewards, mỗi 10.000đ chi tiêu bạn nhận 1 điểm."
+F062,loyalty_earn,Thành viên,vi,Thẻ HL Rewards tích điểm ra sao?,"Với thẻ HL Rewards, mỗi 10.000đ chi tiêu bạn nhận 1 điểm."
+F063,loyalty_earn,Thành viên,en,How do I earn loyalty points?,"With HL Rewards you earn 1 point for every 10,000 VND spent."
+F064,loyalty_earn,Thành viên,en,How does HL Rewards work?,"With HL Rewards you earn 1 point for every 10,000 VND spent."
+F065,loyalty_redeem,Thành viên,vi,Đổi điểm lấy gì được?,100 điểm đổi được 1 đồ uống size M bất kỳ trong menu.
+F066,loyalty_redeem,Thành viên,vi,Bao nhiêu điểm thì đổi được ly nước?,100 điểm đổi được 1 đồ uống size M bất kỳ trong menu.
+F067,loyalty_redeem,Thành viên,en,What can I redeem my points for?,100 points can be redeemed for any size M drink on the menu.
+F068,loyalty_redeem,Thành viên,en,How many points for a free drink?,100 points can be redeemed for any size M drink on the menu.
+F069,student,Khuyến mãi,vi,Học sinh sinh viên có được giảm giá không?,"Học sinh, sinh viên được giảm 10% đồ uống từ Thứ Hai đến Thứ Sáu, 14:00 đến 17:00 khi xuất trình thẻ."
+F070,student,Khuyến mãi,vi,Giảm giá cho sinh viên áp dụng khi nào?,"Học sinh, sinh viên được giảm 10% đồ uống từ Thứ Hai đến Thứ Sáu, 14:00 đến 17:00 khi xuất trình thẻ."
+F071,student,Khuyến mãi,en,Is there a student discount?,"Students get 10% off drinks from Monday to Friday, 14:00 to 17:00, with a valid student card."
+F072,student,Khuyến mãi,en,When does the student discount apply?,"Students get 10% off drinks from Monday to Friday, 14:00 to 17:00, with a valid student card."
+F073,promotions,Khuyến mãi,vi,Hiện tại quán có khuyến mãi gì?,"Các ưu đãi đang áp dụng: Thứ Ba Mua 2 Tặng 1 (Thứ Ba hàng tuần): Mua 2 đồ uống size M bất kỳ, tặng 1 đồ uống size M giá thấp nhất trong đơn.; Happy Student (Thứ Hai đến Thứ Sáu, 14:00 đến 17:00): Giảm 10% đồ uống khi xuất trình thẻ học sinh hoặc sinh viên.; Thứ Sáu Freeze Size L (Thứ Sáu hàng tuần): Mua Freeze size M, nâng cấp lên size L miễn phí.; Thứ Tư Nhân Đôi Điểm (Thứ Tư hàng tuần): Thành viên HL Rewards nhận gấp đôi điểm thưởng cho mọi đơn hàng."
+F074,promotions,Khuyến mãi,vi,Có chương trình ưu đãi nào trong tuần không?,"Các ưu đãi đang áp dụng: Thứ Ba Mua 2 Tặng 1 (Thứ Ba hàng tuần): Mua 2 đồ uống size M bất kỳ, tặng 1 đồ uống size M giá thấp nhất trong đơn.; Happy Student (Thứ Hai đến Thứ Sáu, 14:00 đến 17:00): Giảm 10% đồ uống khi xuất trình thẻ học sinh hoặc sinh viên.; Thứ Sáu Freeze Size L (Thứ Sáu hàng tuần): Mua Freeze size M, nâng cấp lên size L miễn phí.; Thứ Tư Nhân Đôi Điểm (Thứ Tư hàng tuần): Thành viên HL Rewards nhận gấp đôi điểm thưởng cho mọi đơn hàng."
+F075,promotions,Khuyến mãi,en,What promotions are on right now?,"Current promotions: Thứ Ba Mua 2 Tặng 1 (Thứ Ba hàng tuần): Buy 2 size M drinks and get the cheapest size M drink free.; Happy Student (Thứ Hai đến Thứ Sáu, 14:00 đến 17:00): 10% off drinks with a valid student card.; Thứ Sáu Freeze Size L (Thứ Sáu hàng tuần): Buy a size M Freeze and upgrade to size L for free.; Thứ Tư Nhân Đôi Điểm (Thứ Tư hàng tuần): HL Rewards members earn double points on every order."
+F076,promotions,Khuyến mãi,en,Are there any deals this week?,"Current promotions: Thứ Ba Mua 2 Tặng 1 (Thứ Ba hàng tuần): Buy 2 size M drinks and get the cheapest size M drink free.; Happy Student (Thứ Hai đến Thứ Sáu, 14:00 đến 17:00): 10% off drinks with a valid student card.; Thứ Sáu Freeze Size L (Thứ Sáu hàng tuần): Buy a size M Freeze and upgrade to size L for free.; Thứ Tư Nhân Đôi Điểm (Thứ Tư hàng tuần): HL Rewards members earn double points on every order."
+F077,bulk_order,Giao hàng,vi,Mình đặt 30 ly cho công ty được không?,Đơn từ 20 ly trở lên cần đặt trước ít nhất 2 giờ và được giảm 5%.
+F078,bulk_order,Giao hàng,vi,Đặt số lượng lớn có được giảm giá không?,Đơn từ 20 ly trở lên cần đặt trước ít nhất 2 giờ và được giảm 5%.
+F079,bulk_order,Giao hàng,en,Can I place a bulk order of 30 cups for my office?,Orders of 20 cups or more must be placed at least 2 hours ahead and get 5% off.
+F080,bulk_order,Giao hàng,en,Is there a discount for large orders?,Orders of 20 cups or more must be placed at least 2 hours ahead and get 5% off.
+F081,gift_card,Thành viên,vi,Quán có bán thẻ quà tặng không?,"Quán bán thẻ quà tặng mệnh giá 100.000đ, 200.000đ và 500.000đ, hạn sử dụng 12 tháng kể từ ngày mua."
+F082,gift_card,Thành viên,vi,Thẻ quà tặng dùng được bao lâu?,"Quán bán thẻ quà tặng mệnh giá 100.000đ, 200.000đ và 500.000đ, hạn sử dụng 12 tháng kể từ ngày mua."
+F083,gift_card,Thành viên,en,Do you sell gift cards?,"We sell gift cards worth 100,000, 200,000 and 500,000 VND, valid for 12 months from purchase."
+F084,gift_card,Thành viên,en,How long is a gift card valid?,"We sell gift cards worth 100,000, 200,000 and 500,000 VND, valid for 12 months from purchase."
+F085,app,Thành viên,vi,Có ứng dụng đặt món không?,"Ứng dụng Highlands có trên App Store và Google Play, dùng để đặt món, tích điểm và xem ưu đãi."
+F086,app,Thành viên,vi,Tải app Highlands ở đâu?,"Ứng dụng Highlands có trên App Store và Google Play, dùng để đặt món, tích điểm và xem ưu đãi."
+F087,app,Thành viên,en,Is there an app for ordering?,"The Highlands app is on the App Store and Google Play for ordering, collecting points and viewing offers."
+F088,app,Thành viên,en,Where can I download the Highlands app?,"The Highlands app is on the App Store and Google Play for ordering, collecting points and viewing offers."
+F089,sizes,Món uống,vi,Size S M L khác nhau bao nhiêu ml?,"Size S là 360ml, size M là 470ml và size L là 700ml. Size M cộng thêm 6.000đ so với S, size L cộng thêm 10.000đ so với M."
+F090,sizes,Món uống,vi,Ly size M đựng được bao nhiêu?,"Size S là 360ml, size M là 470ml và size L là 700ml. Size M cộng thêm 6.000đ so với S, size L cộng thêm 10.000đ so với M."
+F091,sizes,Món uống,en,"How big are sizes S, M and L?","Size S is 360 ml, M is 470 ml and L is 700 ml. M costs 6,000 VND more than S and L costs 10,000 VND more than M."
+F092,sizes,Món uống,en,How many ml is a medium cup?,"Size S is 360 ml, M is 470 ml and L is 700 ml. M costs 6,000 VND more than S and L costs 10,000 VND more than M."
+F093,sugar_ice,Món uống,vi,Mình có chọn được mức đường và đá không?,"Bạn chọn được mức đường 0%, 30%, 50%, 70% hoặc 100% và mức đá 0%, 30%, 50% hoặc 100%."
+F094,sugar_ice,Món uống,vi,Mình muốn ít đường ít đá được không?,"Bạn chọn được mức đường 0%, 30%, 50%, 70% hoặc 100% và mức đá 0%, 30%, 50% hoặc 100%."
+F095,sugar_ice,Món uống,en,Can I choose the sugar and ice level?,"You can choose sugar at 0%, 30%, 50%, 70% or 100%, and ice at 0%, 30%, 50% or 100%."
+F096,sugar_ice,Món uống,en,Can I get less sugar and less ice?,"You can choose sugar at 0%, 30%, 50%, 70% or 100%, and ice at 0%, 30%, 50% or 100%."
+F097,toppings,Món uống,vi,Topping thêm giá bao nhiêu?,"Quán có các topping: Trân Châu Đường Đen, Thạch Đào, Kem Cheese, Shot Espresso Thêm, Kem Whipping và Đổi Sữa Yến Mạch. Giá từ 8.000đ đến 15.000đ."
+F098,toppings,Món uống,vi,Quán có những topping nào?,"Quán có các topping: Trân Châu Đường Đen, Thạch Đào, Kem Cheese, Shot Espresso Thêm, Kem Whipping và Đổi Sữa Yến Mạch. Giá từ 8.000đ đến 15.000đ."
+F099,toppings,Món uống,en,How much are extra toppings?,"Toppings include Brown Sugar Boba, Peach Jelly, Cream Cheese Foam, Extra Espresso Shot, Whipped Cream and Oat Milk Upgrade, priced from 8,000 to 15,000 VND."
+F100,toppings,Món uống,en,What toppings do you have?,"Toppings include Brown Sugar Boba, Peach Jelly, Cream Cheese Foam, Extra Espresso Shot, Whipped Cream and Oat Milk Upgrade, priced from 8,000 to 15,000 VND."
+F101,decaf,Món uống,vi,Có cà phê không caffeine không?,"Quán không có cà phê decaf. Các thức uống không caffeine gồm Trà Hoa Cúc Mật Ong, Trà Gừng Mật Ong, Chocolate Nóng, sinh tố, nước ép và soda."
+F102,decaf,Món uống,vi,Quán có cà phê decaf không?,"Quán không có cà phê decaf. Các thức uống không caffeine gồm Trà Hoa Cúc Mật Ong, Trà Gừng Mật Ong, Chocolate Nóng, sinh tố, nước ép và soda."
+F103,decaf,Món uống,en,Do you have decaf coffee?,"We do not offer decaf coffee. Caffeine-free options include Chamomile Honey Tea, Ginger Honey Tea, Hot Chocolate, smoothies, juices and sodas."
+F104,decaf,Món uống,en,Is there a caffeine-free coffee?,"We do not offer decaf coffee. Caffeine-free options include Chamomile Honey Tea, Ginger Honey Tea, Hot Chocolate, smoothies, juices and sodas."
+F105,allergens,Món uống,vi,Mình bị dị ứng sữa thì nên lưu ý gì?,"Thông tin dị ứng của từng món có trong menu: các món có sữa, hạt, gluten hoặc trứng đều được ghi rõ. Quán không thể đảm bảo tuyệt đối không lây nhiễm chéo, vui lòng báo nhân viên khi đặt món."
+F106,allergens,Món uống,vi,Món nào có chứa hạt hoặc gluten?,"Thông tin dị ứng của từng món có trong menu: các món có sữa, hạt, gluten hoặc trứng đều được ghi rõ. Quán không thể đảm bảo tuyệt đối không lây nhiễm chéo, vui lòng báo nhân viên khi đặt món."
+F107,allergens,Món uống,en,"I have a dairy allergy, what should I know?","Allergen details are listed per item for milk, nuts, gluten and egg. We cannot fully guarantee against cross contamination, so please tell the staff when ordering."
+F108,allergens,Món uống,en,Which items contain nuts or gluten?,"Allergen details are listed per item for milk, nuts, gluten and egg. We cannot fully guarantee against cross contamination, so please tell the staff when ordering."
+F109,vegan,Món uống,vi,Quán có món chay không?,"Quán có các món chay như Salad Rau Củ, Khoai Tây Chiên, Phin Đen, Cold Brew, các loại trà trái cây, nước ép và soda. Bạn cũng có thể Đổi Sữa Yến Mạch với 15.000đ."
+F110,vegan,Món uống,vi,Có đồ uống nào không có sữa không?,"Quán có các món chay như Salad Rau Củ, Khoai Tây Chiên, Phin Đen, Cold Brew, các loại trà trái cây, nước ép và soda. Bạn cũng có thể Đổi Sữa Yến Mạch với 15.000đ."
+F111,vegan,Món uống,en,Do you have vegan options?,"Vegan choices include Garden Salad, French Fries, black coffee, Cold Brew, fruit teas, juices and sodas. You can also swap to oat milk for 15,000 VND."
+F112,vegan,Món uống,en,Are there any dairy-free drinks?,"Vegan choices include Garden Salad, French Fries, black coffee, Cold Brew, fruit teas, juices and sodas. You can also swap to oat milk for 15,000 VND."
+F113,refund,Chính sách,vi,Nước pha sai thì có được đổi không?,"Nếu món pha sai hoặc có vấn đề, quán sẽ làm lại món mới trong vòng 15 phút kể từ khi bạn nhận món."
+F114,refund,Chính sách,vi,Món có vấn đề thì xử lý thế nào?,"Nếu món pha sai hoặc có vấn đề, quán sẽ làm lại món mới trong vòng 15 phút kể từ khi bạn nhận món."
+F115,refund,Chính sách,en,What if my drink is made wrong?,"If your drink is made wrong or has a problem, we will remake it within 15 minutes of you receiving it."
+F116,refund,Chính sách,en,What happens if there is a problem with my item?,"If your drink is made wrong or has a problem, we will remake it within 15 minutes of you receiving it."
+F117,complaint,Chính sách,vi,Mình muốn góp ý hoặc khiếu nại thì liên hệ ai?,Bạn gọi hotline 1900 1234 hoặc gửi email cskh@highlands-sample.vn. Quán phản hồi trong vòng 24 giờ.
+F118,complaint,Chính sách,vi,Số hotline của quán là gì?,Bạn gọi hotline 1900 1234 hoặc gửi email cskh@highlands-sample.vn. Quán phản hồi trong vòng 24 giờ.
+F119,complaint,Chính sách,en,Who do I contact for feedback or a complaint?,Call hotline 1900 1234 or email cskh@highlands-sample.vn. We reply within 24 hours.
+F120,complaint,Chính sách,en,What is your hotline number?,Call hotline 1900 1234 or email cskh@highlands-sample.vn. We reply within 24 hours.
+F121,lost_found,Chính sách,vi,Mình để quên đồ ở quán thì sao?,Đồ để quên được lưu giữ tại chi nhánh trong 30 ngày. Bạn liên hệ chi nhánh hoặc hotline 1900 1234 để nhận lại.
+F122,lost_found,Chính sách,vi,Đồ thất lạc được giữ bao lâu?,Đồ để quên được lưu giữ tại chi nhánh trong 30 ngày. Bạn liên hệ chi nhánh hoặc hotline 1900 1234 để nhận lại.
+F123,lost_found,Chính sách,en,"I left something behind, what should I do?",Lost items are kept at the branch for 30 days. Contact the branch or hotline 1900 1234 to claim them.
+F124,lost_found,Chính sách,en,How long do you keep lost items?,Lost items are kept at the branch for 30 days. Contact the branch or hotline 1900 1234 to claim them.
+F125,pets,Chính sách,vi,Mang thú cưng vào quán được không?,"Quán không cho phép mang thú cưng vào, trừ chó dẫn đường cho người khiếm thị."
+F126,pets,Chính sách,vi,Quán có cho dắt chó vào không?,"Quán không cho phép mang thú cưng vào, trừ chó dẫn đường cho người khiếm thị."
+F127,pets,Chính sách,en,Are pets allowed?,"Pets are not allowed, except guide dogs for visually impaired guests."
+F128,pets,Chính sách,en,Can I bring my dog in?,"Pets are not allowed, except guide dogs for visually impaired guests."
+F129,smoking,Chính sách,vi,Quán có chỗ hút thuốc không?,Trong nhà là khu vực không hút thuốc. Bạn có thể hút thuốc ở khu vực ngoài trời tại các chi nhánh có chỗ ngồi ngoài trời.
+F130,smoking,Chính sách,vi,Hút thuốc ở đâu được?,Trong nhà là khu vực không hút thuốc. Bạn có thể hút thuốc ở khu vực ngoài trời tại các chi nhánh có chỗ ngồi ngoài trời.
+F131,smoking,Chính sách,en,Is there a smoking area?,Indoors is smoke-free. You can smoke in the outdoor seating area at branches that have one.
+F132,smoking,Chính sách,en,Where can I smoke?,Indoors is smoke-free. You can smoke in the outdoor seating area at branches that have one.
+F133,parking,Tiện ích,vi,Quán có chỗ gửi xe không?,"Hầu hết chi nhánh có chỗ gửi xe máy miễn phí. Chỗ đỗ ô tô có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Cầu Giấy, Royal City, Bạch Đằng, Vincom Ngô Quyền, Ninh Kiều."
+F134,parking,Tiện ích,vi,Đỗ ô tô ở đâu được?,"Hầu hết chi nhánh có chỗ gửi xe máy miễn phí. Chỗ đỗ ô tô có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Cầu Giấy, Royal City, Bạch Đằng, Vincom Ngô Quyền, Ninh Kiều."
+F135,parking,Tiện ích,en,Is there parking?,"Most branches offer free motorbike parking. Car parking is available at: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Cầu Giấy, Royal City, Bạch Đằng, Vincom Ngô Quyền, Ninh Kiều."
+F136,parking,Tiện ích,en,Where can I park my car?,"Most branches offer free motorbike parking. Car parking is available at: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Cầu Giấy, Royal City, Bạch Đằng, Vincom Ngô Quyền, Ninh Kiều."
+F137,power,Tiện ích,vi,Có ổ cắm sạc điện thoại không?,"Hầu hết chi nhánh có ổ cắm tại bàn. Khu làm việc yên tĩnh có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F138,power,Tiện ích,vi,Mình mang laptop đến ngồi làm việc được không?,"Hầu hết chi nhánh có ổ cắm tại bàn. Khu làm việc yên tĩnh có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F139,power,Tiện ích,en,Are there power outlets?,"Most branches have power outlets at the tables. Quiet workspaces are available at: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F140,power,Tiện ích,en,Can I work on my laptop there?,"Most branches have power outlets at the tables. Quiet workspaces are available at: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F141,quiet_space,Tiện ích,vi,Chỗ nào yên tĩnh để học bài?,"Các chi nhánh có khu làm việc yên tĩnh gồm: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F142,quiet_space,Tiện ích,vi,Chi nhánh nào có khu làm việc?,"Các chi nhánh có khu làm việc yên tĩnh gồm: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F143,quiet_space,Tiện ích,en,Where can I find a quiet place to study?,"Branches with a quiet workspace area: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F144,quiet_space,Tiện ích,en,Which branches have a workspace area?,"Branches with a quiet workspace area: Nguyễn Huệ, Phạm Văn Đồng, Cầu Giấy, Lạch Tray."
+F145,kids,Tiện ích,vi,Quán có ghế cho em bé không?,"Ghế ngồi cho trẻ em có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Royal City, Vincom Ngô Quyền, Trần Phú."
+F146,kids,Tiện ích,vi,Đi cùng trẻ nhỏ thì chi nhánh nào tiện?,"Ghế ngồi cho trẻ em có tại các chi nhánh: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Royal City, Vincom Ngô Quyền, Trần Phú."
+F147,kids,Tiện ích,en,Do you have high chairs for kids?,"Child seats are available at: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Royal City, Vincom Ngô Quyền, Trần Phú."
+F148,kids,Tiện ích,en,Which branches are good for families with small children?,"Child seats are available at: Nguyễn Huệ, Phạm Văn Đồng, Crescent Mall, Royal City, Vincom Ngô Quyền, Trần Phú."
+F149,outdoor,Tiện ích,vi,Quán có chỗ ngồi ngoài trời không?,"Chỗ ngồi ngoài trời có tại các chi nhánh: Nguyễn Huệ, Võ Văn Tần, Phạm Văn Đồng, Tràng Tiền, Bạch Đằng, Ninh Kiều, Trần Phú."
+F150,outdoor,Tiện ích,vi,Chi nhánh nào có sân ngoài?,"Chỗ ngồi ngoài trời có tại các chi nhánh: Nguyễn Huệ, Võ Văn Tần, Phạm Văn Đồng, Tràng Tiền, Bạch Đằng, Ninh Kiều, Trần Phú."
+F151,outdoor,Tiện ích,en,Is there outdoor seating?,"Outdoor seating is available at: Nguyễn Huệ, Võ Văn Tần, Phạm Văn Đồng, Tràng Tiền, Bạch Đằng, Ninh Kiều, Trần Phú."
+F152,outdoor,Tiện ích,en,Which branches have an outdoor area?,"Outdoor seating is available at: Nguyễn Huệ, Võ Văn Tần, Phạm Văn Đồng, Tràng Tiền, Bạch Đằng, Ninh Kiều, Trần Phú."
+F153,branches,Chi nhánh,vi,Quán có những chi nhánh nào?,"Quán có 12 chi nhánh tại TP. Hồ Chí Minh, Hà Nội, Đà Nẵng, Hải Phòng, Cần Thơ và Nha Trang. Tại Hà Nội có: Tràng Tiền, Cầu Giấy, Royal City."
+F154,branches,Chi nhánh,vi,Có chi nhánh ở Hà Nội không?,"Quán có 12 chi nhánh tại TP. Hồ Chí Minh, Hà Nội, Đà Nẵng, Hải Phòng, Cần Thơ và Nha Trang. Tại Hà Nội có: Tràng Tiền, Cầu Giấy, Royal City."
+F155,branches,Chi nhánh,en,Where are your branches?,"We have 12 branches in Ho Chi Minh City, Hanoi, Da Nang, Hai Phong, Can Tho and Nha Trang. In Hanoi: Tràng Tiền, Cầu Giấy, Royal City."
+F156,branches,Chi nhánh,en,Do you have a branch in Hanoi?,"We have 12 branches in Ho Chi Minh City, Hanoi, Da Nang, Hai Phong, Can Tho and Nha Trang. In Hanoi: Tràng Tiền, Cầu Giấy, Royal City."
+F157,recruitment,Chính sách,vi,Quán có đang tuyển nhân viên không?,Bạn gửi hồ sơ ứng tuyển qua email cskh@highlands-sample.vn hoặc nộp trực tiếp tại quản lý chi nhánh.
+F158,recruitment,Chính sách,vi,Nộp hồ sơ xin việc ở đâu?,Bạn gửi hồ sơ ứng tuyển qua email cskh@highlands-sample.vn hoặc nộp trực tiếp tại quản lý chi nhánh.
+F159,recruitment,Chính sách,en,Are you hiring?,Send your application to cskh@highlands-sample.vn or hand it to the branch manager.
+F160,recruitment,Chính sách,en,Where do I apply for a job?,Send your application to cskh@highlands-sample.vn or hand it to the branch manager.

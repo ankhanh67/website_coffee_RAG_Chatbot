@@ -1,0 +1,3602 @@
+[
+ {
+  "id": "R-TEST-00001",
+  "text": "Hi, Any good vegan options?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00002",
+  "text": "Ừ ừ anh biết ồi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00003",
+  "text": "How far is the  nearest branch by the way",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00004",
+  "text": "cho tôi hỏi, quán ở đâu vậy?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00005",
+  "text": "Nghe nói vậy",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00006",
+  "text": "huh... Okay okay thanks bye",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00007",
+  "text": "heh, Okay okay thanks bye",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00008",
+  "text": "ừm, Hay đấy nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00009",
+  "text": "em đang làm việc, nên chọn bánh nào?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00010",
+  "text": "mình đổi bạc xỉu thành ạ",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00011",
+  "text": "em gọi matcha latte với soda dâu",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00012",
+  "text": "Sorry, wrongg person",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00013",
+  "text": "he... em đang đi chơi cuối tuần, nên chọn cà phê nào?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00014",
+  "text": "à, tôi đổi cappuccino thành size S",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00015",
+  "text": "à cho hỏi, đặt số lượng lớn có được giảm giá không với",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00016",
+  "text": "hihi, Lấy món nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00017",
+  "text": "ê... Quẹt thẻ được không, tính tiền cho chị",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00018",
+  "text": "nước dừa tươi vị thế nào vậy?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00019",
+  "text": "hokkaido milk tea có giao tận nơi không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00020",
+  "text": "cold brew with fresh milk vị thế nào vậy",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00021",
+  "text": "Hey, Is passion fruit freeze filling?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00022",
+  "text": "Excuse me, Is there a caffeine-free coffee by the way?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00023",
+  "text": "cà phê đen đá nhiều đá, 2 phần đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00024",
+  "text": "haha... de anh xem menu roi goi saau",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00025",
+  "text": "hey, do you have naything caffeine free",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00026",
+  "text": "ừ... có món chay nào ngon không",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00027",
+  "text": "uh, Did you see the game last night",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00028",
+  "text": "hell ohaha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00029",
+  "text": "Haha, Hay đấy nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00030",
+  "text": "cho tôi hỏi, giao hàng mất bao lâu thế?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00031",
+  "text": "Hello, Which combo is the best deal?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00032",
+  "text": "cho tôi hỏi, quán cóm ón chay không ạ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00033",
+  "text": "Món nào bán chạy nhất được không?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00034",
+  "text": "aha eh, mm... eh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00035",
+  "text": "ah... yeah huh, ah ah...",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00036",
+  "text": "ê ê... Ừ anh biết rồi nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00037",
+  "text": "Sorry, where can I find a quiet place to study if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00038",
+  "text": "Cho bác cái bill đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00039",
+  "text": "could you tell me, do reward points expire?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00040",
+  "text": "Um, Any good vegan options",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00041",
+  "text": "em đang ăn trưa, nên chọn cà phê nào",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00042",
+  "text": "hey, i want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00043",
+  "text": "mang về 2 phần cheesecake nha",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00044",
+  "text": "hể... ờ nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00045",
+  "text": "lấy ómn nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00046",
+  "text": "It's so hot today, Thanks",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00047",
+  "text": "I want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00048",
+  "text": "so, i'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00049",
+  "text": "excuse me, which branches have a workspace area thanks",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00050",
+  "text": "zzz ừ",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00051",
+  "text": "Cảm ơn em nhé. Chán ghê",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00052",
+  "text": "Quẹt thẻ được không, tính tiền cho tôi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00053",
+  "text": "ừm, Trời ơi haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00054",
+  "text": "Hello, I'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00055",
+  "text": "c ómón chay nào ngon không?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00056",
+  "text": "ơ... Món nào hợp với người khôông uống được cà phê?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00057",
+  "text": "So, Do you have anything caffeine free",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00058",
+  "text": "anh đang đi chơi cuối tuần, nên chọn đồ ăn nhẹ nào",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00059",
+  "text": "Let me think... I'm so tired",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00060",
+  "text": "Ừ ừ anh biết rồồi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi-en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00061",
+  "text": "i can't decide, whatdo you recommend",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00062",
+  "text": "Thanh toán bằng QR được không em, tính tiền giúp cô",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00063",
+  "text": "Thanh toán bằng zalopay được không em, tính tiền giúp chú",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00064",
+  "text": "trà sữa trân châu uống tại đây, 1 cái đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00065",
+  "text": "huh... Does the price include tax",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00066",
+  "text": "ừ... ê,",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00067",
+  "text": "Um, which branches are good for families with small children please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00068",
+  "text": "eh, excuse me, i'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00069",
+  "text": "combo bạn bè có giao tận nơi không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00070",
+  "text": "so, could you make that size m if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00071",
+  "text": "Chị hỏi chút nha, Ngày lễ quán có làm việc không thế",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00072",
+  "text": "Hmm. I'm so tired",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00073",
+  "text": "yeah, could you make that regular",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00074",
+  "text": "Bánh nào ăn kèm brown sugar boba fresh milk hợp nhất?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00075",
+  "text": "Is there car parking?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00076",
+  "text": "minh doi freeze thanh size nho",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00077",
+  "text": "um, i'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00078",
+  "text": "can i... no wait, foret it",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00079",
+  "text": "Móón nào hợp cho đi chơi cuối tuần?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00080",
+  "text": "Excuse me, Any goood vegan options",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00081",
+  "text": "Um, where can I park my car please",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00082",
+  "text": "Haha, Hello",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00083",
+  "text": "okay okay thanks bye",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00084",
+  "text": "Cancle the pineapple juice",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00085",
+  "text": "xin hoi, minh mua mang di duoc khong?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00086",
+  "text": "By the way, can I book a table by phone please",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00087",
+  "text": "Cho chú trà sữa thái mang đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00088",
+  "text": "uh... Does the price include tax?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00089",
+  "text": "Sorry, wronng person",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00090",
+  "text": "hihi... món nào bán chạy nhất với?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00091",
+  "text": "tôi đổi bánh brownie thành size nhỏ",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00092",
+  "text": "Um, I want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00093",
+  "text": "by the way, can i choose the sugar and ice level if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00094",
+  "text": "oh, Hey, Do you have anything caffeine free?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00095",
+  "text": "By the way, do you have a branch in Da Nang?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00096",
+  "text": "ha... ừ ừ anh biết rồi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00097",
+  "text": "bac order 1 ly ca phe muoi them tran chau",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00098",
+  "text": "Bạn ơi, Quán có nhận đặt bàn qua điện thoại không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00099",
+  "text": "Cho co blueberry muffin size M nhe, quan con ban khong?",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00100",
+  "text": "I can't decide, wat do you recommend",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00101",
+  "text": "ừm, Lát nữa nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00102",
+  "text": "địa chỉ chi nhánh quận 1 là gì",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00103",
+  "text": "bánh mousse chanh dây vị thế nào vậy",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00104",
+  "text": "So, Which combo is the best deal",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00105",
+  "text": "Cancel the orange cinnamon tea",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00106",
+  "text": "hello, do you have seating for a group of 10",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00107",
+  "text": "ê ê, cold brew sua tuoi lanh, mot ly",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00108",
+  "text": "ừm, Lát nữa nhé nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00109",
+  "text": "Cho tôi hỏi, Quán có chỗ hút thuốc không với?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00110",
+  "text": "Ok",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00111",
+  "text": "Mang ve hai ly ca phe muoi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00112",
+  "text": "heh, Sorry, wrong person",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00113",
+  "text": "he... Trời ơi nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00114",
+  "text": "thanh toan bang vnpay duoc khong em, tinh tien giup chi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00115",
+  "text": "Do you accept Via",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00116",
+  "text": "Excuse me, I'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00117",
+  "text": "did you see the game last night ll",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00118",
+  "text": "Cho cô trà chanh dây đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00119",
+  "text": "bác gọi peach tea với healthy combo",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00120",
+  "text": "Lấy món nào bán chạy nấht đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00121",
+  "text": "What time is the movie, Just looking",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00122",
+  "text": "he... nghe nói vậy nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00123",
+  "text": "Ừm, Quán có wifi miễn phí không nhé",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00124",
+  "text": "heh, um, eh mm... ah,",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00125",
+  "text": "huh... Can I... no wait, forget it",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00126",
+  "text": "quẹt thẻ được không, tính ttiền cho mình",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00127",
+  "text": "um... eh heh... ha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00128",
+  "text": "Lấy giúp bác 1 combo sáng bánh mì đá riêng",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00129",
+  "text": "ah... Does the price include tax?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00130",
+  "text": "trà táo quế có giao tận nơi không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00131",
+  "text": "Hi, Is chocolate muffin filling",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00132",
+  "text": "Excuse me, Which combo is the best deal",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00133",
+  "text": "um... Can I... no wait, forget it",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00134",
+  "text": "ới... lấy món nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00135",
+  "text": "bạn ơi, quán có cho mang laptop không thế",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00136",
+  "text": "ha... No thanks lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00137",
+  "text": "Is hokkaido milk tea filling?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00138",
+  "text": "can i reserve a table for 11?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00139",
+  "text": "alo, cho minh xin mat khau wifi voi voi?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00140",
+  "text": "sandwich jambon phô mai size M nóng, một phần ạ",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00141",
+  "text": "Em ơi cho anh hỏi, Địa chỉ chi nhánh quận 1 là gì nhỉ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00142",
+  "text": "Món nà ohợp với người không uống được cà phê?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00143",
+  "text": "à... Ừ thôi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00144",
+  "text": "tôi đang làm việc, nên chọn trà nào?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00145",
+  "text": "i'll look at th emenu first",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00146",
+  "text": "cancel the spaghetti bolognese thanks",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00147",
+  "text": "mm... So, I want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00148",
+  "text": "ờ... bánh nào ăn kèm sinh tố bơ hợp nhất?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00149",
+  "text": "can i reserve a table for 10?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00150",
+  "text": "Could you tell me, which items contain nuts or gluten",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00151",
+  "text": "hút thuốc ở đâu được",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00152",
+  "text": "Do you accept Visa",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00153",
+  "text": "lấy giúp chị ba cái passion fruit freeze",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00154",
+  "text": "aha... uh, eh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00155",
+  "text": "hello, could you make that if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00156",
+  "text": "Cancel the peach green tea",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00157",
+  "text": "yeah, i can't decide, wht do you recommend?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00158",
+  "text": "What time is the movie... Let me think",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00159",
+  "text": "excuse me, one matcha red bean freeze to go when you get a chance",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00160",
+  "text": "uh, no thanks",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00161",
+  "text": "em đang họp nhóm, nên chọn đồ uống nào?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00162",
+  "text": "ừm... Cho chị trà đào ít ngọt",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00163",
+  "text": "haha, hello lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00164",
+  "text": "Lay giup minh 1 ly thai milk tea lanh",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00165",
+  "text": "hể",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00166",
+  "text": "cho tôi hỏi, quán nhận thanh toán bằng gì nhé",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00167",
+  "text": "tôi order 1 phần passion fruit mousse cake",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00168",
+  "text": "Nho em cho anh biet, Do that lac duoc giu bao lau voi",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00169",
+  "text": "hm... lấy món nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00170",
+  "text": "lát nữa nhé nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00171",
+  "text": "ha, Thank you",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00172",
+  "text": "ới ừ... à",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00173",
+  "text": "Um, Anything under 70k",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00174",
+  "text": "hey, which combo is the best deal?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00175",
+  "text": "Cho chú blueberry soda size S nhé, quán còn bàn không?",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00176",
+  "text": "ờ, Cho cô cái bill đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00177",
+  "text": "Cho mình sữa tươi trân châu đường đen mang đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00178",
+  "text": "Cho tôi hỏi, Đặt tiệc cho 20 người cần cọc không",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00179",
+  "text": "à... Có món chay nào ngon không",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00180",
+  "text": "Excuse me, Is mango smoothie filling?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00181",
+  "text": "Cho em đen đá mnag đi được không",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00182",
+  "text": "Mang về hai combo healthy giúp mình",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00183",
+  "text": "Sorry, Anything under 40k",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00184",
+  "text": "ừm, Hello",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00185",
+  "text": "whch combo is the best deal?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00186",
+  "text": "ha, I can't decide,what do you recommend",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00187",
+  "text": "Cho chị cái bill đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00188",
+  "text": "Nhờ em cho anh biết, Quán có bán bánh sinh nhật nguyên cái không ạ",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00189",
+  "text": "Haha, That was funny lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00190",
+  "text": "hey, quick question: can i book a table by phone please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00191",
+  "text": "có món chay nào ngn không",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00192",
+  "text": "oh, Hi, Is there an extra charge for takeaway please",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00193",
+  "text": "i'll look at he menu first",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00194",
+  "text": "cô gọi bánh red velvet với phin đen đá",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00195",
+  "text": "Can I reserve a table for 16?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00196",
+  "text": "ngoài trời đang mưa to kìa, xe mình đỗ ở đâu rồi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00197",
+  "text": "cho cô trà vải size l nhé, quán còn bàn không",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00198",
+  "text": "Um, Minh muon dat ban cho nhom dong thi lam sao voi?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00199",
+  "text": "Cho bac banh mousse socola nhe, quan con ban khong",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00200",
+  "text": "à... Chị hỏi chút nha, Chi nhánh nào có khu làm việc vậy ạ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00201",
+  "text": "Okay... Thank you",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00202",
+  "text": "one sweet combo to go if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00203",
+  "text": "cho em peach tea ít ngọt được không",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00204",
+  "text": "huh, do you accept momo",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00205",
+  "text": "Hello, how far ahead should I book and how long do you hold the table",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00206",
+  "text": "thanh toán bằng tiền mặt được không em, tính tiền giúp mình",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00207",
+  "text": "tôi gọi cheesecake với hazelnut latte",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00208",
+  "text": "Nho em cho anh biet, Quan co wifi mien phi khong?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00209",
+  "text": "trà sữa matcha vị thế nào vậy?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00210",
+  "text": "Um, Is blueberry yourt freeze filling?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00211",
+  "text": "yeah, eh, heh...",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00212",
+  "text": "ơ... ừm, ờ",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00213",
+  "text": "cho tôi hỏi, phí giao hàng là bao nhiêu ạ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00214",
+  "text": "Cho cô cái bil đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00215",
+  "text": "ha... so, i want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00216",
+  "text": "can i reserve a table for 17",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00217",
+  "text": "Mang về 2 ly avocado smoothie nhé em",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00218",
+  "text": "Khoi haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00219",
+  "text": "cold brew with fresh milk size M khôngđường, một cái",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00220",
+  "text": "ừm, đặt tiệc cho 20 người cần cọc không em nhỉ",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00221",
+  "text": "haha, ừ anh biết rồi haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00222",
+  "text": "does te price include tax",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00223",
+  "text": "chị order một cái khoai tây chiên ít ngọt",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00224",
+  "text": "rè rè ê",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00225",
+  "text": "heh... Let's go home... Hi there",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00226",
+  "text": "caramel macchiato có giao tận nơi không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00227",
+  "text": "Wow. Hmm let me see",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00228",
+  "text": "Hey, Do you have anything caffeine free",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00229",
+  "text": "fried egg banh mi, 1 cái cảm ơn",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00230",
+  "text": "Lấy món nào bánn chạy nhất đi?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00231",
+  "text": "chị hỏi chút nha, giao hàng mất bao lâu thế?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00232",
+  "text": "Um, Is iced vietnamese milk coffee filling?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00233",
+  "text": "ừm, Ừ anh biết rồi...",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00234",
+  "text": "Do you accept MoMo?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00235",
+  "text": "Um, where are you loccated",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00236",
+  "text": "Cho tôi banana oat smoothie mang đi ạ",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00237",
+  "text": "Cho em trà đào cam sả",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00238",
+  "text": "Hey, quick question: can I place a bulk order of 30 cups for my office?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00239",
+  "text": "ừm, trời ơi!",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00240",
+  "text": "tôi đổi bánh brownie thành size L với",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00241",
+  "text": "I can't decide, what do you recomemnd?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00242",
+  "text": "How far is the nearest branch if you don't mind",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00243",
+  "text": "chi goi combo mi y voi salad ga",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00244",
+  "text": "mm hmm... oh uh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00245",
+  "text": "nâu đá vị thế nào vậy?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00246",
+  "text": "um, Hay day!",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00247",
+  "text": "hello",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00248",
+  "text": "Anything under 60k?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00249",
+  "text": "Um, Could you make that",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00250",
+  "text": "can i reserve a table for 3?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00251",
+  "text": "Quẹt thẻ được không, tính tiền cho mình",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00252",
+  "text": "ờ... he ê...",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00253",
+  "text": "Hi, do you have seating for a group of 10 please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00254",
+  "text": "ừm, Cho tôi hỏi, Quán có bán thẻ quà tặng không thế",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00255",
+  "text": "Just get me a strawberry soda then",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00256",
+  "text": "Nhờ em cho anh biết, Số hotline của quán là gì?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00257",
+  "text": "So, Any good vegan options",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00258",
+  "text": "em ơi cho anh hỏi, số hotline của quán là gì thế?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00259",
+  "text": "Can I get the wifi password if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00260",
+  "text": "hello, where can i park my car",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00261",
+  "text": "Sorry, Which combo iis the best deal",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00262",
+  "text": "lấy giúp anh 1 phần fresh orange juice",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00263",
+  "text": "uh, hello",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00264",
+  "text": "alo, quán có chỗ hút thuốc không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00265",
+  "text": "sorry, wrong person",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00266",
+  "text": "I can't decide, whatt do you recommend?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00267",
+  "text": "ha, excuse me, i want to try something new, any ideas",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00268",
+  "text": "Hello, do you host birthday parties thanks?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00269",
+  "text": "Bánh nào ăn kèm blueberry muffin hợp nhất?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00270",
+  "text": "cho chị sinh tố dâu mang đi nha",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00271",
+  "text": "Just wondering, what do I need to book a birthday party by the way",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00272",
+  "text": "hể, Món nào hợp với người không uống được cà phê",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00273",
+  "text": "Anything under 70k",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00274",
+  "text": "ah... uh yeah heh, aha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00275",
+  "text": "Hello, Do you have anything caffeine free?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00276",
+  "text": "Do you have a branch in Da Nang?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00277",
+  "text": "Món nào hợp với ngườikhông uống được cà phê",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00278",
+  "text": "À cho hỏi, Quán có giao hàng tận nơi không thế?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00279",
+  "text": "I can't decide, what od you recommend",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00280",
+  "text": "Doi ti haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00281",
+  "text": "mang về 1 ly sinh tố xoài cảm ơn",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00282",
+  "text": "Any good vega noptions?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00283",
+  "text": "cho em caramel macchiato đá riêng nhé",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00284",
+  "text": "Cho tôi cái bill đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00285",
+  "text": "ha... haha... ừ thôi...",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00286",
+  "text": "bác ordder một ly trà thạch đào ít đá",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00287",
+  "text": "ha... That was funny",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00288",
+  "text": "yeah, ha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00289",
+  "text": "uh... Um, do you host birthday parties thanks",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00290",
+  "text": "à cho hỏi, có thể thanh toán bằng thẻ tín dụng không?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00291",
+  "text": "Lấy món nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00292",
+  "text": "Lấy mó nào bán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00293",
+  "text": "De anh xem menu oi goi sau",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00294",
+  "text": "huh... just get me one tiramisu then",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00295",
+  "text": "Hey, I'm ready to order",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00296",
+  "text": "cancel the coconut coffee",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00297",
+  "text": "há... món nào bán chạy nhất đi?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00298",
+  "text": "Just get me one strawberry freeze then",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00299",
+  "text": "Chi hoi chut nha, Do that lac duoc giu bao lau voi",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00300",
+  "text": "cô order 1 ly bánh mì ít đường",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00301",
+  "text": "haha... Món nào hợp với người không uống được cà phê?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00302",
+  "text": "fresh orange juice vi the nao vay?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00303",
+  "text": "haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00304",
+  "text": "Just wondering, where can I find a quiet place to study if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00305",
+  "text": "Thanh toán bằng zalopay được không em, tính tiền giúp mình",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00306",
+  "text": "nho em cho anh biet, co the thanh toan bang the tin dung khong nhe?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00307",
+  "text": "um, where can i buy a gift card please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00308",
+  "text": "haha... món nào bán chạy nhất giúp mình",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00309",
+  "text": "uh, eh... oh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00310",
+  "text": "Cho mình cà phê đen đá size L nhé, quán còn bàn không?",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00311",
+  "text": "sorry, any good vegan options?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00312",
+  "text": "Em ơi cho anh hỏi, Quán có bán bánh sinh nhật nguyên cái không em nhỉ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00313",
+  "text": "ầm ầm há",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00314",
+  "text": "Um, are you hiring thanks?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00315",
+  "text": "Lấy giúp chị 2 ly trà vải uống tại đây",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00316",
+  "text": "Món nào bán chạy nhất giúp anh",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00317",
+  "text": "heh... uh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00318",
+  "text": "à cho hỏi, phí giao hàng là bao nhiêu vậy ạ?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00319",
+  "text": "Do you accept ZaloPay",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00320",
+  "text": "có món chay nào ngon không",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00321",
+  "text": "Món nào hợp cho ăn sáng?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00322",
+  "text": "Ơ, Để anh nghĩ đã",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00323",
+  "text": "Em ơi cho anh hỏi, Quán ở đâu vậy vậy ạ",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00324",
+  "text": "I can't decide, waht do you recommend",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00325",
+  "text": "Haha, Traffic was terrible lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00326",
+  "text": "huh uh... hmm... huh",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00327",
+  "text": "heh, Cancel the milk tea thanks",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00328",
+  "text": "Lấy món nào bá chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00329",
+  "text": "Hello, how do I give feedback about the service by the way",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00330",
+  "text": "có món chay nào ngon khôgn?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00331",
+  "text": "Bánh nào ăn kèm mì ý sốt kem nấm hợp nhất",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00332",
+  "text": "Excuse me, I want to try something new, any ideas?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00333",
+  "text": "ới... không nhé",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00334",
+  "text": "How far ahead should I book and how long do you hold the table please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00335",
+  "text": "Để anh xemmenu rồi gọi sau",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi-en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00336",
+  "text": "haha, thank you lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00337",
+  "text": "Haha, Bố ơi con muốn về",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00338",
+  "text": "Món nào hợp cho họp nhóm",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00339",
+  "text": "do you have nything caffeine free?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00340",
+  "text": "Just get me a grilled chicken sandwich then",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00341",
+  "text": "Doe sthe price include tax?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00342",
+  "text": "há, Món nào hợp cho ăn trưa?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00343",
+  "text": "Bánh nào ăn kèm strawberry milk tea hợp nhất",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00344",
+  "text": "Sorry, Is the ice free please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00345",
+  "text": "mm, I'll look at the menu first",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00346",
+  "text": "há... đặt bàn trước bao lâu và giữ bàn bao lâu vậy ạ",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00347",
+  "text": "Hello, can I place a bulk order of 30 cups for my office please",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00348",
+  "text": "anything under 100k?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00349",
+  "text": "Who do I contact for feedback or a complaint thanks",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00350",
+  "text": "Bố ơi con muốn về!",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00351",
+  "text": "lấy món nào bbán chạy nhất đi",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00352",
+  "text": "uh, That was funny lol",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00353",
+  "text": "tôi order 3 ly trà sữa thái",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00354",
+  "text": "What do I need to book a birthday party please?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00355",
+  "text": "xin hỏi, quán có nhận đặt bàn qua điện thoại không nhỉ",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00356",
+  "text": "à... Cho em trà xanh espresso mang đi với",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00357",
+  "text": "hể... không haha",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00358",
+  "text": "nâu đá có giao tận nơi không",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00359",
+  "text": "Mang về một ly trà đào nhé",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00360",
+  "text": "bác đổi trà đào thành nhé",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00361",
+  "text": "Cho tôi bánh phô mai trà xanh mang đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00362",
+  "text": "hihi... ờ!",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00363",
+  "text": "cô order một cái ham & cheese sandwich ít ngọt",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00364",
+  "text": "Okay okay thank bye",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00365",
+  "text": "hello, one brown sugar boba fresh milk to go thanks",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00366",
+  "text": "mm... I can't decide, what do you recommend?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00367",
+  "text": "Sorry, Anything under 60k?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00368",
+  "text": "Hah, Khỏi",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00369",
+  "text": "Món nào hợp cho tiếp khách",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00370",
+  "text": "thank you yeah",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00371",
+  "text": "ơ... Ok!",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00372",
+  "text": "ờ, Món nào hợp cho họp nhóm",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00373",
+  "text": "Em ơi cho anh hỏi, Quán có cho mang laptop không nhé?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00374",
+  "text": "Hey, quick question: which branches have a workspace arae please",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00375",
+  "text": "Are you hiring if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00376",
+  "text": "hmm, hey, could you make that large if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00377",
+  "text": "Hello, Could you make that size L if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00378",
+  "text": "chị gọi black coffee với almond croissant",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00379",
+  "text": "traffic was terrible yeah",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00380",
+  "text": "aha, Could you tell me, Is there a caffeine-free coffee",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00381",
+  "text": "em đổi trà chanh sả thành đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00382",
+  "text": "sorry, one teriyai chicken rice to go",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00383",
+  "text": "I can't decide, what do yo recommend?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00384",
+  "text": "just get me 2 chamomile honey tea then",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00385",
+  "text": "Um, One taro milk tea to go if you can",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00386",
+  "text": "Mon nao hop voi nguoi khong uong duoc ca pphe?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00387",
+  "text": "Cho cô cái bill đi",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00388",
+  "text": "when is your rush hour",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00389",
+  "text": "Hi, where are you located thanks",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00390",
+  "text": "um, doi ti",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00391",
+  "text": "yeah... did you see the game last night",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00392",
+  "text": "Quẹt tẻ được không, tính tiền cho bác",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": true
+ },
+ {
+  "id": "R-TEST-00393",
+  "text": "Hello, which items contain nuts or gluten if you don't mind?",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00394",
+  "text": "Hi, One lychee jelly tea to go thanks",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00395",
+  "text": "món nào bá nchạy nhất?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00396",
+  "text": "bánh nào ăn kèm strawberry freeze hợp nhất?",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00397",
+  "text": "ê haha há",
+  "label": 3,
+  "intent": "ignore",
+  "is_noise": true,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00398",
+  "text": "ê... Em oi cho anh hoi, Quan nhan thanh toan bang gi a",
+  "label": 2,
+  "intent": "faq",
+  "is_noise": false,
+  "language": "vi",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00399",
+  "text": "lấy giúp chú 3 cái strawberry tea nhiều đá",
+  "label": 0,
+  "intent": "order",
+  "is_noise": false,
+  "language": "vi-en",
+  "is_hard": false
+ },
+ {
+  "id": "R-TEST-00400",
+  "text": "huh... Hi, Anything under 80k",
+  "label": 1,
+  "intent": "consultant",
+  "is_noise": false,
+  "language": "en",
+  "is_hard": false
+ }
+]

@@ -1,0 +1,484 @@
+[
+ {
+  "id": "Q01",
+  "language": "vi",
+  "question": "Phin Đen Đá giá bao nhiêu và có caffeine không?",
+  "type": "menu",
+  "expected_answer": "Phin Đen Đá size M giá 35.000đ, có caffeine.",
+  "answer_keywords": [
+   "35.000đ",
+   "caffeine"
+  ],
+  "gold_menu_ids": [
+   "M002"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q02",
+  "language": "vi",
+  "question": "Quán có đồ uống nào không có caffeine và thuần chay?",
+  "type": "menu",
+  "expected_answer": "Các đồ uống không caffeine và thuần chay: Chanh Dây Freeze, Trà Atiso, Nước Ép Cam, Nước Ép Dưa Hấu, Nước Ép Ổi, Nước Ép Cà Rốt, Nước Ép Dứa, Soda Chanh, Soda Dâu, Soda Việt Quất, Nước Suối, Nước Dừa Tươi.",
+  "answer_keywords": [
+   "Chanh Dây Freeze",
+   "Trà Atiso",
+   "Nước Ép Cam"
+  ],
+  "gold_menu_ids": [
+   "M025",
+   "M045",
+   "M064",
+   "M065",
+   "M066",
+   "M067",
+   "M068",
+   "M071",
+   "M072",
+   "M073",
+   "M074",
+   "M076"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Nhieu dap an dung; precision@5 tinh theo gold_menu_ids."
+ },
+ {
+  "id": "Q03",
+  "language": "en",
+  "question": "How much is the Peach Orange Lemongrass Tea in size L?",
+  "type": "menu",
+  "expected_answer": "The Peach Orange Lemongrass Tea in size L costs 65,000 VND.",
+  "answer_keywords": [
+   "65,000",
+   "65"
+  ],
+  "gold_menu_ids": [
+   "M036"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q04",
+  "language": "vi",
+  "question": "Combo nào dành cho nhóm 4 người và giá bao nhiêu?",
+  "type": "menu",
+  "expected_answer": "Combo Nhóm 4 Người gồm 4 Trà Vải, 1 Khoai Tây Chiên, giá 199.000đ.",
+  "answer_keywords": [
+   "Combo Nhóm 4 Người",
+   "199.000đ"
+  ],
+  "gold_menu_ids": [
+   "M112"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q05",
+  "language": "en",
+  "question": "Which cakes and pastries contain nuts?",
+  "type": "menu",
+  "expected_answer": "Items containing nuts: Brownie, Almond Croissant.",
+  "answer_keywords": [
+   "Brownie",
+   "Almond Croissant"
+  ],
+  "gold_menu_ids": [
+   "M089",
+   "M092"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q06",
+  "language": "vi",
+  "question": "Bạc Xỉu có sữa không và uống nóng được không?",
+  "type": "menu",
+  "expected_answer": "Bạc Xỉu có sữa (sữa tươi, sữa đặc) và có thể uống nóng hoặc lạnh.",
+  "answer_keywords": [
+   "sữa",
+   "nóng"
+  ],
+  "gold_menu_ids": [
+   "M005"
+  ],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q07",
+  "language": "vi",
+  "question": "Mật khẩu wifi của quán là gì?",
+  "type": "faq",
+  "expected_answer": "Mật khẩu wifi là coffee2026 (mạng Highlands_Free).",
+  "answer_keywords": [
+   "coffee2026"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "wifi"
+  ],
+  "gold_faq_ids": [
+   "F001",
+   "F002",
+   "F003",
+   "F004"
+  ],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q08",
+  "language": "en",
+  "question": "How many people do I need for a birthday party and how early should I book?",
+  "type": "faq",
+  "expected_answer": "Birthday parties need at least 10 people and should be booked 1 day ahead.",
+  "answer_keywords": [
+   "10",
+   "1 day"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "birthday_party"
+  ],
+  "gold_faq_ids": [
+   "F037",
+   "F038",
+   "F039",
+   "F040"
+  ],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q09",
+  "language": "vi",
+  "question": "Nếu tôi chi 250.000đ thì được bao nhiêu điểm thành viên?",
+  "type": "faq_calc",
+  "expected_answer": "Mỗi 10.000đ được 1 điểm nên 250.000đ được 25 điểm.",
+  "answer_keywords": [
+   "25"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "loyalty_earn"
+  ],
+  "gold_faq_ids": [
+   "F061",
+   "F062",
+   "F063",
+   "F064"
+  ],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Can suy luan so hoc tu cau tra loi FAQ."
+ },
+ {
+  "id": "Q10",
+  "language": "en",
+  "question": "Is delivery free for a 120,000 VND order within 2 km?",
+  "type": "faq_calc",
+  "expected_answer": "Yes. Orders of 100,000 VND or more within 3 km get free delivery.",
+  "answer_keywords": [
+   "free"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "delivery_fee"
+  ],
+  "gold_faq_ids": [
+   "F049",
+   "F050",
+   "F051",
+   "F052"
+  ],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "120k >= 100k va 2km <= 3km."
+ },
+ {
+  "id": "Q11",
+  "language": "vi",
+  "question": "Chi nhánh nào ở Hà Nội có khu làm việc yên tĩnh?",
+  "type": "faq_branch",
+  "expected_answer": "Tại Hà Nội, khu làm việc yên tĩnh có ở chi nhánh Cầu Giấy.",
+  "answer_keywords": [
+   "Cầu Giấy"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "quiet_space"
+  ],
+  "gold_faq_ids": [
+   "F141",
+   "F142",
+   "F143",
+   "F144"
+  ],
+  "gold_doc_sections": [
+   "branch-07"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q12",
+  "language": "vi",
+  "question": "Nếu nước pha sai thì quán làm lại trong bao lâu?",
+  "type": "doc",
+  "expected_answer": "Quán làm lại món mới trong vòng 15 phút kể từ khi khách nhận món.",
+  "answer_keywords": [
+   "15",
+   "phút"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "refund"
+  ],
+  "gold_faq_ids": [
+   "F113",
+   "F114",
+   "F115",
+   "F116"
+  ],
+  "gold_doc_sections": [
+   "policy-02"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q13",
+  "language": "vi",
+  "question": "Điểm thưởng HL Rewards hết hạn sau bao lâu?",
+  "type": "doc",
+  "expected_answer": "Điểm có hạn sử dụng 12 tháng kể từ ngày phát sinh.",
+  "answer_keywords": [
+   "12 tháng"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [
+   "policy-09"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Chi co trong tai lieu, KHONG co trong FAQ."
+ },
+ {
+  "id": "Q14",
+  "language": "en",
+  "question": "How long should a hot drink take to prepare?",
+  "type": "doc",
+  "expected_answer": "Hot drinks must be ready within 4 minutes of taking the order.",
+  "answer_keywords": [
+   "4 minutes"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [
+   "sop-09"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Tai lieu tieng Viet, cau hoi tieng Anh (cross-lingual)."
+ },
+ {
+  "id": "Q15",
+  "language": "vi",
+  "question": "Chương trình Thứ Tư có ưu đãi gì?",
+  "type": "doc",
+  "expected_answer": "Thứ Tư Nhân Đôi Điểm: thành viên HL Rewards nhận gấp đôi điểm thưởng cho mọi đơn hàng.",
+  "answer_keywords": [
+   "gấp đôi",
+   "điểm"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "promotions"
+  ],
+  "gold_faq_ids": [
+   "F073",
+   "F074",
+   "F075",
+   "F076"
+  ],
+  "gold_doc_sections": [
+   "promo-10"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": ""
+ },
+ {
+  "id": "Q16",
+  "language": "vi",
+  "question": "Khiếu nại về an toàn thực phẩm được liên hệ lại trong bao lâu?",
+  "type": "doc",
+  "expected_answer": "Quản lý phải liên hệ lại với khách trong vòng 2 giờ.",
+  "answer_keywords": [
+   "2 giờ"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [
+   "policy-16"
+  ],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Chi co trong tai lieu."
+ },
+ {
+  "id": "Q17",
+  "language": "vi",
+  "question": "Hạng Vàng cần bao nhiêu điểm và điểm thưởng đổi được gì?",
+  "type": "multi_chunk",
+  "expected_answer": "Hạng Vàng cần từ 500 điểm tích lũy trong năm. 100 điểm đổi được 1 đồ uống size M bất kỳ.",
+  "answer_keywords": [
+   "500",
+   "100 điểm"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [
+   "policy-08",
+   "policy-09"
+  ],
+  "needs_graph_expansion": true,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Hai section ke nhau (NEXT) - vector search thuan thuong chi lay duoc 1."
+ },
+ {
+  "id": "Q18",
+  "language": "en",
+  "question": "Which Hanoi branches have car parking and when do they open?",
+  "type": "multi_chunk",
+  "expected_answer": "Hanoi branches with car parking: Cầu Giấy opens 06:30 to 22:30; Royal City opens 09:00 to 22:00.",
+  "answer_keywords": [
+   "Cầu Giấy",
+   "Royal City",
+   "06:30",
+   "09:00"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [
+   "parking"
+  ],
+  "gold_faq_ids": [
+   "F133",
+   "F134",
+   "F135",
+   "F136"
+  ],
+  "gold_doc_sections": [
+   "branch-07",
+   "branch-08"
+  ],
+  "needs_graph_expansion": true,
+  "forbidden_keywords": [],
+  "answerable": true,
+  "note": "Hai chunk chi nhanh ke nhau."
+ },
+ {
+  "id": "Q19",
+  "language": "vi",
+  "question": "Quán có bán phở bò không và giá bao nhiêu?",
+  "type": "unanswerable",
+  "expected_answer": "Menu không có phở. Mình chỉ có đồ uống, bánh và một số món mặn như bánh mì, mì Ý, salad, cơm gà.",
+  "answer_keywords": [
+   "không có"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [
+   "phở bò giá",
+   "50.000đ",
+   "60.000đ",
+   "70.000đ"
+  ],
+  "answerable": false,
+  "note": "Phai tu choi / noi khong co thong tin, khong duoc bia gia."
+ },
+ {
+  "id": "Q20",
+  "language": "en",
+  "question": "How many calories are in a Latte?",
+  "type": "unanswerable",
+  "expected_answer": "The menu does not include calorie information for the Latte.",
+  "answer_keywords": [
+   "not"
+  ],
+  "gold_menu_ids": [],
+  "gold_faq_topics": [],
+  "gold_faq_ids": [],
+  "gold_doc_sections": [],
+  "needs_graph_expansion": false,
+  "forbidden_keywords": [
+   "kcal",
+   "calories per",
+   "150 calories",
+   "190 calories"
+  ],
+  "answerable": false,
+  "note": "Menu/FAQ khong co du lieu calo. Khong duoc bia con so."
+ }
+]
