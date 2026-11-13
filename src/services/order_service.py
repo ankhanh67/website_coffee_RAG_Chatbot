@@ -161,6 +161,14 @@ class OrderService:
             logger.info("STAGE OrderService.process_extraction OUTPUT: %s", dump_json(calc.model_dump(mode="json")))
             return calc
 
+        if extraction.intent in (OrderIntentType.VIEW, OrderIntentType.UNKNOWN) and not extraction.items:
+            if not cart:
+                calc = self._calculate_totals([], OrderStatus.EMPTY, message_hint="view_empty")
+            else:
+                calc = self._calculate_totals(cart, OrderStatus.PENDING_CONFIRMATION, message_hint="view")
+            logger.info("STAGE OrderService.process_extraction OUTPUT: %s", dump_json(calc.model_dump(mode="json")))
+            return calc
+
         if extraction.intent is OrderIntentType.CONFIRM and not extraction.items:
             if not cart:
                 calc = self._calculate_totals([], OrderStatus.EMPTY, message_hint="confirm_empty")
@@ -261,3 +269,4 @@ class OrderService:
                 note=item_input.note,
             )
         )
+

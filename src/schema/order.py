@@ -12,6 +12,8 @@ class OrderIntentType(StrEnum):
     UPDATE = "update"
     CONFIRM = "confirm"
     CANCEL = "cancel"
+    VIEW = "view"
+    UNKNOWN = "unknown"
 
 
 class OrderStatus(StrEnum):

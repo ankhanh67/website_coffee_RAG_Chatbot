@@ -231,3 +231,44 @@ async def test_confirm_empty_cart_and_cancel_cart():
     assert cancelled.status is OrderStatus.CANCELLED
     assert cancelled.total_vnd == 0
     assert service.has_pending_order("sess-cancel") is False
+
+
+async def test_view_cart_and_unknown_intent():
+    repo = FakeMenuRepository(make_menu_records())
+    service = OrderService(repository=repo)
+
+    # View when empty
+    view_empty = await service.process_extraction(
+        "sess-view",
+        OrderExtraction(intent=OrderIntentType.VIEW),
+    )
+    assert view_empty.status is OrderStatus.EMPTY
+    assert view_empty.message_hint == "view_empty"
+
+    # Add item
+    await service.process_extraction(
+        "sess-view",
+        OrderExtraction(
+            intent=OrderIntentType.ADD,
+            items=[OrderItemInput(name="Phin Sữa Đá", size="M", quantity=2)],
+        ),
+    )
+
+    # View with items
+    view_populated = await service.process_extraction(
+        "sess-view",
+        OrderExtraction(intent=OrderIntentType.VIEW),
+    )
+    assert view_populated.status is OrderStatus.PENDING_CONFIRMATION
+    assert view_populated.message_hint == "view"
+    assert len(view_populated.items) == 1
+    assert view_populated.total_vnd == 78000
+
+    # Unknown intent also behaves like view
+    view_unknown = await service.process_extraction(
+        "sess-view",
+        OrderExtraction(intent=OrderIntentType.UNKNOWN),
+    )
+    assert view_unknown.status is OrderStatus.PENDING_CONFIRMATION
+    assert view_unknown.total_vnd == 78000
+

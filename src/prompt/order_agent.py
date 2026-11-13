@@ -8,7 +8,7 @@ ORDER_EXTRACTION_SYSTEM_PROMPT = """Bạn là bộ trích xuất đơn hàng cho
 Hãy phân tích câu nói của khách hàng và trả về duy nhất một JSON object theo đúng cấu trúc sau (không kèm giải thích):
 
 {
-  "intent": "add" | "remove" | "update" | "confirm" | "cancel",
+  "intent": "add" | "remove" | "update" | "confirm" | "cancel" | "view",
   "items": [
     {
       "name": "tên món khách gọi (bỏ từ 'ly', 'cốc', 'cái')",
@@ -26,6 +26,8 @@ Quy tắc:
 3. Nếu khách muốn bỏ/xóa một món khỏi giỏ -> intent = "remove", món đó có action = "remove".
 4. Nếu khách xác nhận chốt đơn ("Đúng rồi", "Ok chốt đơn", "Xác nhận", "Đồng ý", "Chốt nhé") -> intent = "confirm", items = [].
 5. Nếu khách muốn hủy toàn bộ đơn hàng ("Hủy đơn", "Không đặt nữa", "Xóa hết giỏ hàng") -> intent = "cancel", items = [].
+6. Nếu khách hỏi đã đặt món gì / muốn xem lại giỏ hàng ("tôi đã đặt món gì", "xem giỏ hàng", "trong giỏ có gì", "kiểm tra đơn") -> intent = "view", items = [].
+7. Nếu câu nói không rõ hành động cụ thể nào ở trên -> intent = "unknown", items = [].
 """
 
 _SHORT_FOLLOWUP_RE = re.compile(
@@ -70,6 +72,11 @@ def format_order_response(calc: OrderCalculation) -> str:
         return "Mình đã hủy toàn bộ giỏ hàng theo yêu cầu của bạn. Khi nào muốn đặt món mới bạn cứ nhắn mình nhé!"
 
     if calc.status is OrderStatus.EMPTY:
+        if calc.message_hint == "view_empty":
+            return (
+                "Hiện tại giỏ hàng của bạn đang trống, bạn chưa đặt món nào ạ. "
+                "Bạn muốn đặt món gì (kèm size S/M/L và số lượng) để mình lên đơn giúp bạn nhé!"
+            )
         if calc.unmatched_items:
             missing = ", ".join(f"'{name}'" for name in calc.unmatched_items)
             return (
@@ -92,6 +99,14 @@ def format_order_response(calc: OrderCalculation) -> str:
             "Cảm ơn bạn, quán đang chuẩn bị món cho bạn ngay ạ!"
         )
 
+    if calc.message_hint == "view":
+        return (
+            "Hiện tại trong giỏ hàng tạm tính của bạn đang có:\n"
+            f"{items_block}\n"
+            f"Tổng tạm tính: {format_vnd(calc.total_vnd)}.\n"
+            "Bạn muốn đặt thêm món gì hay nhắn 'Xác nhận' để mình chốt đơn nhé!"
+        )
+
     # PENDING_CONFIRMATION: always ask the user to verify the matched items before confirming
     unmatched_notice = ""
     if calc.unmatched_items:
@@ -105,3 +120,4 @@ def format_order_response(calc: OrderCalculation) -> str:
         "Bạn kiểm tra giúp mình xem các món và size đã đúng ý bạn chưa ạ? "
         "Nhắn 'Xác nhận' để mình chốt đơn hoặc báo mình nếu cần thay đổi nhé!"
     )
+
