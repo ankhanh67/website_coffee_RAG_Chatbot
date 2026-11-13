@@ -16,6 +16,7 @@ def get_model_client() -> ModelClient:
     return ModelClient(
         api_key=s.llm_api_key.get_secret_value(),
         decisions_url=s.llm_decisions_url,
+        base_url=s.llm_base_url,
         timeout_seconds=s.llm_timeout_seconds,
         max_retries=s.llm_max_retries,
     )
