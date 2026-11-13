@@ -139,4 +139,60 @@ ORDER BY score DESC
 LIMIT 1
 """
 
+# 7. Uniqueness constraints for Chunk and Entity
+INIT_CHUNK_CONSTRAINTS = [
+    """
+    CREATE CONSTRAINT chunk_id_unique IF NOT EXISTS
+    FOR (c:Chunk)
+    REQUIRE c.chunk_id IS UNIQUE
+    """,
+    """
+    CREATE CONSTRAINT entity_canonical_name_unique IF NOT EXISTS
+    FOR (e:Entity)
+    REQUIRE e.canonical_name IS UNIQUE
+    """,
+]
+
+# 8. Vector index for Chunk.embedding (dimension defaults to 768)
+INIT_CHUNK_VECTOR_INDEX = """
+CREATE VECTOR INDEX chunk_vector_index IF NOT EXISTS
+FOR (c:Chunk)
+ON (c.embedding)
+OPTIONS {
+  indexConfig: {
+    `vector.dimensions`: 768,
+    `vector.similarity_function`: 'cosine'
+  }
+}
+"""
+
+# 9. Upsert Chunk
+UPSERT_CHUNK = """
+MERGE (c:Chunk {chunk_id: $chunk_id})
+SET c.source = $source,
+    c.title = $title,
+    c.text = $text,
+    c.doc_id = $doc_id,
+    c.order = $order,
+    c.file = $file,
+    c.metadata = $metadata,
+    c.embedding = $embedding
+RETURN c.chunk_id AS chunk_id
+"""
+
+# 10. Link adjacent Chunks with [:NEXT]
+LINK_CHUNKS_NEXT = """
+MATCH (c1:Chunk {chunk_id: $c1_id}), (c2:Chunk {chunk_id: $c2_id})
+MERGE (c1)-[:NEXT]->(c2)
+"""
+
+# 11. Link Chunk to Entity with [:MENTIONS]
+LINK_CHUNK_ENTITY_MENTIONS = """
+MATCH (c:Chunk {chunk_id: $chunk_id})
+MERGE (e:Entity {canonical_name: $canonical_name})
+ON CREATE SET e.name = $name, e.type = $entity_type
+MERGE (c)-[:MENTIONS]->(e)
+"""
+
+
 

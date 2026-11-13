@@ -6,7 +6,7 @@ from src.exceptions import RetrievalError
 from src.observability.logging import dump_json
 from src.rag.graph import queries
 from src.rag.graph.client import Neo4jClient
-from src.schema.retrieval import MenuItemRecord
+from src.schema.retrieval import ChunkRecord, EntityRecord, MenuItemRecord
 
 logger = logging.getLogger(__name__)
 
@@ -125,4 +125,62 @@ class Neo4jRepository:
         except Exception as e:
             logger.error("Failed to search menu item by vector: %s", e)
             raise RetrievalError(f"Search menu item by vector failed: {e}") from e
+
+    async def init_chunk_schema(self, vector_dimensions: int = 768) -> None:
+        """Create constraints and chunk_vector_index on Neo4j Aura."""
+        logger.info("Initializing Neo4j Chunk schema and vector index (dimensions=%d)...", vector_dimensions)
+        try:
+            async with self.client.session() as session:
+                for query in queries.INIT_CHUNK_CONSTRAINTS:
+                    await session.run(query)
+                idx_query = queries.INIT_CHUNK_VECTOR_INDEX.replace("768", str(vector_dimensions))
+                await session.run(idx_query)
+            logger.info("Neo4j Chunk schema and vector index initialized successfully.")
+        except Exception as e:
+            logger.error("Failed to initialize Chunk schema: %s", e)
+            raise RetrievalError(f"Chunk schema initialization failed: {e}") from e
+
+    async def upsert_chunk(self, chunk: ChunkRecord, embedding: list[float]) -> str:
+        """Upsert a Chunk node with its vector embedding."""
+        params = chunk.model_dump()
+        params["metadata"] = dump_json(chunk.metadata)
+        params["embedding"] = embedding
+        logger.info("STAGE Neo4jRepository.upsert_chunk INPUT chunk_id=%s", chunk.chunk_id)
+        try:
+            async with self.client.session() as session:
+                result = await session.run(queries.UPSERT_CHUNK, **params)
+                record = await result.single()
+                chunk_id = record["chunk_id"]
+                logger.info("STAGE Neo4jRepository.upsert_chunk OUTPUT chunk_id=%s", chunk_id)
+                return chunk_id
+        except Exception as e:
+            logger.error("Failed to upsert chunk %s: %s", chunk.chunk_id, e)
+            raise RetrievalError(f"Upsert chunk failed: {e}") from e
+
+    async def link_chunks_next(self, c1_id: str, c2_id: str) -> None:
+        """Create a [:NEXT] relationship from chunk c1 to chunk c2."""
+        logger.info("STAGE Neo4jRepository.link_chunks_next INPUT: %s -> %s", c1_id, c2_id)
+        try:
+            async with self.client.session() as session:
+                await session.run(queries.LINK_CHUNKS_NEXT, c1_id=c1_id, c2_id=c2_id)
+        except Exception as e:
+            logger.error("Failed to link chunks NEXT (%s -> %s): %s", c1_id, c2_id, e)
+            raise RetrievalError(f"Link chunks NEXT failed: {e}") from e
+
+    async def link_chunk_mentions(self, chunk_id: str, entity: EntityRecord) -> None:
+        """Create an Entity node if not exists and link [:MENTIONS] from Chunk."""
+        params = {
+            "chunk_id": chunk_id,
+            "canonical_name": entity.canonical_name,
+            "name": entity.name,
+            "entity_type": entity.entity_type,
+        }
+        logger.info("STAGE Neo4jRepository.link_chunk_mentions INPUT: %s mentions %s", chunk_id, entity.canonical_name)
+        try:
+            async with self.client.session() as session:
+                await session.run(queries.LINK_CHUNK_ENTITY_MENTIONS, **params)
+        except Exception as e:
+            logger.error("Failed to link chunk mentions (%s -> %s): %s", chunk_id, entity.canonical_name, e)
+            raise RetrievalError(f"Link chunk mentions failed: {e}") from e
+
 

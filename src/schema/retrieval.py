@@ -28,3 +28,21 @@ class VectorSearchResult(BaseModel):
     node_id: str
     score: float
     properties: dict[str, Any] = Field(default_factory=dict)
+
+
+class ChunkRecord(BaseModel):
+    chunk_id: str
+    source: str
+    title: str
+    text: str
+    doc_id: str = ""
+    order: int = 0
+    file: str = ""
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class EntityRecord(BaseModel):
+    name: str
+    entity_type: str = "GENERAL"
+    canonical_name: str
+
