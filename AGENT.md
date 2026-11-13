@@ -32,7 +32,7 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
 - **Windows Sandbox & `asyncio`:** Trong sandbox của Antigravity trên Windows, việc khởi tạo `asyncio` event loop (`_make_self_pipe` qua loopback socket) bị treo. Vì vậy khi chạy `pytest` cho các hàm `async` hoặc gọi mạng (`OpenRouter`, `git push`), cần chạy với `BypassSandbox: true`.
 - **Cấu hình `.env` hiện tại:**
   - `LLM_API_KEY`: Đã có key OpenRouter thật và hoạt động tốt.
-  - `NEO4J_URI`, `NEO4J_PASSWORD`: Vẫn đang là placeholder (`neo4j+s://xxxxxxxx...`), sẽ cần cập nhật trước khi sang Phase 3.
+  - `NEO4J_URI`, `NEO4J_PASSWORD`, `NEO4J_DATABASE`: Đã kết nối Neo4j Aura thật và nạp đầy đủ 120 món menu.
 
 ---
 
@@ -61,6 +61,12 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - `src/rag/ingestion/base.py`, `src/rag/ingestion/menu.py` (`MenuIngestor` parse CSV và tạo dense semantic text mô tả món).
     - `scripts/ingest.py` hỗ trợ `--target menu`.
     - Đã nạp thành công **120/120 món ăn/đồ uống**, **10 danh mục (Category)**, **120 quan hệ `[:BELONGS_TO]`**, và tạo Vector Index `menu_vector_index` trên Neo4j Aura.
-    - Test vector search thử nghiệm trên Aura trả về món liên quan rất khớp (M001 Phin Sữa Đá -> M003 Phin Sữa Nóng score=0.958, M002 Phin Đen Đá score=0.949).
-- **[ ] Phase 4 — Hoàn thiện Order Agent (Luồng đặt hàng):** Bước tiếp theo (tính tiền tất định + tra cứu menu Neo4j).
+    - Bổ sung thuộc tính `m.name = $name_vi` trên `MenuItem` để Neo4j Aura hiển thị tên món làm caption mặc định.
+- **[x] Phase 4 — Hoàn thiện Order Agent (Luồng đặt hàng & Xác nhận 2 bước):**
+  - Mở rộng `ModelClient` (`generate_structured`, `generate_text`) và `src/schema/order.py` (`OrderExtraction`, `OrderStatus`).
+  - Bổ sung `find_menu_item_by_text` và `find_menu_item_by_vector` trong `Neo4jRepository` (Phương án A: Cypher Text Match + Vector Search Fallback `>= 0.82`).
+  - Xây dựng `OrderService` (`src/services/order_service.py`): xử lý từ đồng nghĩa phổ biến, tự động lấy `price_m` cho 46 món `"Một cỡ"`, tính tiền tất định bằng số nguyên `int` VNĐ, quản lý trạng thái giỏ hàng (`PENDING_CONFIRMATION` -> `CONFIRMED` / `CANCELLED`).
+  - Xây dựng `OrderAgent` (`src/subagents/order_agent.py`) và `src/prompt/order_agent.py`: luôn liệt kê chi tiết giỏ hàng tạm tính và hỏi khách xác nhận trước khi chốt đơn; `DeepAgent` tự động chuyển tiếp câu trả lời xác nhận ngắn (`"Đúng rồi"`, `"Ok chốt nhé"`) vào `OrderAgent` khi phiên đang có đơn chờ xác nhận.
+  - Toàn bộ 53/53 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+- **[ ] Phase 5 — Nạp dữ liệu FAQ, Documents & Watch Mode lên Neo4j Aura:** Bước tiếp theo.
 
