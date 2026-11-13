@@ -63,10 +63,19 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Đã nạp thành công **120/120 món ăn/đồ uống**, **10 danh mục (Category)**, **120 quan hệ `[:BELONGS_TO]`**, và tạo Vector Index `menu_vector_index` trên Neo4j Aura.
     - Bổ sung thuộc tính `m.name = $name_vi` trên `MenuItem` để Neo4j Aura hiển thị tên món làm caption mặc định.
 - **[x] Phase 4 — Hoàn thiện Order Agent (Luồng đặt hàng & Xác nhận 2 bước):**
-  - Mở rộng `ModelClient` (`generate_structured`, `generate_text`) và `src/schema/order.py` (`OrderExtraction`, `OrderStatus`).
+  - Mở rộng `ModelClient` (`generate_structured`, `generate_text`) và `src/schema/order.py` (`OrderExtraction`, `OrderStatus`, `VIEW`, `UNKNOWN`).
   - Bổ sung `find_menu_item_by_text` và `find_menu_item_by_vector` trong `Neo4jRepository` (Phương án A: Cypher Text Match + Vector Search Fallback `>= 0.82`).
   - Xây dựng `OrderService` (`src/services/order_service.py`): xử lý từ đồng nghĩa phổ biến, tự động lấy `price_m` cho 46 món `"Một cỡ"`, tính tiền tất định bằng số nguyên `int` VNĐ, quản lý trạng thái giỏ hàng (`PENDING_CONFIRMATION` -> `CONFIRMED` / `CANCELLED`).
   - Xây dựng `OrderAgent` (`src/subagents/order_agent.py`) và `src/prompt/order_agent.py`: luôn liệt kê chi tiết giỏ hàng tạm tính và hỏi khách xác nhận trước khi chốt đơn; `DeepAgent` tự động chuyển tiếp câu trả lời xác nhận ngắn (`"Đúng rồi"`, `"Ok chốt nhé"`) vào `OrderAgent` khi phiên đang có đơn chờ xác nhận.
-  - Toàn bộ 53/53 tests (`unit` + `e2e`) pass, `ruff check` sạch.
-- **[ ] Phase 5 — Nạp dữ liệu FAQ, Documents & Watch Mode lên Neo4j Aura:** Bước tiếp theo.
+  - Toàn bộ 54/54 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+- **[x] Phase 5 — Nạp dữ liệu FAQ, Documents & Watch Mode lên Neo4j Aura:**
+  - `src/schema/retrieval.py`: Thêm `ChunkRecord`, `EntityRecord`.
+  - `src/rag/graph/queries.py` & `src/rag/graph/repository.py`: Thêm constraints cho Chunk và Entity, tạo `chunk_vector_index` (768d), lệnh upsert chunk, nối `[:NEXT]` và `[:MENTIONS]`.
+  - `src/rag/ingestion/faq.py` (`FAQIngestor`): Nạp thành công **160/160 câu FAQ**.
+  - `src/rag/ingestion/entity_deduplicator.py` & `entity_extractor.py`: Thuật toán Jaccard token similarity ($\ge 0.50$) hợp nhất chi nhánh, phương thức thanh toán và mã khuyến mãi.
+  - `src/rag/ingestion/chunker.py` & `document.py` (`DocumentIngestor`): Nạp thành công **62/62 đoạn tài liệu** từ `doc_sections_manifest.json`, nối **58 quan hệ `[:NEXT]`** và các quan hệ `[:MENTIONS]` tới `Entity`.
+  - `src/rag/ingestion/watcher.py` (`InboxWatcher`): Lắng nghe `data/inbox/` tự động nạp file mới (`.docx`, `.pdf`, `.csv`).
+  - Mở rộng CLI `scripts/ingest.py` hỗ trợ `--target [menu|faq|docs|all]` và `--watch`. Đã nạp thành công trên Neo4j Aura thật.
+  - Toàn bộ 67/67 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+- **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.
 
