@@ -81,7 +81,7 @@ RETURN m {
 # 5. Search MenuItem by text (exact match prioritized over substring match)
 SEARCH_MENU_ITEM_BY_TEXT = """
 MATCH (m:MenuItem)
-WITH m, toLower(trim($query)) AS q, toLower(m.name_vi) AS n_vi, toLower(coalesce(m.name_en, '')) AS n_en
+WITH m, toLower(trim($search_text)) AS q, toLower(m.name_vi) AS n_vi, toLower(coalesce(m.name_en, '')) AS n_en
 WHERE n_vi = q OR n_en = q OR n_vi CONTAINS q OR q CONTAINS n_vi OR (n_en <> '' AND n_en CONTAINS q)
 WITH m,
      CASE
@@ -89,7 +89,7 @@ WITH m,
        WHEN n_vi CONTAINS q THEN 0.9
        ELSE 0.8
      END AS score,
-     abs(size(m.name_vi) - size(trim($query))) AS len_diff
+     abs(size(m.name_vi) - size(trim($search_text))) AS len_diff
 ORDER BY score DESC, len_diff ASC
 LIMIT 1
 RETURN m {

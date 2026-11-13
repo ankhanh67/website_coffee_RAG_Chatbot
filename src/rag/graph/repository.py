@@ -77,7 +77,7 @@ class Neo4jRepository:
         logger.info("STAGE Neo4jRepository.find_menu_item_by_text INPUT query=%s", cleaned)
         try:
             async with self.client.session() as session:
-                result = await session.run(queries.SEARCH_MENU_ITEM_BY_TEXT, query=cleaned)
+                result = await session.run(queries.SEARCH_MENU_ITEM_BY_TEXT, search_text=cleaned)
                 record = await result.single()
                 if not record or not record.get("item"):
                     logger.info("STAGE Neo4jRepository.find_menu_item_by_text OUTPUT None")
