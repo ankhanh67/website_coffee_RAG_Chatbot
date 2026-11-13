@@ -68,3 +68,61 @@ class Neo4jRepository:
         except Exception as e:
             logger.error("Failed to get menu item %s: %s", item_id, e)
             raise RetrievalError(f"Get menu item failed: {e}") from e
+
+    async def find_menu_item_by_text(self, query: str) -> MenuItemRecord | None:
+        """Search a MenuItem by case-insensitive exact or substring match on name_vi / name_en."""
+        cleaned = query.strip()
+        if not cleaned:
+            return None
+        logger.info("STAGE Neo4jRepository.find_menu_item_by_text INPUT query=%s", cleaned)
+        try:
+            async with self.client.session() as session:
+                result = await session.run(queries.SEARCH_MENU_ITEM_BY_TEXT, query=cleaned)
+                record = await result.single()
+                if not record or not record.get("item"):
+                    logger.info("STAGE Neo4jRepository.find_menu_item_by_text OUTPUT None")
+                    return None
+                menu_item = MenuItemRecord(**dict(record["item"]))
+                logger.info(
+                    "STAGE Neo4jRepository.find_menu_item_by_text OUTPUT: %s",
+                    dump_json({"item_id": menu_item.item_id, "name_vi": menu_item.name_vi}),
+                )
+                return menu_item
+        except Exception as e:
+            logger.error("Failed to search menu item by text '%s': %s", cleaned, e)
+            raise RetrievalError(f"Search menu item by text failed: {e}") from e
+
+    async def find_menu_item_by_vector(
+        self,
+        embedding: list[float],
+        min_score: float = 0.82,
+        top_k: int = 3,
+    ) -> tuple[MenuItemRecord, float] | None:
+        """Search the closest MenuItem using `menu_vector_index` above `min_score`."""
+        logger.info(
+            "STAGE Neo4jRepository.find_menu_item_by_vector INPUT: %s",
+            dump_json({"min_score": min_score, "top_k": top_k, "dim": len(embedding)}),
+        )
+        try:
+            async with self.client.session() as session:
+                result = await session.run(
+                    queries.SEARCH_MENU_ITEM_BY_VECTOR,
+                    embedding=embedding,
+                    min_score=min_score,
+                    top_k=top_k,
+                )
+                record = await result.single()
+                if not record or not record.get("item"):
+                    logger.info("STAGE Neo4jRepository.find_menu_item_by_vector OUTPUT None")
+                    return None
+                menu_item = MenuItemRecord(**dict(record["item"]))
+                score = float(record["score"])
+                logger.info(
+                    "STAGE Neo4jRepository.find_menu_item_by_vector OUTPUT: %s",
+                    dump_json({"item_id": menu_item.item_id, "name_vi": menu_item.name_vi, "score": score}),
+                )
+                return menu_item, score
+        except Exception as e:
+            logger.error("Failed to search menu item by vector: %s", e)
+            raise RetrievalError(f"Search menu item by vector failed: {e}") from e
+
