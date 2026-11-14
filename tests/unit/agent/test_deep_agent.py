@@ -54,3 +54,12 @@ def test_menu_match_line_total_uses_exact_int_math():
     assert item.line_total_vnd == 117000
     assert isinstance(item.line_total_vnd, int)
 
+
+def test_deep_agent_builds_langgraph_state_graph():
+    router = FakeRouter(RouterAction.ORDER)
+    agent = DeepAgent(router=router, registry=SubAgentRegistry.with_default_stubs())
+    node_names = set(agent.graph.nodes.keys())
+    for expected in ("router", "order", "consultant", "faq", "ignore"):
+        assert expected in node_names
+
+

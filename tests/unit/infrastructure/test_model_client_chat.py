@@ -70,7 +70,7 @@ async def test_generate_structured_parses_clean_and_fenced_json():
         call_idx += 1
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": content}}]},
+            json={"choices": [{"message": {"role": "assistant", "content": content}}]},
         )
 
     client = make_client(handler)
@@ -109,7 +109,7 @@ async def test_generate_text_retries_and_returns_text():
             return httpx.Response(503, text="Service Unavailable")
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "Xin chào quý khách!"}}]},
+            json={"choices": [{"message": {"role": "assistant", "content": "Xin chào quý khách!"}}]},
         )
 
     client = make_client(handler, max_retries=2)
@@ -127,7 +127,7 @@ async def test_generate_structured_raises_on_invalid_json():
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(
             200,
-            json={"choices": [{"message": {"content": "not valid json"}}]},
+            json={"choices": [{"message": {"role": "assistant", "content": "not valid json"}}]},
         )
 
     client = make_client(handler, max_retries=0)

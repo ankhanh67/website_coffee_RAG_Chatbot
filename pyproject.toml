@@ -16,6 +16,9 @@ dependencies = [
     "python-docx>=1.1",
     "pypdf>=4.2",
     "watchdog>=4.0",
+    "langchain-core>=1.8.0",
+    "langchain-openai>=1.8.0",
+    "langgraph>=1.2.22",
 ]
 
 [dependency-groups]

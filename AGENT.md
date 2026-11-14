@@ -81,5 +81,12 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Chuyển `EntityExtractor` sang gọi `ModelClient.generate_structured` với Gemini 2.5 Flash, bóc tách thực thể mở (Branch, Payment, Promotion, Ingredient, Facility, Policy, General) tự động mà không dùng regex hay list từ khóa cứng.
     - Loại bỏ `_SHORT_FOLLOWUP_RE` trong `src/prompt/order_agent.py` và `src/agent/deep_agent.py`, để LLM tự phân loại intent câu ngắn khi có pending order.
     - Loại bỏ `_LEADING_CLASSIFIER_RE` trong `src/services/order_service.py`, để OrderAgent LLM trích xuất tên món chuẩn hóa.
+  - **Refactor Tích hợp LangChain & LangGraph:**
+    - Bổ sung `langchain-core`, `langchain-openai`, `langgraph` vào `pyproject.toml`.
+    - Tạo `src/agent/llm.py` xây dựng LCEL chains (`ChatPromptTemplate | ChatOpenAI | StrOutputParser | RunnableLambda`).
+    - Cập nhật `ModelClient` (`src/infrastructure/model_client.py`) dùng `ChatOpenAI` và LCEL chains cho `generate_text` & `generate_structured` (giữ Jev Decisions API cho `decide()`).
+    - Cập nhật `EmbeddingsClient` (`src/rag/embeddings.py`) dùng `OpenAIEmbeddings` của `langchain_openai`.
+    - Cập nhật `DeepAgent` (`src/agent/deep_agent.py`) dùng `StateGraph(AgentGraphState)` của **LangGraph** với các node `router`, `order`, `consultant`, `faq`, `ignore` và `add_conditional_edges`.
+    - Toàn bộ 68/68 tests pass, `ruff check` sạch.
 - **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.
 
