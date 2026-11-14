@@ -1,9 +1,11 @@
-"""End-to-end tests for Phase 4 OrderAgent confirmation workflow through DeepAgent."""
+"""End-to-end tests for Phase 4 OrderAgent (create_agent + @tool) confirmation workflow through DeepAgent."""
+
+from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
+from langchain_core.messages import AIMessage
 
 from src.agent.deep_agent import DeepAgent
 from src.agent.subagent_registry import SubAgentRegistry
 from src.schema.chat import ChatRequest
-from src.schema.order import OrderExtraction, OrderIntentType, OrderItemInput
 from src.schema.retrieval import MenuItemRecord
 from src.schema.router import RouterAction, RouterDecision
 from src.services.order_service import OrderService
@@ -21,15 +23,9 @@ class FakeRouter:
         return RouterDecision(action=action, confidence=0.92)
 
 
-class FakeModelClient:
-    def __init__(self, extractions: list[OrderExtraction]):
-        self._extractions = list(extractions)
-        self._idx = 0
-
-    async def generate_structured(self, model, system_prompt, user_message, response_model, temperature=0.0):
-        res = self._extractions[self._idx]
-        self._idx += 1
-        return res
+class FakeToolCallingChatModel(GenericFakeChatModel):
+    def bind_tools(self, tools, **kwargs):
+        return self
 
 
 class FakeMenuRepo:
@@ -76,22 +72,49 @@ async def test_full_order_add_update_and_confirm_flow():
         RouterAction.ORDER,
         RouterAction.IGNORE,  # Short confirmation "Đúng rồi, chốt nhé" that Jev might mark IGNORE
     ])
-    llm = FakeModelClient([
-        OrderExtraction(
-            intent=OrderIntentType.ADD,
-            items=[
-                OrderItemInput(name="cà phê sữa đá", size="L", quantity=2, note="ít đá"),
-                OrderItemInput(name="bánh tiramisu", size="M", quantity=1),
-            ],
-        ),
-        OrderExtraction(
-            intent=OrderIntentType.UPDATE,
-            items=[
-                OrderItemInput(name="Phin Sữa Đá", size="M", quantity=2, action=OrderIntentType.UPDATE),
-            ],
-        ),
-        OrderExtraction(intent=OrderIntentType.CONFIRM, items=[]),
-    ])
+    llm = FakeToolCallingChatModel(
+        messages=iter([
+            AIMessage(
+                content="",
+                tool_calls=[
+                    {
+                        "name": "add_order_items",
+                        "args": {
+                            "items": [
+                                {"name": "cà phê sữa đá", "size": "L", "quantity": 2, "note": "ít đá"},
+                                {"name": "bánh tiramisu", "size": "M", "quantity": 1},
+                            ]
+                        },
+                        "id": "call_1",
+                    }
+                ],
+            ),
+            AIMessage(
+                content="",
+                tool_calls=[
+                    {
+                        "name": "update_order_items",
+                        "args": {
+                            "items": [
+                                {"name": "Phin Sữa Đá", "size": "M", "quantity": 2},
+                            ]
+                        },
+                        "id": "call_2",
+                    }
+                ],
+            ),
+            AIMessage(
+                content="",
+                tool_calls=[
+                    {
+                        "name": "confirm_order",
+                        "args": {},
+                        "id": "call_3",
+                    }
+                ],
+            ),
+        ])
+    )
 
     order_service = OrderService(repository=FakeMenuRepo())
     order_agent = OrderAgent(
@@ -142,4 +165,3 @@ async def test_full_order_add_update_and_confirm_flow():
     assert "chốt đơn thành công" in res3.reply.lower() or "xác nhận đơn hàng" in res3.reply.lower()
     assert "123.000đ" in res3.reply
     assert order_service.has_pending_order("sess-order-1") is False
-

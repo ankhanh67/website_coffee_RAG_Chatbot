@@ -82,11 +82,12 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Loại bỏ `_SHORT_FOLLOWUP_RE` trong `src/prompt/order_agent.py` và `src/agent/deep_agent.py`, để LLM tự phân loại intent câu ngắn khi có pending order.
     - Loại bỏ `_LEADING_CLASSIFIER_RE` trong `src/services/order_service.py`, để OrderAgent LLM trích xuất tên món chuẩn hóa.
   - **Refactor Tích hợp LangChain & LangGraph:**
-    - Bổ sung `langchain-core`, `langchain-openai`, `langgraph` vào `pyproject.toml`.
+    - Bổ sung `langchain`, `langchain-core`, `langchain-openai`, `langgraph` vào `pyproject.toml`.
     - Tạo `src/agent/llm.py` xây dựng LCEL chains (`ChatPromptTemplate | ChatOpenAI | StrOutputParser | RunnableLambda`).
     - Cập nhật `ModelClient` (`src/infrastructure/model_client.py`) dùng `ChatOpenAI` và LCEL chains cho `generate_text` & `generate_structured` (giữ Jev Decisions API cho `decide()`).
     - Cập nhật `EmbeddingsClient` (`src/rag/embeddings.py`) dùng `OpenAIEmbeddings` của `langchain_openai`.
     - Cập nhật `DeepAgent` (`src/agent/deep_agent.py`) dùng `StateGraph(AgentGraphState)` của **LangGraph** với các node `router`, `order`, `consultant`, `faq`, `ignore` và `add_conditional_edges`.
+    - Cập nhật `OrderAgent` (`src/subagents/order_agent.py`) dùng `from langchain.agents import create_agent` và `from langchain.tools import tool` với 6 `@tool` (`add_order_items`, `update_order_items`, `remove_order_items`, `confirm_order`, `cancel_order`, `view_order`).
     - Toàn bộ 68/68 tests pass, `ruff check` sạch.
 - **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.
 
