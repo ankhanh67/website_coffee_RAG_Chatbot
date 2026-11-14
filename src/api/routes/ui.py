@@ -210,20 +210,36 @@ CHAT_UI_HTML = """<!DOCTYPE html>
   </main>
 
   <script>
-    let sessionId = localStorage.getItem("coffee_session_id") || makeSessionId();
+    function getStoredSession() {
+      try {
+        return localStorage.getItem("coffee_session_id");
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setStoredSession(id) {
+      try {
+        localStorage.setItem("coffee_session_id", id);
+      } catch (e) {}
+    }
+
+    function makeSessionId() {
+      const id = "sess-" + Math.random().toString(36).substring(2, 8);
+      setStoredSession(id);
+      return id;
+    }
+
+    let sessionId = getStoredSession() || makeSessionId();
     const chatBox = document.getElementById("chat-box");
     const msgInput = document.getElementById("msg-input");
     const sendBtn = document.getElementById("send-btn");
     const sessionLabel = document.getElementById("session-label");
 
-    function makeSessionId() {
-      const id = "sess-" + Math.random().toString(36).substring(2, 8);
-      localStorage.setItem("coffee_session_id", id);
-      return id;
-    }
-
     function updateSessionBadge() {
-      sessionLabel.textContent = "Session: " + sessionId;
+      if (sessionLabel) {
+        sessionLabel.textContent = "Session: " + sessionId;
+      }
     }
 
     function appendMessage(role, text, action) {
@@ -285,45 +301,68 @@ CHAT_UI_HTML = """<!DOCTYPE html>
       chatBox.scrollTop = chatBox.scrollHeight;
 
       try {
-        const res = await fetch("/api/v1/chat/stream", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionId, message: text })
-        });
-        if (!res.ok) {
-          const err = await res.text();
-          body.textContent = "Lỗi hệ thống: " + (err || res.statusText);
-          meta.innerHTML = `<span class="badge-action">ERROR</span>`;
-          return;
-        }
+        let streamOk = false;
+        try {
+          const res = await fetch("/api/v1/chat/stream", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: sessionId, message: text })
+          });
+          if (res.ok && res.body && res.body.getReader) {
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder("utf-8");
+            let buffer = "";
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split("\\n\\n");
+              buffer = lines.pop();
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let buffer = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n\n");
-          buffer = lines.pop();
-
-          for (const block of lines) {
-            const trimmed = block.trim();
-            if (!trimmed.startsWith("data: ")) continue;
-            const payload = JSON.parse(trimmed.slice(6));
-
-            if (payload.event === "routed") {
-              meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
-            } else if (payload.event === "token") {
-              body.textContent += payload.token;
-              chatBox.scrollTop = chatBox.scrollHeight;
-            } else if (payload.event === "done") {
-              meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
-              body.textContent = payload.reply;
-              chatBox.scrollTop = chatBox.scrollHeight;
+              for (const block of lines) {
+                const trimmed = block.trim();
+                if (!trimmed.startsWith("data: ")) continue;
+                try {
+                  const payload = JSON.parse(trimmed.slice(6));
+                  if (payload.event === "routed") {
+                    meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
+                  } else if (payload.event === "token") {
+                    body.textContent += payload.token;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                  } else if (payload.event === "done") {
+                    meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
+                    body.textContent = payload.reply;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                  }
+                } catch (err) {
+                  console.error("Parse SSE error:", err);
+                }
+              }
+            }
+            if (body.textContent.trim().length > 0) {
+              streamOk = true;
             }
           }
+        } catch (streamErr) {
+          console.warn("SSE stream failed, falling back to standard POST:", streamErr);
+        }
+
+        if (!streamOk) {
+          const res = await fetch("/api/v1/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: sessionId, message: text })
+          });
+          if (!res.ok) {
+            const err = await res.text();
+            body.textContent = "Lỗi hệ thống: " + (err || res.statusText);
+            meta.innerHTML = `<span class="badge-action">ERROR</span>`;
+            return;
+          }
+          const data = await res.json();
+          meta.innerHTML = `<span class="badge-action">${data.action}</span>`;
+          body.textContent = data.reply;
+          chatBox.scrollTop = chatBox.scrollHeight;
         }
       } catch (err) {
         body.textContent = "Không thể kết nối tới server: " + err.message;
@@ -349,4 +388,7 @@ CHAT_UI_HTML = """<!DOCTYPE html>
 
 @router.get("/", response_class=HTMLResponse)
 async def chat_ui() -> HTMLResponse:
-    return HTMLResponse(content=CHAT_UI_HTML)
+    return HTMLResponse(
+        content=CHAT_UI_HTML,
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+    )
