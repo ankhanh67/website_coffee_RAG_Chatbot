@@ -7,6 +7,7 @@ from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
 from src.config import get_settings
 from src.infrastructure.model_client import ModelClient
+from src.rag.cache.semantic_cache import SemanticCache
 from src.rag.embeddings import EmbeddingsClient
 from src.rag.graph.client import Neo4jClient
 from src.rag.graph.repository import Neo4jRepository
@@ -79,6 +80,15 @@ def get_hybrid_retriever() -> HybridRetriever:
 
 
 @lru_cache
+def get_semantic_cache() -> SemanticCache:
+    s = get_settings()
+    return SemanticCache(
+        embeddings_client=get_embeddings_client(),
+        similarity_threshold=s.cache_similarity_threshold,
+    )
+
+
+@lru_cache
 def get_chat_service() -> ChatService:
     s = get_settings()
     model_client = get_model_client()
@@ -115,5 +125,6 @@ def get_chat_service() -> ChatService:
         registry=registry,
         model_client=model_client,
         model=s.llm_generator_model,
+        semantic_cache=get_semantic_cache(),
     )
     return ChatService(deep_agent=deep_agent)

@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, Response
 
-from src.api.dependencies import get_model_client
+from src.api.dependencies import get_embeddings_client, get_model_client, get_neo4j_client
 from src.api.routes.chat import router as chat_router
 from src.observability.logging import dump_json, job_context, setup_logging
 
@@ -21,6 +21,12 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     if get_model_client.cache_info().currsize:
         await get_model_client().aclose()
         get_model_client.cache_clear()
+    if get_embeddings_client.cache_info().currsize:
+        await get_embeddings_client().aclose()
+        get_embeddings_client.cache_clear()
+    if get_neo4j_client.cache_info().currsize:
+        await get_neo4j_client().close()
+        get_neo4j_client.cache_clear()
 
 
 app = FastAPI(title="Website Coffee MAS-LLM", lifespan=lifespan)
@@ -50,3 +56,12 @@ async def bind_job_context(request: Request, call_next) -> Response:
 @app.get("/health/live")
 async def live() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/health/ready")
+async def ready() -> dict[str, str]:
+    neo4j_client = get_neo4j_client()
+    async with neo4j_client.session() as session:
+        result = await session.run("RETURN 1 AS ok")
+        await result.single()
+    return {"status": "ready"}

@@ -14,6 +14,7 @@ from src.agent.subagent_registry import SubAgentRegistry
 from src.exceptions import AgentExecutionError
 from src.observability.logging import dump_json
 from src.prompt.deep_agent import DEEP_AGENT_SYSTEM_PROMPT
+from src.rag.cache.semantic_cache import SemanticCache
 from src.schema.chat import ChatRequest, ChatResponse
 from src.schema.router import RouterAction
 
@@ -128,12 +129,14 @@ class DeepAgent:
         model_client: ChatModelProvider | BaseChatModel | None = None,
         model: str = "google/gemini-2.5-flash",
         ignore_reply: str = IGNORE_REPLY,
+        semantic_cache: SemanticCache | None = None,
     ) -> None:
         self._router = router
         self._registry = registry
         self._model_client = model_client
         self._model = model
         self._ignore_reply = ignore_reply
+        self._semantic_cache = semantic_cache
 
     def _resolve_chat_model(self, routed_action: RouterAction, message: str) -> BaseChatModel:
         if isinstance(self._model_client, BaseChatModel):
@@ -182,6 +185,22 @@ class DeepAgent:
             )
             return response
 
+        # Check SemanticCache only for non-stateful routes (CONSULTANT / FAQ)
+        if self._semantic_cache is not None and self._semantic_cache.is_cacheable(action):
+            cached = await self._semantic_cache.lookup(request.message)
+            if cached is not None:
+                entry, _ = cached
+                response = ChatResponse(
+                    session_id=request.session_id,
+                    action=entry.action,
+                    reply=entry.reply,
+                )
+                logger.info(
+                    "STAGE DeepAgent.handle OUTPUT (cache_hit): %s",
+                    dump_json(response.model_dump(mode="json")),
+                )
+                return response
+
         called_actions: list[RouterAction] = []
         tools = build_subagent_tools(self._registry, request.session_id, called_actions)
         chat_model = self._resolve_chat_model(action, request.message)
@@ -198,6 +217,14 @@ class DeepAgent:
         messages = result.get("messages", [])
         reply = str(messages[-1].content).strip() if messages else ""
         final_action = called_actions[-1] if called_actions else action
+
+        # Store in SemanticCache only when a single cacheable intent was executed (never ORDER)
+        if (
+            self._semantic_cache is not None
+            and RouterAction.ORDER not in called_actions
+            and self._semantic_cache.is_cacheable(final_action)
+        ):
+            await self._semantic_cache.store(request.message, final_action, reply)
 
         response = ChatResponse(
             session_id=request.session_id,

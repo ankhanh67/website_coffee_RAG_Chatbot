@@ -107,5 +107,11 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - `src/subagents/faq_agent.py`: Xây dựng `FAQAgent` bằng `from langchain.agents import create_agent` và `@tool` (`search_store_knowledge`).
   - `src/api/dependencies.py`: Thay thế hoàn toàn các stub bằng 3 agent thật (`OrderAgent`, `ConsultantAgent`, `FAQAgent`) dùng chung `HybridRetriever` và `ModelClient`.
   - `tests/unit/subagents/test_consultant_and_faq_agents.py`: Toàn bộ 76/76 tests (`unit` + `e2e`) pass, `ruff check` sạch.
-- **[ ] Phase 8 — End-to-End RAG Generation Evaluation (`evaluation/rag/evaluate_rag_e2e.py`) & Final Polish:** Bước tiếp theo.
+- **[x] Phase 8 — Semantic Cache, End-to-End Evaluation & Final Polish:**
+  - `src/rag/cache/semantic_cache.py`: Triển khai `SemanticCache` (cosine similarity $\ge 0.90$, TTL `3600s`) cho `CONSULTANT` và `FAQ`, tuyệt đối không cache `ORDER`.
+  - `src/agent/deep_agent.py` & `src/api/dependencies.py`: Tích hợp `SemanticCache` vào `DeepAgent`.
+  - `src/main.py`: Bổ sung `/health/ready` kiểm tra kết nối Neo4j Aura và đóng kết nối sạch sẽ trong `lifespan`.
+  - `evaluation/rag/evaluate_rag_e2e.py`: Script đánh giá End-to-End 20 câu `rag_eval_20.json` đi qua `ConsultantAgent` và `FAQAgent`.
+  - `README.md`: Tài liệu hóa đầy đủ kiến trúc, hướng dẫn cài đặt, nạp dữ liệu, chạy server và kiểm thử.
+  - Toàn bộ **79/79 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
 
