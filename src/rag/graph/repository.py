@@ -1,6 +1,8 @@
 """Neo4j repository for MenuItem, Category, and Vector Index management."""
 
+import json
 import logging
+from typing import Any
 
 from src.exceptions import RetrievalError
 from src.observability.logging import dump_json
@@ -9,6 +11,19 @@ from src.rag.graph.client import Neo4jClient
 from src.schema.retrieval import ChunkRecord, EntityRecord, MenuItemRecord
 
 logger = logging.getLogger(__name__)
+
+
+def _parse_chunk_dict(raw: dict[str, Any]) -> ChunkRecord:
+    data = dict(raw)
+    meta = data.get("metadata")
+    if isinstance(meta, str):
+        try:
+            data["metadata"] = json.loads(meta) if meta.strip() else {}
+        except json.JSONDecodeError:
+            data["metadata"] = {}
+    elif not isinstance(meta, dict):
+        data["metadata"] = {}
+    return ChunkRecord(**data)
 
 
 class Neo4jRepository:
@@ -182,5 +197,159 @@ class Neo4jRepository:
         except Exception as e:
             logger.error("Failed to link chunk mentions (%s -> %s): %s", chunk_id, entity.canonical_name, e)
             raise RetrievalError(f"Link chunk mentions failed: {e}") from e
+
+    async def search_chunks_by_vector(
+        self,
+        embedding: list[float],
+        top_k: int = 5,
+        min_score: float = 0.65,
+    ) -> list[tuple[ChunkRecord, float]]:
+        """Query `chunk_vector_index` for top-k Chunk nodes above `min_score`."""
+        logger.info(
+            "STAGE Neo4jRepository.search_chunks_by_vector INPUT: %s",
+            dump_json({"top_k": top_k, "min_score": min_score}),
+        )
+        try:
+            async with self.client.session() as session:
+                result = await session.run(
+                    queries.SEARCH_CHUNKS_BY_VECTOR,
+                    embedding=embedding,
+                    top_k=top_k,
+                    min_score=min_score,
+                )
+                records = [r async for r in result]
+                items = [
+                    (_parse_chunk_dict(dict(r["chunk"])), float(r["score"]))
+                    for r in records
+                    if r.get("chunk")
+                ]
+                logger.info(
+                    "STAGE Neo4jRepository.search_chunks_by_vector OUTPUT count=%d",
+                    len(items),
+                )
+                return items
+        except Exception as e:
+            logger.error("Failed to search chunks by vector: %s", e)
+            raise RetrievalError(f"Search chunks by vector failed: {e}") from e
+
+    async def search_menu_items_by_vector(
+        self,
+        embedding: list[float],
+        top_k: int = 5,
+        min_score: float = 0.65,
+    ) -> list[tuple[MenuItemRecord, float]]:
+        """Query `menu_vector_index` for top-k MenuItem nodes above `min_score`."""
+        logger.info(
+            "STAGE Neo4jRepository.search_menu_items_by_vector INPUT: %s",
+            dump_json({"top_k": top_k, "min_score": min_score}),
+        )
+        try:
+            async with self.client.session() as session:
+                result = await session.run(
+                    queries.SEARCH_MENU_ITEMS_BY_VECTOR,
+                    embedding=embedding,
+                    top_k=top_k,
+                    min_score=min_score,
+                )
+                records = [r async for r in result]
+                items = [
+                    (MenuItemRecord(**dict(r["item"])), float(r["score"]))
+                    for r in records
+                    if r.get("item")
+                ]
+                logger.info(
+                    "STAGE Neo4jRepository.search_menu_items_by_vector OUTPUT count=%d",
+                    len(items),
+                )
+                return items
+        except Exception as e:
+            logger.error("Failed to search menu items by vector: %s", e)
+            raise RetrievalError(f"Search menu items by vector failed: {e}") from e
+
+    async def expand_chunks_next(
+        self, chunk_ids: list[str]
+    ) -> list[tuple[ChunkRecord, str]]:
+        """Expand adjacent Chunk nodes connected via [:NEXT] in either direction."""
+        if not chunk_ids:
+            return []
+        logger.info("STAGE Neo4jRepository.expand_chunks_next INPUT count=%d", len(chunk_ids))
+        try:
+            async with self.client.session() as session:
+                result = await session.run(queries.EXPAND_CHUNKS_NEXT, chunk_ids=chunk_ids)
+                records = [r async for r in result]
+                expanded = [
+                    (_parse_chunk_dict(dict(r["chunk"])), str(r["parent_id"]))
+                    for r in records
+                    if r.get("chunk")
+                ]
+                logger.info("STAGE Neo4jRepository.expand_chunks_next OUTPUT count=%d", len(expanded))
+                return expanded
+        except Exception as e:
+            logger.error("Failed to expand chunks NEXT: %s", e)
+            raise RetrievalError(f"Expand chunks NEXT failed: {e}") from e
+
+    async def expand_chunks_by_entities(
+        self, chunk_ids: list[str], limit: int = 10
+    ) -> list[tuple[ChunkRecord, str, str]]:
+        """Expand related Chunk nodes sharing an Entity via [:MENTIONS]."""
+        if not chunk_ids:
+            return []
+        logger.info("STAGE Neo4jRepository.expand_chunks_by_entities INPUT count=%d", len(chunk_ids))
+        try:
+            async with self.client.session() as session:
+                result = await session.run(
+                    queries.EXPAND_CHUNKS_BY_ENTITIES, chunk_ids=chunk_ids, limit=limit
+                )
+                records = [r async for r in result]
+                expanded = [
+                    (
+                        _parse_chunk_dict(dict(r["chunk"])),
+                        str(r["parent_id"]),
+                        str(r["entity_name"]),
+                    )
+                    for r in records
+                    if r.get("chunk")
+                ]
+                logger.info(
+                    "STAGE Neo4jRepository.expand_chunks_by_entities OUTPUT count=%d",
+                    len(expanded),
+                )
+                return expanded
+        except Exception as e:
+            logger.error("Failed to expand chunks by entities: %s", e)
+            raise RetrievalError(f"Expand chunks by entities failed: {e}") from e
+
+    async def expand_chunks_by_title_mention(
+        self, chunk_ids: list[str], limit: int = 10
+    ) -> list[tuple[ChunkRecord, str, int]]:
+        """Bridge seed Chunks that mention a Document Chunk's title subject."""
+        if not chunk_ids:
+            return []
+        logger.info("STAGE Neo4jRepository.expand_chunks_by_title_mention INPUT count=%d", len(chunk_ids))
+        try:
+            async with self.client.session() as session:
+                result = await session.run(
+                    queries.EXPAND_CHUNKS_BY_TITLE_MENTION, chunk_ids=chunk_ids, limit=limit
+                )
+                records = [r async for r in result]
+                expanded = [
+                    (
+                        _parse_chunk_dict(dict(r["chunk"])),
+                        str(r["parent_id"]),
+                        int(r.get("mention_count") or 1),
+                    )
+                    for r in records
+                    if r.get("chunk")
+                ]
+                logger.info(
+                    "STAGE Neo4jRepository.expand_chunks_by_title_mention OUTPUT count=%d",
+                    len(expanded),
+                )
+                return expanded
+        except Exception as e:
+            logger.error("Failed to expand chunks by title mention: %s", e)
+            raise RetrievalError(f"Expand chunks by title mention failed: {e}") from e
+
+
 
 

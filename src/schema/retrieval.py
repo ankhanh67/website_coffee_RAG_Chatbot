@@ -46,3 +46,20 @@ class EntityRecord(BaseModel):
     entity_type: str = "GENERAL"
     canonical_name: str
 
+
+class RetrievedItem(BaseModel):
+    node_id: str
+    source_type: str
+    title: str
+    text: str
+    score: float
+    hop_type: str = "vector"
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class HybridRetrievalResult(BaseModel):
+    query: str
+    items: list[RetrievedItem] = Field(default_factory=list)
+    has_sufficient_evidence: bool = False
+
+

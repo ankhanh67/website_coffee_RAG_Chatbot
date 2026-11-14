@@ -89,5 +89,17 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Cập nhật `DeepAgent` (`src/agent/deep_agent.py` + `src/prompt/deep_agent.py`) sang kiến trúc **Supervisor Agent** dùng `from langchain.agents import create_agent` và `from langchain.tools import tool` (bọc các Subagent thành 3 `@tool`: `call_order_agent`, `call_consultant_agent`, `call_faq_agent`), kết hợp Jev lọc `ignore` ở đầu.
     - Cập nhật `OrderAgent` (`src/subagents/order_agent.py`) dùng `from langchain.agents import create_agent` và `from langchain.tools import tool` với 6 `@tool` (`add_order_items`, `update_order_items`, `remove_order_items`, `confirm_order`, `cancel_order`, `view_order`).
     - Toàn bộ 68/68 tests pass, `ruff check` sạch.
-- **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.
+- **[x] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):**
+  - `src/schema/retrieval.py`: Thêm `RetrievedItem` và `HybridRetrievalResult`.
+  - `src/rag/graph/queries.py` & `src/rag/graph/repository.py`: Thêm `SEARCH_CHUNKS_BY_VECTOR`, `SEARCH_MENU_ITEMS_BY_VECTOR`, `EXPAND_CHUNKS_NEXT` (mở rộng 2 chiều qua `[:NEXT]`), `EXPAND_CHUNKS_BY_ENTITIES` (mở rộng qua `[:MENTIONS]`), và `EXPAND_CHUNKS_BY_TITLE_MENTION` (cầu nối ngữ nghĩa từ FAQ sang Document chunk kèm trọng số `mention_count`).
+  - `src/rag/retrieval/`:
+    - `base.py` (`BaseRetriever`), `vector_search.py` (`VectorSearcher` tìm đồng thời trên `chunk_vector_index` và `menu_vector_index`, chuẩn hóa `source_type` cho `doc-*` / `faq-*`).
+    - `graph_search.py` (`GraphSearcher` mở rộng theo `[:NEXT]`, `[:MENTIONS]` và cầu nối tiêu đề).
+    - `reranker.py` (`HybridReranker` hợp nhất kết quả Vector + Graph, cộng thưởng lexical overlap không dấu và multi-source confirmation, đa dạng hóa `topic_id` của FAQ và cân bằng slot giữa `document`, `menu`, `faq`).
+    - `hybrid_search.py` (`HybridRetriever` điều phối toàn bộ pipeline và kiểm tra ngưỡng `evidence_threshold` cho câu hỏi ngoài phạm vi).
+  - Benchmark `evaluation/rag/benchmark_retrieval.py` trên 20 câu `data/evaluation/rag_eval_20.json` với Neo4j Aura thật:
+    - **Answerable Recall@8: 18/18 (100.0%)**
+    - **Multi-Chunk Graph Expansion Recall: 2/2 (100.0%)** (bao gồm `Q17` nối `policy-08` + `policy-09` và `Q18` nối `branch-07` + `branch-08`).
+  - Toàn bộ 73/73 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+- **[ ] Phase 7 — Consultant Agent & FAQ Agent (Grounding + Citation + LangChain `create_agent`):** Bước tiếp theo.
 

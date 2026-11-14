@@ -194,5 +194,107 @@ ON CREATE SET e.name = $name, e.type = $entity_type
 MERGE (c)-[:MENTIONS]->(e)
 """
 
+# 12. Vector search top-k Chunks on chunk_vector_index
+SEARCH_CHUNKS_BY_VECTOR = """
+CALL db.index.vector.queryNodes('chunk_vector_index', $top_k, $embedding)
+YIELD node AS c, score
+WHERE score >= $min_score
+RETURN c {
+    .chunk_id,
+    .source,
+    .title,
+    .text,
+    .doc_id,
+    .order,
+    .file,
+    .metadata
+} AS chunk, score
+ORDER BY score DESC
+"""
+
+# 13. Vector search top-k MenuItems on menu_vector_index
+SEARCH_MENU_ITEMS_BY_VECTOR = """
+CALL db.index.vector.queryNodes('menu_vector_index', $top_k, $embedding)
+YIELD node AS m, score
+WHERE score >= $min_score
+RETURN m {
+    .item_id,
+    .name_vi,
+    .name_en,
+    .category,
+    .category_en,
+    .price_s,
+    .price_m,
+    .price_l,
+    .sizes,
+    .temperature,
+    .caffeine,
+    .vegan,
+    .allergens,
+    .ingredients,
+    .description_vi,
+    .description_en
+} AS item, score
+ORDER BY score DESC
+"""
+
+# 14. Graph traversal: expand adjacent Chunks along [:NEXT] (bidirectional)
+EXPAND_CHUNKS_NEXT = """
+MATCH (c:Chunk)-[:NEXT]-(neighbor:Chunk)
+WHERE c.chunk_id IN $chunk_ids AND NOT neighbor.chunk_id IN $chunk_ids
+RETURN DISTINCT neighbor {
+    .chunk_id,
+    .source,
+    .title,
+    .text,
+    .doc_id,
+    .order,
+    .file,
+    .metadata
+} AS chunk, c.chunk_id AS parent_id
+"""
+
+# 15. Graph traversal: expand related Chunks sharing an Entity via [:MENTIONS]
+EXPAND_CHUNKS_BY_ENTITIES = """
+MATCH (c:Chunk)-[:MENTIONS]->(e:Entity)<-[:MENTIONS]-(related:Chunk)
+WHERE c.chunk_id IN $chunk_ids AND NOT related.chunk_id IN $chunk_ids
+RETURN DISTINCT related {
+    .chunk_id,
+    .source,
+    .title,
+    .text,
+    .doc_id,
+    .order,
+    .file,
+    .metadata
+} AS chunk, c.chunk_id AS parent_id, e.canonical_name AS entity_name
+LIMIT $limit
+"""
+
+# 16. Graph bridging: link FAQ/seed Chunks that mention a Document Chunk's title subject
+EXPAND_CHUNKS_BY_TITLE_MENTION = """
+MATCH (seed:Chunk), (doc:Chunk)
+WHERE seed.chunk_id IN $chunk_ids
+  AND NOT doc.chunk_id IN $chunk_ids
+  AND doc.chunk_id STARTS WITH 'doc-'
+  AND size(trim(replace(doc.title, 'Chi nhánh ', ''))) >= 4
+  AND toLower(seed.text) CONTAINS toLower(trim(replace(doc.title, 'Chi nhánh ', '')))
+WITH doc, collect(DISTINCT seed.chunk_id) AS parent_ids
+ORDER BY size(parent_ids) DESC
+RETURN doc {
+    .chunk_id,
+    .source,
+    .title,
+    .text,
+    .doc_id,
+    .order,
+    .file,
+    .metadata
+} AS chunk, parent_ids[0] AS parent_id, size(parent_ids) AS mention_count
+LIMIT $limit
+"""
+
+
+
 
 
