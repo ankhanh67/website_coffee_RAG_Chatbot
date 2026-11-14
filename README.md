@@ -85,6 +85,11 @@ Copy-Item .env.example .env
 .venv\Scripts\uvicorn.exe src.main:app --reload --port 8000
 ```
 
+- **Giao diện Web Chat trực tiếp:** `http://127.0.0.1:8000/`
+- **Chat trực tiếp trên Terminal (CLI):**
+  ```powershell
+  .venv\Scripts\python.exe scripts/chat_cli.py
+  ```
 - **Swagger UI:** `http://127.0.0.1:8000/docs`
 - **Health Checks:**
   - Liveness: `GET /health/live`

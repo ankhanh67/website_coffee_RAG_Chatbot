@@ -6,6 +6,7 @@ from typing import Any, Protocol
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.language_models.chat_models import BaseChatModel
+from langgraph.checkpoint.memory import InMemorySaver
 
 from src.observability.logging import dump_json
 from src.prompt.faq_agent import FAQ_AGENT_SYSTEM_PROMPT
@@ -52,11 +53,13 @@ class FAQAgent(BaseSubAgent):
         retriever: BaseRetriever,
         model: str = "google/gemini-2.5-flash",
         top_k: int = 8,
+        checkpointer: InMemorySaver | None = None,
     ) -> None:
         self._model_client = model_client
         self._retriever = retriever
         self._model = model
         self._top_k = top_k
+        self._checkpointer = checkpointer or InMemorySaver()
 
     def _resolve_chat_model(self) -> BaseChatModel:
         if isinstance(self._model_client, BaseChatModel):
@@ -74,9 +77,13 @@ class FAQAgent(BaseSubAgent):
             model=chat_model,
             tools=tools,
             system_prompt=FAQ_AGENT_SYSTEM_PROMPT,
+            checkpointer=self._checkpointer,
         )
 
-        result = await agent.ainvoke({"messages": [{"role": "user", "content": message}]})
+        result = await agent.ainvoke(
+            {"messages": [{"role": "user", "content": message}]},
+            config={"configurable": {"thread_id": f"faq:{session_id}"}},
+        )
         messages = result.get("messages", [])
         reply = str(messages[-1].content).strip() if messages else ""
 

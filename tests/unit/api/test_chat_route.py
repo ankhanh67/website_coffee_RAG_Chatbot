@@ -66,3 +66,13 @@ async def test_health_live():
     assert resp.status_code == 200
     assert resp.json() == {"status": "ok"}
 
+
+async def test_web_chat_ui_served_at_root():
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test"
+    ) as client:
+        resp = await client.get("/")
+    assert resp.status_code == 200
+    assert "Highlands Coffee" in resp.text
+    assert "/api/v1/chat" in resp.text
+

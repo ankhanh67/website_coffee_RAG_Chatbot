@@ -6,8 +6,9 @@ from typing import Any, Protocol
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import AIMessage, BaseMessage, ToolMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
+from langgraph.checkpoint.memory import InMemorySaver
 
 from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
@@ -60,7 +61,13 @@ class _RouterGuidedChatModel(BaseChatModel):
         run_manager: Any = None,
         **kwargs: Any,
     ) -> ChatResult:
-        tool_msgs = [m for m in messages if isinstance(m, ToolMessage)]
+        # Look only at messages since the latest HumanMessage in this turn
+        last_human_idx = -1
+        for i, m in enumerate(messages):
+            if isinstance(m, HumanMessage):
+                last_human_idx = i
+        current_turn_msgs = messages[last_human_idx + 1 :] if last_human_idx >= 0 else messages
+        tool_msgs = [m for m in current_turn_msgs if isinstance(m, ToolMessage)]
         if not tool_msgs:
             ai_msg = AIMessage(
                 content="",
@@ -130,6 +137,7 @@ class DeepAgent:
         model: str = "google/gemini-2.5-flash",
         ignore_reply: str = IGNORE_REPLY,
         semantic_cache: SemanticCache | None = None,
+        checkpointer: InMemorySaver | None = None,
     ) -> None:
         self._router = router
         self._registry = registry
@@ -137,6 +145,8 @@ class DeepAgent:
         self._model = model
         self._ignore_reply = ignore_reply
         self._semantic_cache = semantic_cache
+        self._checkpointer = checkpointer or InMemorySaver()
+        self._seen_sessions: set[str] = set()
 
     def _resolve_chat_model(self, routed_action: RouterAction, message: str) -> BaseChatModel:
         if isinstance(self._model_client, BaseChatModel):
@@ -172,6 +182,16 @@ class DeepAgent:
                 request.session_id,
             )
             action = RouterAction.ORDER
+        elif (
+            action is RouterAction.IGNORE
+            and request.session_id in self._seen_sessions
+            and self._model_client is not None
+        ):
+            logger.info(
+                "STAGE DeepAgent.handle OVERRIDE: ignore -> consultant (active multi-turn session_id=%s)",
+                request.session_id,
+            )
+            action = RouterAction.CONSULTANT
 
         if action is RouterAction.IGNORE:
             response = ChatResponse(
@@ -209,11 +229,14 @@ class DeepAgent:
             model=chat_model,
             tools=tools,
             system_prompt=f"{DEEP_AGENT_SYSTEM_PROMPT}\nGợi ý phân luồng từ Router: {action.value}",
+            checkpointer=self._checkpointer,
         )
 
         result = await supervisor_agent.ainvoke(
-            {"messages": [{"role": "user", "content": request.message}]}
+            {"messages": [{"role": "user", "content": request.message}]},
+            config={"configurable": {"thread_id": f"supervisor:{request.session_id}"}},
         )
+        self._seen_sessions.add(request.session_id)
         messages = result.get("messages", [])
         reply = str(messages[-1].content).strip() if messages else ""
         final_action = called_actions[-1] if called_actions else action

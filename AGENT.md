@@ -114,4 +114,8 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - `evaluation/rag/evaluate_rag_e2e.py`: Script đánh giá End-to-End 20 câu `rag_eval_20.json` đi qua `ConsultantAgent` và `FAQAgent`.
   - `README.md`: Tài liệu hóa đầy đủ kiến trúc, hướng dẫn cài đặt, nạp dữ liệu, chạy server và kiểm thử.
   - Toàn bộ **79/79 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
+- **[x] Phase 9 — Conversation Memory (`InMemorySaver`) & Giao diện Web/CLI Chat:**
+  - Tích hợp `langgraph.checkpoint.memory.InMemorySaver` vào `DeepAgent`, `OrderAgent`, `ConsultantAgent` và `FAQAgent` theo `thread_id` gắn với `session_id`, giúp nhớ ngữ cảnh hội thoại nhiều lượt ("món đó", "chi nhánh đấy", "lấy mình 1 ly đó size L").
+  - Tạo giao diện Web Chat trực quan tại `GET /` (`src/api/routes/ui.py`) và CLI Chat (`scripts/chat_cli.py`).
+  - Toàn bộ **81/81 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
 

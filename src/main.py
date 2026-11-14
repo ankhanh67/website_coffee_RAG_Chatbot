@@ -9,6 +9,7 @@ from fastapi import FastAPI, Request, Response
 
 from src.api.dependencies import get_embeddings_client, get_model_client, get_neo4j_client
 from src.api.routes.chat import router as chat_router
+from src.api.routes.ui import router as ui_router
 from src.observability.logging import dump_json, job_context, setup_logging
 
 setup_logging()
@@ -30,6 +31,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="Website Coffee MAS-LLM", lifespan=lifespan)
+app.include_router(ui_router)
 app.include_router(chat_router)
 
 

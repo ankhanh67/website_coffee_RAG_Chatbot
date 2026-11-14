@@ -2,6 +2,7 @@
 
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langchain_core.messages import AIMessage
+from pydantic import Field
 
 from src.rag.retrieval.base import BaseRetriever
 from src.schema.retrieval import HybridRetrievalResult, RetrievedItem
@@ -185,3 +186,50 @@ async def test_faq_agent_calls_search_store_knowledge_tool_and_synthesizes_multi
     assert retriever.queries == ["Hạng Vàng cần bao nhiêu điểm và đổi được gì"]
     assert "500 điểm" in reply
     assert "100 điểm" in reply
+
+
+class HistoryInspectingChatModel(GenericFakeChatModel):
+    seen_message_counts: list[int] = Field(default_factory=list)
+
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
+        self.seen_message_counts.append(len(messages))
+        return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
+
+
+async def test_consultant_agent_preserves_conversation_memory_within_session():
+    fake_result = HybridRetrievalResult(
+        query="Trà Đào Cam Sả",
+        items=[
+            RetrievedItem(
+                node_id="M036",
+                source_type="menu",
+                title="Trà Đào Cam Sả",
+                text="[M036] Trà Đào Cam Sả - Giá: Size S: 45.000đ, Size M: 55.000đ, Size L: 65.000đ. Caffeine: có.",
+                score=0.95,
+                hop_type="vector",
+            )
+        ],
+        has_sufficient_evidence=True,
+    )
+    retriever = FakeRetriever(fake_result)
+
+    llm = HistoryInspectingChatModel(
+        messages=iter([
+            AIMessage(content="Trà Đào Cam Sả có giá 45.000đ (S), 55.000đ (M), 65.000đ (L) ạ."),
+            AIMessage(content="Dạ món Trà Đào Cam Sả bạn vừa hỏi có chứa caffeine nhẹ từ trà đen ạ."),
+        ])
+    )
+    agent = ConsultantAgent(model_client=llm, retriever=retriever)
+
+    # Turn 1 in session 'mem-1'
+    r1 = await agent.handle("Tư vấn cho mình Trà Đào Cam Sả", session_id="mem-1")
+    assert "45.000đ" in r1
+
+    # Turn 2 in the same session 'mem-1' -> checkpointer passes Turn 1 messages into Turn 2
+    r2 = await agent.handle("Món đó có caffeine không?", session_id="mem-1")
+    assert "caffeine" in r2
+    assert len(llm.seen_message_counts) == 2
+    assert llm.seen_message_counts[1] > llm.seen_message_counts[0]
