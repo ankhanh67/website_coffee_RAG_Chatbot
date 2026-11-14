@@ -1,7 +1,5 @@
 """System prompt for LLM order extraction and deterministic Vietnamese order response formatter."""
 
-import re
-
 from src.schema.order import MenuMatch, OrderCalculation, OrderStatus
 
 ORDER_EXTRACTION_SYSTEM_PROMPT = """Bạn là bộ trích xuất đơn hàng cho quán cà phê Việt Nam.
@@ -11,7 +9,7 @@ Hãy phân tích câu nói của khách hàng và trả về duy nhất một JS
   "intent": "add" | "remove" | "update" | "confirm" | "cancel" | "view",
   "items": [
     {
-      "name": "tên món khách gọi (bỏ từ 'ly', 'cốc', 'cái')",
+      "name": "tên món khách gọi (chuẩn hóa tên món, bỏ từ định lượng như 'ly', 'cốc', 'phần', 'suất')",
       "size": "S" | "M" | "L",
       "quantity": 1,
       "note": "ghi chú thêm như ít đá, ít ngọt, không đường (để rỗng nếu không có)",
@@ -30,22 +28,15 @@ Quy tắc:
 7. Nếu câu nói không rõ hành động cụ thể nào ở trên -> intent = "unknown", items = [].
 """
 
-_SHORT_FOLLOWUP_RE = re.compile(
-    r"\b(?:đúng\s*rồi|đúng|chuẩn|ok|oke|okay|chốt|xác\s*nhận|đồng\s*ý|nhất\s*trí|hủy|huỷ|không\s*đặt)\b",
-    re.IGNORECASE,
-)
-
 
 def build_order_extraction_system_prompt() -> str:
     return ORDER_EXTRACTION_SYSTEM_PROMPT
 
 
 def is_short_order_followup(message: str) -> bool:
-    """Return True if a short message looks like a confirmation or cancellation of a pending order."""
+    """Return True if message is a concise reply suitable for order confirmation/intent resolution."""
     text = message.strip()
-    if not text or len(text) > 80:
-        return False
-    return bool(_SHORT_FOLLOWUP_RE.search(text))
+    return bool(text and len(text) <= 100)
 
 
 def format_vnd(amount: int) -> str:

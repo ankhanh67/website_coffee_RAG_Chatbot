@@ -1,7 +1,6 @@
 """Deterministic OrderService: menu matching (Text + Vector fallback), pricing, and cart state machine."""
 
 import logging
-import re
 from typing import Literal, Protocol
 
 from src.observability.logging import dump_json
@@ -16,11 +15,6 @@ from src.schema.order import (
 from src.schema.retrieval import MenuItemRecord
 
 logger = logging.getLogger(__name__)
-
-_LEADING_CLASSIFIER_RE = re.compile(
-    r"^(?:cho\s+mình|lấy|gọi|thêm|đổi|bỏ|xóa)?\s*(?:\d+\s*)?(?:ly|cốc|phần|cái|chiếc|món|suất|chai|hộp)\s+",
-    re.IGNORECASE,
-)
 
 COMMON_MENU_ALIASES: dict[str, str] = {
     "cà phê sữa đá": "Phin Sữa Đá",
@@ -59,7 +53,7 @@ class EmbeddingProvider(Protocol):
 
 
 def normalize_item_query(raw_name: str) -> str:
-    cleaned = _LEADING_CLASSIFIER_RE.sub("", raw_name.strip()).strip()
+    cleaned = raw_name.strip()
     lowered = cleaned.lower()
     if lowered in COMMON_MENU_ALIASES:
         return COMMON_MENU_ALIASES[lowered]

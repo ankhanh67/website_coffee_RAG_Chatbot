@@ -139,3 +139,4 @@ async def test_generate_structured_raises_on_invalid_json():
             response_model=OrderExtraction,
         )
     await client.aclose()
+

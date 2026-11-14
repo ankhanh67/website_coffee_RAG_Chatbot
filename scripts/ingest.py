@@ -14,6 +14,7 @@ import logging
 from pathlib import Path
 
 from src.config import get_settings
+from src.infrastructure.model_client import ModelClient
 from src.observability.logging import job_context, setup_logging
 from src.rag.embeddings import EmbeddingsClient
 from src.rag.graph.client import Neo4jClient
@@ -45,7 +46,14 @@ async def run_ingestion(target: str, watch: bool = False) -> None:
         dimensions=settings.vector_dimensions,
     )
 
-    entity_extractor = EntityExtractor()
+    model_client = ModelClient(
+        api_key=settings.llm_api_key.get_secret_value(),
+        base_url=settings.llm_base_url,
+    )
+    entity_extractor = EntityExtractor(
+        model_client=model_client,
+        model=settings.generation_model,
+    )
     base_dir = Path(__file__).resolve().parents[1]
 
     try:
@@ -109,6 +117,7 @@ async def run_ingestion(target: str, watch: bool = False) -> None:
                 print("[WATCH] Stopped.")
 
     finally:
+        await model_client.aclose()
         await embeddings_client.aclose()
         await neo4j_client.close()
 

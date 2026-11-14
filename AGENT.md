@@ -77,5 +77,9 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - `src/rag/ingestion/watcher.py` (`InboxWatcher`): Lắng nghe `data/inbox/` tự động nạp file mới (`.docx`, `.pdf`, `.csv`).
   - Mở rộng CLI `scripts/ingest.py` hỗ trợ `--target [menu|faq|docs|all]` và `--watch`. Đã nạp thành công trên Neo4j Aura thật.
   - Toàn bộ 67/67 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+  - **Refactor Loại bỏ Regex & Trao quyền cho LLM (LLM-first Ingestion):**
+    - Chuyển `EntityExtractor` sang gọi `ModelClient.generate_structured` với Gemini 2.5 Flash, bóc tách thực thể mở (Branch, Payment, Promotion, Ingredient, Facility, Policy, General) tự động mà không dùng regex hay list từ khóa cứng.
+    - Loại bỏ `_SHORT_FOLLOWUP_RE` trong `src/prompt/order_agent.py` và `src/agent/deep_agent.py`, để LLM tự phân loại intent câu ngắn khi có pending order.
+    - Loại bỏ `_LEADING_CLASSIFIER_RE` trong `src/services/order_service.py`, để OrderAgent LLM trích xuất tên món chuẩn hóa.
 - **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.
 

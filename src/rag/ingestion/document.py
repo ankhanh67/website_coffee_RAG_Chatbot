@@ -72,7 +72,7 @@ class DocumentIngestor(BaseIngestor):
             doc_groups[chunk.doc_id].append(chunk)
 
         linked_next_count = 0
-        for doc_id, doc_chunks in doc_groups.items():
+        for doc_chunks in doc_groups.values():
             sorted_chunks = sorted(doc_chunks, key=lambda c: c.order)
             for j in range(len(sorted_chunks) - 1):
                 c1, c2 = sorted_chunks[j], sorted_chunks[j + 1]

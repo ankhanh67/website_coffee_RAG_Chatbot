@@ -51,3 +51,4 @@ async def test_faq_ingestor_flow(tmp_path: Path):
     assert count == 2
     assert mock_embeddings.get_embeddings_batch.await_count == 1
     assert mock_repo.upsert_chunk.await_count == 2
+

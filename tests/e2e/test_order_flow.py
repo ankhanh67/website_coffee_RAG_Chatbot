@@ -142,3 +142,4 @@ async def test_full_order_add_update_and_confirm_flow():
     assert "chốt đơn thành công" in res3.reply.lower() or "xác nhận đơn hàng" in res3.reply.lower()
     assert "123.000đ" in res3.reply
     assert order_service.has_pending_order("sess-order-1") is False
+

@@ -89,3 +89,4 @@ class EntityDeduplicator:
         )
         self._entities.append(new_entity)
         return new_entity
+

@@ -92,3 +92,4 @@ async def test_document_ingestor_creates_chunks_next_and_mentions(tmp_path: Path
     mock_repo.link_chunks_next.assert_awaited_with("doc-branch-01", "doc-branch-02")
     # Verify [:MENTIONS] was linked
     assert mock_repo.link_chunk_mentions.await_count >= 1
+

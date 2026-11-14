@@ -88,3 +88,4 @@ class FAQIngestor(BaseIngestor):
 
         logger.info("STAGE FAQIngestor.ingest COMPLETE: %s", dump_json({"total_ingested": ingested_count}))
         return ingested_count
+
