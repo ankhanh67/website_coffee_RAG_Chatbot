@@ -499,9 +499,9 @@ Ngay sau khi lát cắt này chạy thông suốt, chuyển sang **Phase 3** đ�
 [x] Phase 3: Kết nối Neo4j Aura & Nạp dữ liệu Menu (menu.csv) — 120 món, 10 danh mục, Vector Index 768d
 [x] Phase 4: Hoàn thiện Order Agent (Logic tính tiền tất định + Tra cứu Neo4j + Bước hỏi xác nhận đơn)
 [x] Phase 5: Nạp dữ liệu FAQ, Documents & Watch Mode lên Neo4j Aura
-[ ] Phase 6: Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker)
-[ ] Phase 7: Hoàn thiện FAQ Agent & Consultant Agent
-[ ] Phase 8: Quản lý Session, Tóm tắt hội thoại & Request Queue
-[ ] Phase 9: SSE Streaming & Bộ chuẩn hóa TTS (tts_cases.json)
-[ ] Phase 10: Semantic Cache, Observability & E2E Benchmark
+[x] Phase 6: Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker)
+[x] Phase 7: Hoàn thiện FAQ Agent & Consultant Agent (LangChain create_agent + @tool)
+[x] Phase 8: Quản lý Session, Conversation Memory (InMemorySaver) & Semantic Cache
+[x] Phase 9: SSE Streaming & Chuẩn hóa giọng đọc TTS (tts_cases.json đạt 100%)
+[ ] Phase 10: E2E Benchmark Evaluation & Observability Tuning
 ```

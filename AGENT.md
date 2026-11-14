@@ -118,4 +118,10 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - Tích hợp `langgraph.checkpoint.memory.InMemorySaver` vào `DeepAgent`, `OrderAgent`, `ConsultantAgent` và `FAQAgent` theo `thread_id` gắn với `session_id`, giúp nhớ ngữ cảnh hội thoại nhiều lượt ("món đó", "chi nhánh đấy", "lấy mình 1 ly đó size L").
   - Tạo giao diện Web Chat trực quan tại `GET /` (`src/api/routes/ui.py`) và CLI Chat (`scripts/chat_cli.py`).
   - Toàn bộ **81/81 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
+- **[x] Phase 10 — SSE Streaming & Chuẩn hóa giọng đọc TTS (`tts_cases.json` 100%):**
+  - Cấu hình kết nối Neo4j Aura chống ngắt kết nối (`keep_alive=True`, `max_connection_lifetime=3600`, `connection_timeout=30.0`).
+  - `src/guardrails/tts_normalizer.py` & `src/services/tts_service.py`: Chuẩn hóa văn bản tiếng Việt cho giọng đọc tổng hợp (giá tiền, size `S/M/L`, `%`, `VAT`, thời gian, danh sách...), đạt **100% (45/45)** trên `data/evaluation/tts_cases.json`.
+  - `src/api/streaming.py` & `POST /api/v1/chat/stream`: Stream token theo thời gian thực qua Server-Sent Events (SSE).
+  - Giao diện Web Chat (`GET /`) hỗ trợ đọc stream trực tiếp hiển thị mượt mà.
+  - Toàn bộ **127/127 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
 

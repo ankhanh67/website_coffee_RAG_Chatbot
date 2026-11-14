@@ -272,20 +272,62 @@ CHAT_UI_HTML = """<!DOCTYPE html>
       sendBtn.disabled = true;
       sendBtn.textContent = "Đang xử lý...";
 
+      const botDiv = document.createElement("div");
+      botDiv.className = "msg bot";
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.innerHTML = `<span class="badge-action">Đang suy nghĩ...</span>`;
+      const body = document.createElement("div");
+      body.textContent = "";
+      botDiv.appendChild(meta);
+      botDiv.appendChild(body);
+      chatBox.appendChild(botDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
       try {
-        const res = await fetch("/api/v1/chat", {
+        const res = await fetch("/api/v1/chat/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ session_id: sessionId, message: text })
         });
-        const data = await res.json();
         if (!res.ok) {
-          appendMessage("bot", "Lỗi hệ thống: " + (data.detail || res.statusText), "error");
-        } else {
-          appendMessage("bot", data.reply, data.action);
+          const err = await res.text();
+          body.textContent = "Lỗi hệ thống: " + (err || res.statusText);
+          meta.innerHTML = `<span class="badge-action">ERROR</span>`;
+          return;
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n\n");
+          buffer = lines.pop();
+
+          for (const block of lines) {
+            const trimmed = block.trim();
+            if (!trimmed.startsWith("data: ")) continue;
+            const payload = JSON.parse(trimmed.slice(6));
+
+            if (payload.event === "routed") {
+              meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
+            } else if (payload.event === "token") {
+              body.textContent += payload.token;
+              chatBox.scrollTop = chatBox.scrollHeight;
+            } else if (payload.event === "done") {
+              meta.innerHTML = `<span class="badge-action">${payload.action}</span>`;
+              body.textContent = payload.reply;
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }
+          }
         }
       } catch (err) {
-        appendMessage("bot", "Không thể kết nối tới server: " + err.message, "error");
+        body.textContent = "Không thể kết nối tới server: " + err.message;
+        meta.innerHTML = `<span class="badge-action">ERROR</span>`;
       } finally {
         sendBtn.disabled = false;
         sendBtn.textContent = "Gửi";

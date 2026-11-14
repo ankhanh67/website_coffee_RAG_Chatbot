@@ -76,3 +76,28 @@ async def test_web_chat_ui_served_at_root():
     assert "Highlands Coffee" in resp.text
     assert "/api/v1/chat" in resp.text
 
+
+async def test_post_chat_stream_returns_sse_events():
+    service = ChatService(
+        DeepAgent(
+            router=StaticRouter(RouterAction.FAQ),
+            registry=SubAgentRegistry.with_default_stubs(),
+        )
+    )
+    app.dependency_overrides[get_chat_service] = lambda: service
+    try:
+        async with httpx.AsyncClient(
+            transport=httpx.ASGITransport(app=app), base_url="http://test"
+        ) as client:
+            resp = await client.post(
+                "/api/v1/chat/stream", json={"session_id": "stream-1", "message": "Quán mở cửa mấy giờ?"}
+            )
+    finally:
+        app.dependency_overrides.clear()
+
+    assert resp.status_code == 200
+    assert "text/event-stream" in resp.headers.get("content-type", "")
+    assert "data: " in resp.text
+    assert '"event": "start"' in resp.text
+    assert '"event": "done"' in resp.text
+
