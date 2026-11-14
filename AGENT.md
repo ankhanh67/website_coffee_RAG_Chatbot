@@ -86,7 +86,7 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - Tạo `src/agent/llm.py` xây dựng LCEL chains (`ChatPromptTemplate | ChatOpenAI | StrOutputParser | RunnableLambda`).
     - Cập nhật `ModelClient` (`src/infrastructure/model_client.py`) dùng `ChatOpenAI` và LCEL chains cho `generate_text` & `generate_structured` (giữ Jev Decisions API cho `decide()`).
     - Cập nhật `EmbeddingsClient` (`src/rag/embeddings.py`) dùng `OpenAIEmbeddings` của `langchain_openai`.
-    - Cập nhật `DeepAgent` (`src/agent/deep_agent.py`) dùng `StateGraph(AgentGraphState)` của **LangGraph** với các node `router`, `order`, `consultant`, `faq`, `ignore` và `add_conditional_edges`.
+    - Cập nhật `DeepAgent` (`src/agent/deep_agent.py` + `src/prompt/deep_agent.py`) sang kiến trúc **Supervisor Agent** dùng `from langchain.agents import create_agent` và `from langchain.tools import tool` (bọc các Subagent thành 3 `@tool`: `call_order_agent`, `call_consultant_agent`, `call_faq_agent`), kết hợp Jev lọc `ignore` ở đầu.
     - Cập nhật `OrderAgent` (`src/subagents/order_agent.py`) dùng `from langchain.agents import create_agent` và `from langchain.tools import tool` với 6 `@tool` (`add_order_items`, `update_order_items`, `remove_order_items`, `confirm_order`, `cancel_order`, `view_order`).
     - Toàn bộ 68/68 tests pass, `ruff check` sạch.
 - **[ ] Phase 6 — Hybrid Graph RAG (Vector Search + Graph Traversal + Reranker):** Bước tiếp theo.

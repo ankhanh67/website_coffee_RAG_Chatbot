@@ -1,4 +1,6 @@
 import pytest
+from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
+from langchain_core.messages import AIMessage
 
 from src.agent.deep_agent import IGNORE_REPLY, DeepAgent
 from src.agent.subagent_registry import DEFAULT_STUB_REPLIES, SubAgentRegistry
@@ -55,11 +57,38 @@ def test_menu_match_line_total_uses_exact_int_math():
     assert isinstance(item.line_total_vnd, int)
 
 
-def test_deep_agent_builds_langgraph_state_graph():
-    router = FakeRouter(RouterAction.ORDER)
-    agent = DeepAgent(router=router, registry=SubAgentRegistry.with_default_stubs())
-    node_names = set(agent.graph.nodes.keys())
-    for expected in ("router", "order", "consultant", "faq", "ignore"):
-        assert expected in node_names
+class FakeSupervisorLLM(GenericFakeChatModel):
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+
+async def test_deep_agent_supervisor_calls_multiple_subagent_tools():
+    router = FakeRouter(RouterAction.FAQ)
+    supervisor_llm = FakeSupervisorLLM(
+        messages=iter([
+            AIMessage(
+                content="",
+                tool_calls=[
+                    {"name": "call_faq_agent", "args": {"query": "Mấy giờ đóng cửa?"}, "id": "c1"},
+                    {"name": "call_order_agent", "args": {"query": "Đặt 1 Bạc Xỉu"}, "id": "c2"},
+                ],
+            ),
+            AIMessage(
+                content="Quán mở cửa đến 22h và mình đã ghi nhận đơn 1 Bạc Xỉu của bạn ạ!"
+            ),
+        ])
+    )
+    agent = DeepAgent(
+        router=router,
+        registry=SubAgentRegistry.with_default_stubs(),
+        model_client=supervisor_llm,
+    )
+    resp = await agent.handle(
+        ChatRequest(session_id="s-multi", message="Quán mấy giờ đóng cửa và cho mình đặt 1 Bạc Xỉu")
+    )
+    assert resp.action is RouterAction.ORDER
+    assert "22h" in resp.reply
+    assert "Bạc Xỉu" in resp.reply
+
 
 

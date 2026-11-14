@@ -82,5 +82,10 @@ def get_chat_service() -> ChatService:
             model=s.llm_generator_model,
         )
     )
-    deep_agent = DeepAgent(router=router, registry=registry)
+    deep_agent = DeepAgent(
+        router=router,
+        registry=registry,
+        model_client=model_client,
+        model=s.llm_generator_model,
+    )
     return ChatService(deep_agent=deep_agent)

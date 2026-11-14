@@ -1,15 +1,19 @@
-"""Orchestrator (DeepAgent): LangGraph StateGraph routing chat messages to specialized subagent nodes."""
+"""Supervisor Agent (DeepAgent) built with `langchain.agents.create_agent` and `@tool` subagents."""
 
 import logging
-from typing import Any, TypedDict
+from typing import Any, Protocol
 
-from langgraph.graph import END, START, StateGraph
-from langgraph.graph.state import CompiledStateGraph
+from langchain.agents import create_agent
+from langchain.tools import tool
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_core.messages import AIMessage, BaseMessage, ToolMessage
+from langchain_core.outputs import ChatGeneration, ChatResult
 
 from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
 from src.exceptions import AgentExecutionError
 from src.observability.logging import dump_json
+from src.prompt.deep_agent import DEEP_AGENT_SYSTEM_PROMPT
 from src.schema.chat import ChatRequest, ChatResponse
 from src.schema.router import RouterAction
 
@@ -19,14 +23,101 @@ IGNORE_REPLY = (
     "Xin chào! Mình có thể hỗ trợ bạn đặt món, tư vấn đồ uống hoặc giải đáp thông tin về quán ạ."
 )
 
+_ACTION_TO_TOOL_NAME: dict[RouterAction, str] = {
+    RouterAction.ORDER: "call_order_agent",
+    RouterAction.CONSULTANT: "call_consultant_agent",
+    RouterAction.FAQ: "call_faq_agent",
+}
 
-class AgentGraphState(TypedDict):
-    """State dictionary passed across nodes in the DeepAgent LangGraph workflow."""
 
-    session_id: str
-    message: str
-    action: RouterAction
-    reply: str
+class ChatModelProvider(Protocol):
+    def get_chat_model(
+        self,
+        model: str,
+        temperature: float = 0.0,
+        model_kwargs: dict[str, Any] | None = None,
+    ) -> BaseChatModel: ...
+
+
+class _RouterGuidedChatModel(BaseChatModel):
+    """Lightweight BaseChatModel adapter that dispatches the Jev Router decision as a tool call when no external LLM is injected."""
+
+    target_tool: str
+    query: str
+
+    @property
+    def _llm_type(self) -> str:
+        return "router-guided-chat-model"
+
+    def bind_tools(self, tools: Any, **kwargs: Any) -> BaseChatModel:
+        return self
+
+    def _generate(
+        self,
+        messages: list[BaseMessage],
+        stop: list[str] | None = None,
+        run_manager: Any = None,
+        **kwargs: Any,
+    ) -> ChatResult:
+        tool_msgs = [m for m in messages if isinstance(m, ToolMessage)]
+        if not tool_msgs:
+            ai_msg = AIMessage(
+                content="",
+                tool_calls=[
+                    {
+                        "name": self.target_tool,
+                        "args": {"query": self.query},
+                        "id": "call_subagent_1",
+                    }
+                ],
+            )
+        else:
+            combined = "\n".join(str(m.content) for m in tool_msgs)
+            ai_msg = AIMessage(content=combined)
+        return ChatResult(generations=[ChatGeneration(message=ai_msg)])
+
+
+def build_subagent_tools(
+    registry: SubAgentRegistry,
+    session_id: str,
+    called_actions: list[RouterAction],
+) -> list[Any]:
+    """Wrap registered SubAgents as LangChain `@tool` functions for the DeepAgent supervisor."""
+
+    @tool
+    async def call_order_agent(query: str) -> str:
+        """Gọi OrderAgent xử lý đặt món, sửa món, đổi size, xem giỏ hàng, xác nhận hoặc hủy đơn."""
+        subagent = registry.get(RouterAction.ORDER)
+        logger.info(
+            "STAGE DeepAgent.handle DISPATCH: %s",
+            dump_json({"action": RouterAction.ORDER, "subagent": type(subagent).__name__}),
+        )
+        called_actions.append(RouterAction.ORDER)
+        return await subagent.handle(message=query, session_id=session_id)
+
+    @tool
+    async def call_consultant_agent(query: str) -> str:
+        """Gọi ConsultantAgent tư vấn chọn đồ uống, bánh ngọt theo khẩu vị, ngân sách, dị ứng."""
+        subagent = registry.get(RouterAction.CONSULTANT)
+        logger.info(
+            "STAGE DeepAgent.handle DISPATCH: %s",
+            dump_json({"action": RouterAction.CONSULTANT, "subagent": type(subagent).__name__}),
+        )
+        called_actions.append(RouterAction.CONSULTANT)
+        return await subagent.handle(message=query, session_id=session_id)
+
+    @tool
+    async def call_faq_agent(query: str) -> str:
+        """Gọi FAQAgent giải đáp thông tin về quán: giờ mở cửa, chi nhánh, wifi, đỗ xe, khuyến mãi."""
+        subagent = registry.get(RouterAction.FAQ)
+        logger.info(
+            "STAGE DeepAgent.handle DISPATCH: %s",
+            dump_json({"action": RouterAction.FAQ, "subagent": type(subagent).__name__}),
+        )
+        called_actions.append(RouterAction.FAQ)
+        return await subagent.handle(message=query, session_id=session_id)
+
+    return [call_order_agent, call_consultant_agent, call_faq_agent]
 
 
 class DeepAgent:
@@ -34,44 +125,23 @@ class DeepAgent:
         self,
         router: Router,
         registry: SubAgentRegistry,
+        model_client: ChatModelProvider | BaseChatModel | None = None,
+        model: str = "google/gemini-2.5-flash",
         ignore_reply: str = IGNORE_REPLY,
     ) -> None:
         self._router = router
         self._registry = registry
+        self._model_client = model_client
+        self._model = model
         self._ignore_reply = ignore_reply
-        self._graph: CompiledStateGraph = self._build_graph()
 
-    @property
-    def graph(self) -> CompiledStateGraph:
-        """Expose the compiled LangGraph state machine."""
-        return self._graph
-
-    def _build_graph(self) -> CompiledStateGraph:
-        workflow = StateGraph(AgentGraphState)
-
-        workflow.add_node("router", self._router_node)
-        workflow.add_node("order", self._order_node)
-        workflow.add_node("consultant", self._consultant_node)
-        workflow.add_node("faq", self._faq_node)
-        workflow.add_node("ignore", self._ignore_node)
-
-        workflow.add_edge(START, "router")
-        workflow.add_conditional_edges(
-            "router",
-            self._route_by_action,
-            {
-                RouterAction.ORDER.value: "order",
-                RouterAction.CONSULTANT.value: "consultant",
-                RouterAction.FAQ.value: "faq",
-                RouterAction.IGNORE.value: "ignore",
-            },
-        )
-        workflow.add_edge("order", END)
-        workflow.add_edge("consultant", END)
-        workflow.add_edge("faq", END)
-        workflow.add_edge("ignore", END)
-
-        return workflow.compile()
+    def _resolve_chat_model(self, routed_action: RouterAction, message: str) -> BaseChatModel:
+        if isinstance(self._model_client, BaseChatModel):
+            return self._model_client
+        if self._model_client is not None:
+            return self._model_client.get_chat_model(model=self._model, temperature=0.0)
+        target_tool = _ACTION_TO_TOOL_NAME.get(routed_action, "call_faq_agent")
+        return _RouterGuidedChatModel(target_tool=target_tool, query=message)
 
     def _should_override_ignore_to_order(self, session_id: str, message: str) -> bool:
         text = message.strip()
@@ -84,73 +154,55 @@ class DeepAgent:
         has_pending = getattr(order_agent, "has_pending_order", None)
         return bool(callable(has_pending) and has_pending(session_id))
 
-    async def _router_node(self, state: AgentGraphState) -> dict[str, Any]:
-        decision = await self._router.route(state["message"])
-        action = decision.action
-
-        if action is RouterAction.IGNORE and self._should_override_ignore_to_order(
-            state["session_id"], state["message"]
-        ):
-            logger.info(
-                "STAGE DeepAgent.handle OVERRIDE: ignore -> order (pending order confirmation for session_id=%s)",
-                state["session_id"],
-            )
-            action = RouterAction.ORDER
-
-        return {"action": action}
-
-    @staticmethod
-    def _route_by_action(state: AgentGraphState) -> str:
-        return state["action"].value
-
-    async def _dispatch_subagent(
-        self, action: RouterAction, state: AgentGraphState
-    ) -> dict[str, Any]:
-        subagent = self._registry.get(action)
-        logger.info(
-            "STAGE DeepAgent.handle DISPATCH: %s",
-            dump_json({"action": action, "subagent": type(subagent).__name__}),
-        )
-        reply = await subagent.handle(message=state["message"], session_id=state["session_id"])
-        return {"reply": reply}
-
-    async def _order_node(self, state: AgentGraphState) -> dict[str, Any]:
-        return await self._dispatch_subagent(RouterAction.ORDER, state)
-
-    async def _consultant_node(self, state: AgentGraphState) -> dict[str, Any]:
-        return await self._dispatch_subagent(RouterAction.CONSULTANT, state)
-
-    async def _faq_node(self, state: AgentGraphState) -> dict[str, Any]:
-        return await self._dispatch_subagent(RouterAction.FAQ, state)
-
-    async def _ignore_node(self, state: AgentGraphState) -> dict[str, Any]:
-        return {"reply": self._ignore_reply}
-
     async def handle(self, request: ChatRequest) -> ChatResponse:
         logger.info(
             "STAGE DeepAgent.handle INPUT: %s", dump_json(request.model_dump(mode="json"))
         )
-        initial_state: AgentGraphState = {
-            "session_id": request.session_id,
-            "message": request.message,
-            "action": RouterAction.IGNORE,
-            "reply": "",
-        }
-        final_state = await self._graph.ainvoke(initial_state)
-        action = final_state["action"]
-        response = ChatResponse(
-            session_id=request.session_id,
-            action=action,
-            reply=final_state["reply"],
-        )
+        decision = await self._router.route(request.message)
+        action = decision.action
+
+        if action is RouterAction.IGNORE and self._should_override_ignore_to_order(
+            request.session_id, request.message
+        ):
+            logger.info(
+                "STAGE DeepAgent.handle OVERRIDE: ignore -> order (pending order confirmation for session_id=%s)",
+                request.session_id,
+            )
+            action = RouterAction.ORDER
+
         if action is RouterAction.IGNORE:
+            response = ChatResponse(
+                session_id=request.session_id,
+                action=RouterAction.IGNORE,
+                reply=self._ignore_reply,
+            )
             logger.info(
                 "STAGE DeepAgent.handle OUTPUT (ignore): %s",
                 dump_json(response.model_dump(mode="json")),
             )
-        else:
-            logger.info(
-                "STAGE DeepAgent.handle OUTPUT: %s",
-                dump_json(response.model_dump(mode="json")),
-            )
+            return response
+
+        called_actions: list[RouterAction] = []
+        tools = build_subagent_tools(self._registry, request.session_id, called_actions)
+        chat_model = self._resolve_chat_model(action, request.message)
+
+        supervisor_agent = create_agent(
+            model=chat_model,
+            tools=tools,
+            system_prompt=f"{DEEP_AGENT_SYSTEM_PROMPT}\nGợi ý phân luồng từ Router: {action.value}",
+        )
+
+        result = await supervisor_agent.ainvoke(
+            {"messages": [{"role": "user", "content": request.message}]}
+        )
+        messages = result.get("messages", [])
+        reply = str(messages[-1].content).strip() if messages else ""
+        final_action = called_actions[-1] if called_actions else action
+
+        response = ChatResponse(
+            session_id=request.session_id,
+            action=final_action,
+            reply=reply,
+        )
+        logger.info("STAGE DeepAgent.handle OUTPUT: %s", dump_json(response.model_dump(mode="json")))
         return response
