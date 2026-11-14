@@ -1,33 +1,4 @@
-"""System prompt for LLM order extraction and deterministic Vietnamese order response formatter."""
-
-from src.schema.order import MenuMatch, OrderCalculation, OrderStatus
-
-ORDER_EXTRACTION_SYSTEM_PROMPT = """Bạn là bộ trích xuất đơn hàng cho quán cà phê Việt Nam.
-Hãy phân tích câu nói của khách hàng và trả về duy nhất một JSON object theo đúng cấu trúc sau (không kèm giải thích):
-
-{
-  "intent": "add" | "remove" | "update" | "confirm" | "cancel" | "view",
-  "items": [
-    {
-      "name": "tên món khách gọi (chuẩn hóa tên món, bỏ từ định lượng như 'ly', 'cốc', 'phần', 'suất')",
-      "size": "S" | "M" | "L",
-      "quantity": 1,
-      "note": "ghi chú thêm như ít đá, ít ngọt, không đường (để rỗng nếu không có)",
-      "action": "add" | "remove" | "update"
-    }
-  ]
-}
-
-Quy tắc:
-1. Nếu khách gọi món mới hoặc thêm món -> intent = "add", mỗi món có action = "add". Nếu khách không nói size thì mặc định size = "M", không nói số lượng thì mặc định quantity = 1.
-2. Nếu khách đổi size hoặc số lượng món đã gọi -> intent = "update", món đó có action = "update".
-3. Nếu khách muốn bỏ/xóa một món khỏi giỏ -> intent = "remove", món đó có action = "remove".
-4. Nếu khách xác nhận chốt đơn ("Đúng rồi", "Ok chốt đơn", "Xác nhận", "Đồng ý", "Chốt nhé") -> intent = "confirm", items = [].
-5. Nếu khách muốn hủy toàn bộ đơn hàng ("Hủy đơn", "Không đặt nữa", "Xóa hết giỏ hàng") -> intent = "cancel", items = [].
-6. Nếu khách hỏi đã đặt món gì / muốn xem lại giỏ hàng ("tôi đã đặt món gì", "xem giỏ hàng", "trong giỏ có gì", "kiểm tra đơn") -> intent = "view", items = [].
-7. Nếu câu nói không rõ hành động cụ thể nào ở trên -> intent = "unknown", items = [].
-"""
-
+"""System prompt for the LangChain OrderAgent."""
 
 ORDER_AGENT_SYSTEM_PROMPT = """Bạn là nhân viên nhận đơn (Order Agent) của chuỗi quán cà phê Việt Nam.
 Hãy phân tích yêu cầu của khách hàng và gọi đúng công cụ (tool) tương ứng để xử lý giỏ hàng:
@@ -37,89 +8,11 @@ Hãy phân tích yêu cầu của khách hàng và gọi đúng công cụ (tool
 4. Gọi `confirm_order` khi khách xác nhận chốt đơn ("Đúng rồi", "Ok chốt đơn", "Xác nhận", "Đồng ý", "Chốt nhé").
 5. Gọi `cancel_order` khi khách muốn hủy toàn bộ đơn hàng ("Hủy đơn", "Không đặt nữa", "Xóa hết giỏ hàng").
 6. Gọi `view_order` khi khách hỏi đã đặt món gì hoặc muốn xem lại giỏ hàng ("tôi đã đặt món gì", "xem giỏ hàng", "trong giỏ có gì").
+
+Khi công cụ trả về dữ liệu giỏ hàng (`OrderCalculation` JSON) từ hệ thống:
+- Giữ nguyên tuyệt đối tên món (`name_vi`), size, số lượng (`quantity`), đơn giá (`unit_price_vnd`), thành tiền (`line_total_vnd`) và tổng tiền (`total_vnd`) từ kết quả công cụ (định dạng tiền tệ kiểu Việt Nam như `143.000đ`, tuyệt đối không tự ý tính toán lại hay bịa giá).
+- Nếu `status` là `"pending_confirmation"`, hãy liệt kê rõ từng món kèm giá, tổng tạm tính và hỏi khách kiểm tra xác nhận trước khi chốt đơn (tuyệt đối chưa báo chốt đơn thành công ở bước này).
+- Nếu `status` là `"confirmed"`, thông báo đã chốt đơn thành công kèm chi tiết đơn hàng và tổng thanh toán.
+- Nếu `status` là `"cancelled"`, thông báo đã hủy giỏ hàng theo yêu cầu.
+- Nếu `status` là `"empty"`, báo giỏ hàng hiện đang trống (hoặc báo tên các món trong `unmatched_items` hiện không có trong menu của quán) và gợi ý khách chọn món khác.
 """
-
-
-def build_order_extraction_system_prompt() -> str:
-    return ORDER_AGENT_SYSTEM_PROMPT
-
-
-def is_short_order_followup(message: str) -> bool:
-    """Return True if message is a concise reply suitable for order confirmation/intent resolution."""
-    text = message.strip()
-    return bool(text and len(text) <= 100)
-
-
-def format_vnd(amount: int) -> str:
-    """Format integer VND with dot thousands separator, e.g. 143000 -> '143.000đ'."""
-    return f"{int(amount):,}".replace(",", ".") + "đ"
-
-
-def _format_item_line(item: MenuMatch) -> str:
-    size_label = "Một cỡ" if item.size == "Một cỡ" else f"Size {item.size}"
-    note_suffix = f" [Ghi chú: {item.note}]" if item.note else ""
-    req_clean = item.requested_name.strip().lower()
-    matched_note = ""
-    if req_clean and req_clean != item.name_vi.lower() and req_clean not in item.name_vi.lower():
-        matched_note = f" (khớp từ '{item.requested_name}')"
-    return (
-        f"- {item.quantity} x {item.name_vi}{matched_note} ({size_label}): "
-        f"{format_vnd(item.line_total_vnd)} ({format_vnd(item.unit_price_vnd)}/món){note_suffix}"
-    )
-
-
-def format_order_response(calc: OrderCalculation) -> str:
-    """Render a deterministic, human-friendly Vietnamese reply for the current order state."""
-    if calc.status is OrderStatus.CANCELLED:
-        return "Mình đã hủy toàn bộ giỏ hàng theo yêu cầu của bạn. Khi nào muốn đặt món mới bạn cứ nhắn mình nhé!"
-
-    if calc.status is OrderStatus.EMPTY:
-        if calc.message_hint == "view_empty":
-            return (
-                "Hiện tại giỏ hàng của bạn đang trống, bạn chưa đặt món nào ạ. "
-                "Bạn muốn đặt món gì (kèm size S/M/L và số lượng) để mình lên đơn giúp bạn nhé!"
-            )
-        if calc.unmatched_items:
-            missing = ", ".join(f"'{name}'" for name in calc.unmatched_items)
-            return (
-                f"Hiện tại trong menu của quán chưa tìm thấy món {missing}. "
-                "Bạn vui lòng kiểm tra lại tên món hoặc nhờ mình tư vấn món tương tự nhé!"
-            )
-        return (
-            "Giỏ hàng của bạn hiện đang trống ạ. "
-            "Bạn muốn đặt món gì (kèm size S/M/L và số lượng) để mình lên đơn giúp bạn nhé!"
-        )
-
-    lines = [_format_item_line(item) for item in calc.items]
-    items_block = "\n".join(lines)
-
-    if calc.status is OrderStatus.CONFIRMED:
-        return (
-            "Đã chốt đơn thành công! Chi tiết đơn hàng của bạn:\n"
-            f"{items_block}\n"
-            f"Tổng thanh toán: {format_vnd(calc.total_vnd)}.\n"
-            "Cảm ơn bạn, quán đang chuẩn bị món cho bạn ngay ạ!"
-        )
-
-    if calc.message_hint == "view":
-        return (
-            "Hiện tại trong giỏ hàng tạm tính của bạn đang có:\n"
-            f"{items_block}\n"
-            f"Tổng tạm tính: {format_vnd(calc.total_vnd)}.\n"
-            "Bạn muốn đặt thêm món gì hay nhắn 'Xác nhận' để mình chốt đơn nhé!"
-        )
-
-    # PENDING_CONFIRMATION: always ask the user to verify the matched items before confirming
-    unmatched_notice = ""
-    if calc.unmatched_items:
-        missing = ", ".join(f"'{name}'" for name in calc.unmatched_items)
-        unmatched_notice = f"\n(Lưu ý: Món {missing} hiện không có trong menu của quán nên mình chưa thêm vào giỏ)."
-
-    return (
-        "Mình đã tìm thấy các món trong menu và cập nhật giỏ hàng tạm tính của bạn:\n"
-        f"{items_block}\n"
-        f"Tổng tạm tính: {format_vnd(calc.total_vnd)}.{unmatched_notice}\n"
-        "Bạn kiểm tra giúp mình xem các món và size đã đúng ý bạn chưa ạ? "
-        "Nhắn 'Xác nhận' để mình chốt đơn hoặc báo mình nếu cần thay đổi nhé!"
-    )
-

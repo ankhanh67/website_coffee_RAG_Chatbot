@@ -74,6 +74,7 @@ async def test_full_order_add_update_and_confirm_flow():
     ])
     llm = FakeToolCallingChatModel(
         messages=iter([
+            # Turn 1: Call add_order_items -> LLM replies with tool result
             AIMessage(
                 content="",
                 tool_calls=[
@@ -90,6 +91,14 @@ async def test_full_order_add_update_and_confirm_flow():
                 ],
             ),
             AIMessage(
+                content=(
+                    "Giỏ hàng tạm tính của bạn gồm: 2 x Phin Sữa Đá (Size L): 98.000đ và "
+                    "1 x Bánh Tiramisu (Một cỡ): 45.000đ. Tổng tạm tính: 143.000đ. "
+                    "Bạn kiểm tra và nhắn Xác nhận giúp mình nhé!"
+                )
+            ),
+            # Turn 2: Call update_order_items -> LLM replies with updated total
+            AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -104,6 +113,14 @@ async def test_full_order_add_update_and_confirm_flow():
                 ],
             ),
             AIMessage(
+                content=(
+                    "Mình đã đổi sang 2 x Phin Sữa Đá (Size M): 78.000đ và "
+                    "1 x Bánh Tiramisu: 45.000đ. Tổng tạm tính: 123.000đ. "
+                    "Bạn nhắn Xác nhận để chốt đơn nhé!"
+                )
+            ),
+            # Turn 3: Call confirm_order -> LLM replies with confirmed order
+            AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -112,6 +129,9 @@ async def test_full_order_add_update_and_confirm_flow():
                         "id": "call_3",
                     }
                 ],
+            ),
+            AIMessage(
+                content="Đã chốt đơn thành công! Tổng thanh toán của bạn là 123.000đ."
             ),
         ])
     )

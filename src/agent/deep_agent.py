@@ -10,7 +10,6 @@ from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
 from src.exceptions import AgentExecutionError
 from src.observability.logging import dump_json
-from src.prompt.order_agent import is_short_order_followup
 from src.schema.chat import ChatRequest, ChatResponse
 from src.schema.router import RouterAction
 
@@ -75,7 +74,8 @@ class DeepAgent:
         return workflow.compile()
 
     def _should_override_ignore_to_order(self, session_id: str, message: str) -> bool:
-        if not is_short_order_followup(message):
+        text = message.strip()
+        if not text or len(text) > 100:
             return False
         try:
             order_agent = self._registry.get(RouterAction.ORDER)
