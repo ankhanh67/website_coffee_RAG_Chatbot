@@ -10,8 +10,11 @@ from src.infrastructure.model_client import ModelClient
 from src.rag.embeddings import EmbeddingsClient
 from src.rag.graph.client import Neo4jClient
 from src.rag.graph.repository import Neo4jRepository
+from src.rag.retrieval.hybrid_search import HybridRetriever
 from src.services.chat_service import ChatService
 from src.services.order_service import OrderService
+from src.subagents.consultant_agent import ConsultantAgent
+from src.subagents.faq_agent import FAQAgent
 from src.subagents.order_agent import OrderAgent
 
 
@@ -66,19 +69,44 @@ def get_order_service() -> OrderService:
 
 
 @lru_cache
+def get_hybrid_retriever() -> HybridRetriever:
+    return HybridRetriever(
+        repository=get_neo4j_repository(),
+        embeddings_client=get_embeddings_client(),
+        min_score=0.60,
+        evidence_threshold=0.70,
+    )
+
+
+@lru_cache
 def get_chat_service() -> ChatService:
     s = get_settings()
     model_client = get_model_client()
+    retriever = get_hybrid_retriever()
     router = Router(
         client=model_client,
         model=s.llm_router_model,
         confidence_threshold=s.router_confidence_threshold,
     )
-    registry = SubAgentRegistry.with_default_stubs()
+    registry = SubAgentRegistry()
     registry.register(
         OrderAgent(
             model_client=model_client,
             order_service=get_order_service(),
+            model=s.llm_generator_model,
+        )
+    )
+    registry.register(
+        ConsultantAgent(
+            model_client=model_client,
+            retriever=retriever,
+            model=s.llm_generator_model,
+        )
+    )
+    registry.register(
+        FAQAgent(
+            model_client=model_client,
+            retriever=retriever,
             model=s.llm_generator_model,
         )
     )

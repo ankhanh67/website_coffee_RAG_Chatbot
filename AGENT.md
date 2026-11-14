@@ -101,5 +101,11 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
     - **Answerable Recall@8: 18/18 (100.0%)**
     - **Multi-Chunk Graph Expansion Recall: 2/2 (100.0%)** (bao gồm `Q17` nối `policy-08` + `policy-09` và `Q18` nối `branch-07` + `branch-08`).
   - Toàn bộ 73/73 tests (`unit` + `e2e`) pass, `ruff check` sạch.
-- **[ ] Phase 7 — Consultant Agent & FAQ Agent (Grounding + Citation + LangChain `create_agent`):** Bước tiếp theo.
+- **[x] Phase 7 — Consultant Agent & FAQ Agent (Grounding + Citation + LangChain `create_agent`):**
+  - `src/prompt/consultant_agent.py` & `src/prompt/faq_agent.py`: Chứa duy nhất chuỗi System Prompt thuần túy, quy định bắt buộc gọi tool truy xuất dữ liệu, bám sát kết quả từ `HybridRetriever` và từ chối lịch sự khi câu hỏi ngoài phạm vi (`has_sufficient_evidence=False`).
+  - `src/subagents/consultant_agent.py`: Xây dựng `ConsultantAgent` bằng `from langchain.agents import create_agent` và `@tool` (`search_menu_and_recommendations`).
+  - `src/subagents/faq_agent.py`: Xây dựng `FAQAgent` bằng `from langchain.agents import create_agent` và `@tool` (`search_store_knowledge`).
+  - `src/api/dependencies.py`: Thay thế hoàn toàn các stub bằng 3 agent thật (`OrderAgent`, `ConsultantAgent`, `FAQAgent`) dùng chung `HybridRetriever` và `ModelClient`.
+  - `tests/unit/subagents/test_consultant_and_faq_agents.py`: Toàn bộ 76/76 tests (`unit` + `e2e`) pass, `ruff check` sạch.
+- **[ ] Phase 8 — End-to-End RAG Generation Evaluation (`evaluation/rag/evaluate_rag_e2e.py`) & Final Polish:** Bước tiếp theo.
 
