@@ -67,6 +67,18 @@ async def test_health_live():
     assert resp.json() == {"status": "ok"}
 
 
+async def test_metrics_endpoint():
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test"
+    ) as client:
+        resp = await client.get("/metrics")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "uptime_seconds" in data
+    assert "total_requests" in data
+    assert "cache_hit_rate_pct" in data
+
+
 async def test_web_chat_ui_served_at_root():
     async with httpx.AsyncClient(
         transport=httpx.ASGITransport(app=app), base_url="http://test"

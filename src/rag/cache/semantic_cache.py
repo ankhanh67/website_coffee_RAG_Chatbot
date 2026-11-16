@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from src.observability.logging import dump_json
+from src.observability.metrics import metrics_collector
 from src.schema.router import RouterAction
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,7 @@ class SemanticCache:
         lowered = cleaned.lower()
         for entry in self._entries:
             if entry.query.lower() == lowered:
+                metrics_collector.record_cache_hit()
                 logger.info(
                     "STAGE SemanticCache.lookup EXACT HIT: %s",
                     dump_json({"query": cleaned, "action": entry.action}),
@@ -98,6 +100,7 @@ class SemanticCache:
                 best_entry = entry
 
         if best_entry is not None and best_score >= self._similarity_threshold:
+            metrics_collector.record_cache_hit()
             logger.info(
                 "STAGE SemanticCache.lookup SEMANTIC HIT: %s",
                 dump_json(
@@ -111,6 +114,7 @@ class SemanticCache:
             )
             return best_entry, best_score
 
+        metrics_collector.record_cache_miss()
         return None
 
     async def store(self, query: str, action: RouterAction, reply: str) -> None:
