@@ -15,12 +15,13 @@ ROUTER_CRITERIA: dict[RouterAction, str] = {
         "xác nhận hoặc hủy đơn hàng."
     ),
     RouterAction.CONSULTANT: (
-        "Khách nhờ gợi ý, tư vấn chọn món theo khẩu vị, ngân sách, độ ngọt, caffeine, "
+        "Khách hỏi menu/thực đơn, hỏi quán có những món gì, các loại cà phê/trà/bánh ngọt; "
+        "nhờ gợi ý, tư vấn chọn món theo khẩu vị, ngân sách, độ ngọt, caffeine, "
         "ăn chay hoặc dị ứng; chưa chốt món cụ thể."
     ),
     RouterAction.FAQ: (
-        "Khách hỏi thông tin thực tế về quán: giờ mở cửa, chi nhánh, wifi, chỗ đậu xe, "
-        "thú cưng, chính sách, khuyến mãi, thanh toán, giao hàng."
+        "Khách hỏi thông tin thực tế về quán và cơ sở vật chất: giờ mở cửa, chi nhánh, "
+        "wifi, chỗ đậu xe/ô tô, thú cưng, chính sách, khuyến mãi, thanh toán, giao hàng."
     ),
     RouterAction.IGNORE: (
         "Tin nhắn vô nghĩa, chỉ chào hỏi/xác nhận suông, cảm thán, hoặc ngoài phạm vi quán "
