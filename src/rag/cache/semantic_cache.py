@@ -8,6 +8,7 @@ from typing import Protocol
 
 from src.observability.logging import dump_json
 from src.observability.metrics import metrics_collector
+from src.observability.tracing import trace_observation
 from src.schema.router import RouterAction
 
 logger = logging.getLogger(__name__)
@@ -70,52 +71,68 @@ class SemanticCache:
     async def lookup(self, query: str) -> tuple[SemanticCacheEntry, float] | None:
         """Find the highest-scoring cached entry above `similarity_threshold`."""
         cleaned = query.strip()
-        if not cleaned or not self._entries:
-            return None
+        with trace_observation(
+            "SemanticCache.lookup", as_type="span", input={"query": cleaned}
+        ) as span:
+            if not cleaned or not self._entries:
+                span.update(output={"hit": False})
+                return None
 
-        now = time.monotonic()
-        self._evict_expired(now)
-        if not self._entries:
-            return None
+            now = time.monotonic()
+            self._evict_expired(now)
+            if not self._entries:
+                span.update(output={"hit": False})
+                return None
 
-        # Exact normalized text match shortcut
-        lowered = cleaned.lower()
-        for entry in self._entries:
-            if entry.query.lower() == lowered:
+            # Exact normalized text match shortcut
+            lowered = cleaned.lower()
+            for entry in self._entries:
+                if entry.query.lower() == lowered:
+                    metrics_collector.record_cache_hit()
+                    span.update(
+                        output={"hit": True, "score": 1.0, "action": entry.action.value}
+                    )
+                    logger.info(
+                        "STAGE SemanticCache.lookup EXACT HIT: %s",
+                        dump_json({"query": cleaned, "action": entry.action}),
+                    )
+                    return entry, 1.0
+
+            query_vec = await self._embeddings.get_embedding(cleaned)
+            best_entry: SemanticCacheEntry | None = None
+            best_score = -1.0
+
+            for entry in self._entries:
+                score = cosine_similarity(query_vec, entry.embedding)
+                if score > best_score:
+                    best_score = score
+                    best_entry = entry
+
+            if best_entry is not None and best_score >= self._similarity_threshold:
                 metrics_collector.record_cache_hit()
-                logger.info(
-                    "STAGE SemanticCache.lookup EXACT HIT: %s",
-                    dump_json({"query": cleaned, "action": entry.action}),
-                )
-                return entry, 1.0
-
-        query_vec = await self._embeddings.get_embedding(cleaned)
-        best_entry: SemanticCacheEntry | None = None
-        best_score = -1.0
-
-        for entry in self._entries:
-            score = cosine_similarity(query_vec, entry.embedding)
-            if score > best_score:
-                best_score = score
-                best_entry = entry
-
-        if best_entry is not None and best_score >= self._similarity_threshold:
-            metrics_collector.record_cache_hit()
-            logger.info(
-                "STAGE SemanticCache.lookup SEMANTIC HIT: %s",
-                dump_json(
-                    {
-                        "query": cleaned,
-                        "matched_query": best_entry.query,
+                span.update(
+                    output={
+                        "hit": True,
                         "score": round(best_score, 4),
-                        "action": best_entry.action,
+                        "action": best_entry.action.value,
                     }
-                ),
-            )
-            return best_entry, best_score
+                )
+                logger.info(
+                    "STAGE SemanticCache.lookup SEMANTIC HIT: %s",
+                    dump_json(
+                        {
+                            "query": cleaned,
+                            "matched_query": best_entry.query,
+                            "score": round(best_score, 4),
+                            "action": best_entry.action,
+                        }
+                    ),
+                )
+                return best_entry, best_score
 
-        metrics_collector.record_cache_miss()
-        return None
+            metrics_collector.record_cache_miss()
+            span.update(output={"hit": False, "best_score": round(best_score, 4)})
+            return None
 
     async def store(self, query: str, action: RouterAction, reply: str) -> None:
         """Store a response in cache only if `action` is cacheable (CONSULTANT or FAQ)."""
@@ -123,26 +140,34 @@ class SemanticCache:
         if not cleaned or not reply.strip() or not self.is_cacheable(action):
             return
 
-        now = time.monotonic()
-        self._evict_expired(now)
+        with trace_observation(
+            "SemanticCache.store",
+            as_type="span",
+            input={"query": cleaned, "action": action.value},
+        ) as span:
+            now = time.monotonic()
+            self._evict_expired(now)
 
-        embedding = await self._embeddings.get_embedding(cleaned)
-        if len(self._entries) >= self._max_entries:
-            self._entries.pop(0)
+            embedding = await self._embeddings.get_embedding(cleaned)
+            if len(self._entries) >= self._max_entries:
+                self._entries.pop(0)
 
-        self._entries.append(
-            SemanticCacheEntry(
-                query=cleaned,
-                embedding=embedding,
-                action=action,
-                reply=reply,
-                created_at=now,
+            self._entries.append(
+                SemanticCacheEntry(
+                    query=cleaned,
+                    embedding=embedding,
+                    action=action,
+                    reply=reply,
+                    created_at=now,
+                )
             )
-        )
-        logger.info(
-            "STAGE SemanticCache.store SAVED: %s",
-            dump_json({"query": cleaned, "action": action, "total_entries": len(self._entries)}),
-        )
+            span.update(output={"stored": True, "total_entries": len(self._entries)})
+            logger.info(
+                "STAGE SemanticCache.store SAVED: %s",
+                dump_json(
+                    {"query": cleaned, "action": action, "total_entries": len(self._entries)}
+                ),
+            )
 
     def clear(self) -> None:
         self._entries.clear()

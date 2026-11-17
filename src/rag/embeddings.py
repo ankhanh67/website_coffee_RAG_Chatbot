@@ -8,6 +8,7 @@ from pydantic import SecretStr
 
 from src.exceptions import ModelServiceUnavailableError
 from src.observability.logging import dump_json
+from src.observability.tracing import trace_observation
 
 logger = logging.getLogger(__name__)
 
@@ -45,20 +46,33 @@ class EmbeddingsClient:
         if not texts:
             return []
 
+        input_payload = {"count": len(texts), "model": self.model, "dimensions": self.dimensions}
         logger.info(
             "STAGE EmbeddingsClient.get_embeddings_batch INPUT: %s",
-            dump_json({"count": len(texts), "model": self.model, "dimensions": self.dimensions}),
+            dump_json(input_payload),
         )
-        try:
-            vectors = await self._embeddings.aembed_documents(texts)
-            logger.info(
-                "STAGE EmbeddingsClient.get_embeddings_batch OUTPUT: %s",
-                dump_json({"count": len(vectors), "dimensions": len(vectors[0]) if vectors else 0}),
-            )
-            return vectors
-        except (OpenAIError, ValueError, TypeError, RuntimeError) as e:
-            logger.error("Failed to generate embeddings: %s", e)
-            raise ModelServiceUnavailableError(f"Embedding generation failed: {e}") from e
+        with trace_observation(
+            "EmbeddingsClient.get_embeddings_batch",
+            as_type="embedding",
+            model=self.model,
+            input=input_payload,
+        ) as span:
+            try:
+                vectors = await self._embeddings.aembed_documents(texts)
+                output_summary = {
+                    "count": len(vectors),
+                    "dimensions": len(vectors[0]) if vectors else 0,
+                }
+                span.update(output=output_summary)
+                logger.info(
+                    "STAGE EmbeddingsClient.get_embeddings_batch OUTPUT: %s",
+                    dump_json(output_summary),
+                )
+                return vectors
+            except (OpenAIError, ValueError, TypeError, RuntimeError) as e:
+                span.update(level="ERROR", status_message=str(e))
+                logger.error("Failed to generate embeddings: %s", e)
+                raise ModelServiceUnavailableError(f"Embedding generation failed: {e}") from e
 
     async def aclose(self) -> None:
         async_client = getattr(self._embeddings, "async_client", None)

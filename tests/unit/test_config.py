@@ -15,6 +15,25 @@ def test_defaults_load():
     assert s.vector_dimensions == 768
     assert s.cache_similarity_threshold == 0.90
     assert s.llm_api_key.get_secret_value() == "k"
+    assert s.langfuse_public_key is None
+    assert s.langfuse_secret_key is None
+    assert s.langfuse_base_url == "http://localhost:3000"
+    assert s.langfuse_tracing_enabled is True
+
+
+def test_langfuse_custom_settings():
+    s = make(
+        langfuse_public_key="pk-lf-123",
+        langfuse_secret_key="sk-lf-456",
+        langfuse_base_url="https://us.cloud.langfuse.com",
+        langfuse_tracing_enabled=False,
+    )
+    assert s.langfuse_public_key is not None
+    assert s.langfuse_public_key.get_secret_value() == "pk-lf-123"
+    assert s.langfuse_secret_key is not None
+    assert s.langfuse_secret_key.get_secret_value() == "sk-lf-456"
+    assert s.langfuse_base_url == "https://us.cloud.langfuse.com"
+    assert s.langfuse_tracing_enabled is False
 
 
 def test_secrets_hidden_in_repr():

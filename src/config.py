@@ -33,6 +33,12 @@ class Settings(BaseSettings):
     cache_similarity_threshold: float = Field(0.90, ge=0.0, le=1.0)
     router_confidence_threshold: float = Field(0.5, ge=0.0, le=1.0)
 
+    # Langfuse Observability / Tracing (Self-hosted via docker-compose at http://localhost:3000)
+    langfuse_public_key: SecretStr | None = None
+    langfuse_secret_key: SecretStr | None = None
+    langfuse_base_url: str = "http://localhost:3000"
+    langfuse_tracing_enabled: bool = True
+
 
 @lru_cache
 def get_settings() -> Settings:

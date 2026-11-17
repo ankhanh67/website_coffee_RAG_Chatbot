@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from src.exceptions import ModelServiceUnavailableError, RouterOutputError
 from src.infrastructure.model_client import ModelClient
 from src.observability.logging import dump_json
+from src.observability.tracing import trace_observation
 from src.prompt.router import ROUTE_QUESTION_KEY, build_router_questions
 from src.schema.router import RouterAction, RouterDecision
 
@@ -21,33 +22,43 @@ class Router:
         self._questions = build_router_questions()
 
     async def route(self, message: str) -> RouterDecision:
-        logger.info(
-            "STAGE Router.route INPUT: %s",
-            dump_json({"message": message, "model": self._model, "threshold": self._threshold}),
-        )
-        try:
-            raw = await self._client.decide(self._model, {"message": message}, self._questions)
-            decision = self._parse(raw)
-        except (ModelServiceUnavailableError, RouterOutputError) as e:
-            fallback = RouterDecision(action=RouterAction.IGNORE, confidence=0.0, is_fallback=True)
-            logger.warning(
-                "STAGE Router.route FALLBACK (error=%s) OUTPUT: %s",
-                e,
-                dump_json(fallback.model_dump(mode="json")),
-            )
-            return fallback
+        input_payload = {"message": message, "model": self._model, "threshold": self._threshold}
+        logger.info("STAGE Router.route INPUT: %s", dump_json(input_payload))
+        with trace_observation("Router.route", as_type="span", input=input_payload) as span:
+            try:
+                raw = await self._client.decide(self._model, {"message": message}, self._questions)
+                decision = self._parse(raw)
+            except (ModelServiceUnavailableError, RouterOutputError) as e:
+                fallback = RouterDecision(
+                    action=RouterAction.IGNORE, confidence=0.0, is_fallback=True
+                )
+                span.update(
+                    output=fallback.model_dump(mode="json"),
+                    level="WARNING",
+                    status_message=str(e),
+                )
+                logger.warning(
+                    "STAGE Router.route FALLBACK (error=%s) OUTPUT: %s",
+                    e,
+                    dump_json(fallback.model_dump(mode="json")),
+                )
+                return fallback
 
-        if decision.confidence < self._threshold:
-            fallback = decision.model_copy(update={"action": RouterAction.IGNORE, "is_fallback": True})
-            logger.info(
-                "STAGE Router.route FALLBACK (low_confidence=%.2f < %.2f) OUTPUT: %s",
-                decision.confidence,
-                self._threshold,
-                dump_json(fallback.model_dump(mode="json")),
-            )
-            return fallback
-        logger.info("STAGE Router.route OUTPUT: %s", dump_json(decision.model_dump(mode="json")))
-        return decision
+            if decision.confidence < self._threshold:
+                fallback = decision.model_copy(
+                    update={"action": RouterAction.IGNORE, "is_fallback": True}
+                )
+                span.update(output=fallback.model_dump(mode="json"))
+                logger.info(
+                    "STAGE Router.route FALLBACK (low_confidence=%.2f < %.2f) OUTPUT: %s",
+                    decision.confidence,
+                    self._threshold,
+                    dump_json(fallback.model_dump(mode="json")),
+                )
+                return fallback
+            span.update(output=decision.model_dump(mode="json"))
+            logger.info("STAGE Router.route OUTPUT: %s", dump_json(decision.model_dump(mode="json")))
+            return decision
 
     @staticmethod
     def _parse(raw: dict) -> RouterDecision:

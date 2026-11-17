@@ -9,6 +9,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langgraph.checkpoint.memory import InMemorySaver
 
 from src.observability.logging import dump_json
+from src.observability.tracing import get_langchain_callbacks, trace_observation
 from src.prompt.order_agent import ORDER_AGENT_SYSTEM_PROMPT
 from src.schema.order import OrderExtraction, OrderIntentType, OrderItemInput
 from src.schema.router import RouterAction
@@ -121,28 +122,33 @@ class OrderAgent(BaseSubAgent):
         return self._order_service.has_pending_order(session_id)
 
     async def handle(self, message: str, session_id: str) -> str:
-        logger.info(
-            "STAGE OrderAgent.handle INPUT: %s",
-            dump_json({"session_id": session_id, "message": message, "model": self._model}),
-        )
-        chat_model = self._resolve_chat_model()
-        tools = build_order_tools(self._order_service, session_id)
-        agent = create_agent(
-            model=chat_model,
-            tools=tools,
-            system_prompt=ORDER_AGENT_SYSTEM_PROMPT,
-            checkpointer=self._checkpointer,
-        )
+        input_payload = {"session_id": session_id, "message": message, "model": self._model}
+        logger.info("STAGE OrderAgent.handle INPUT: %s", dump_json(input_payload))
+        with trace_observation("OrderAgent.handle", as_type="agent", input=input_payload) as span:
+            chat_model = self._resolve_chat_model()
+            tools = build_order_tools(self._order_service, session_id)
+            agent = create_agent(
+                model=chat_model,
+                tools=tools,
+                system_prompt=ORDER_AGENT_SYSTEM_PROMPT,
+                checkpointer=self._checkpointer,
+            )
 
-        result = await agent.ainvoke(
-            {"messages": [{"role": "user", "content": message}]},
-            config={"configurable": {"thread_id": f"order:{session_id}"}},
-        )
-        messages = result.get("messages", [])
-        reply = str(messages[-1].content).strip() if messages else ""
+            invoke_config: dict[str, Any] = {"configurable": {"thread_id": f"order:{session_id}"}}
+            callbacks = get_langchain_callbacks()
+            if callbacks:
+                invoke_config["callbacks"] = callbacks
 
-        logger.info(
-            "STAGE OrderAgent.handle OUTPUT: %s",
-            dump_json({"session_id": session_id, "reply": reply}),
-        )
-        return reply
+            result = await agent.ainvoke(
+                {"messages": [{"role": "user", "content": message}]},
+                config=invoke_config,
+            )
+            messages = result.get("messages", [])
+            reply = str(messages[-1].content).strip() if messages else ""
+
+            span.update(output={"reply": reply})
+            logger.info(
+                "STAGE OrderAgent.handle OUTPUT: %s",
+                dump_json({"session_id": session_id, "reply": reply}),
+            )
+            return reply

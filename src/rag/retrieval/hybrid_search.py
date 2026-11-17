@@ -4,6 +4,7 @@ import logging
 from typing import Protocol
 
 from src.observability.logging import dump_json
+from src.observability.tracing import trace_observation
 from src.rag.retrieval.base import BaseRetriever
 from src.rag.retrieval.graph_search import GraphSearcher, GraphSearchRepository
 from src.rag.retrieval.reranker import HybridReranker
@@ -52,60 +53,56 @@ class HybridRetriever(BaseRetriever):
         if not cleaned_query:
             return HybridRetrievalResult(query=query, items=[], has_sufficient_evidence=False)
 
-        logger.info(
-            "STAGE HybridRetriever.retrieve INPUT: %s",
-            dump_json(
-                {
-                    "query": cleaned_query,
-                    "top_k": top_k,
-                    "include_menu": include_menu,
-                    "include_chunks": include_chunks,
-                    "expand_graph": expand_graph,
-                }
-            ),
-        )
-        embedding = await self._embeddings.get_embedding(cleaned_query)
+        input_payload = {
+            "query": cleaned_query,
+            "top_k": top_k,
+            "include_menu": include_menu,
+            "include_chunks": include_chunks,
+            "expand_graph": expand_graph,
+        }
+        logger.info("STAGE HybridRetriever.retrieve INPUT: %s", dump_json(input_payload))
+        with trace_observation(
+            "HybridRetriever.retrieve", as_type="retriever", input=input_payload
+        ) as span:
+            embedding = await self._embeddings.get_embedding(cleaned_query)
 
-        candidate_k = max(top_k * 2, 12)
-        vector_items = await self._vector_searcher.search_all(
-            embedding=embedding,
-            top_k=candidate_k,
-            min_score=self._min_score,
-            include_menu=include_menu,
-            include_chunks=include_chunks,
-        )
+            candidate_k = max(top_k * 2, 12)
+            vector_items = await self._vector_searcher.search_all(
+                embedding=embedding,
+                top_k=candidate_k,
+                min_score=self._min_score,
+                include_menu=include_menu,
+                include_chunks=include_chunks,
+            )
 
-        # Sort initial vector items by score descending before picking graph expansion seeds
-        vector_items.sort(key=lambda x: x.score, reverse=True)
+            # Sort initial vector items by score descending before picking graph expansion seeds
+            vector_items.sort(key=lambda x: x.score, reverse=True)
 
-        graph_items = []
-        if expand_graph and include_chunks and vector_items:
-            graph_items = await self._graph_searcher.expand(vector_items)
+            graph_items = []
+            if expand_graph and include_chunks and vector_items:
+                graph_items = await self._graph_searcher.expand(vector_items)
 
-        ranked_items = self._reranker.rerank(
-            query=cleaned_query,
-            vector_items=vector_items,
-            graph_items=graph_items,
-            top_k=top_k,
-        )
+            ranked_items = self._reranker.rerank(
+                query=cleaned_query,
+                vector_items=vector_items,
+                graph_items=graph_items,
+                top_k=top_k,
+            )
 
-        has_evidence = bool(
-            ranked_items and ranked_items[0].score >= self._evidence_threshold
-        )
+            has_evidence = bool(
+                ranked_items and ranked_items[0].score >= self._evidence_threshold
+            )
 
-        result = HybridRetrievalResult(
-            query=cleaned_query,
-            items=ranked_items,
-            has_sufficient_evidence=has_evidence,
-        )
-        logger.info(
-            "STAGE HybridRetriever.retrieve OUTPUT: %s",
-            dump_json(
-                {
-                    "count": len(ranked_items),
-                    "has_sufficient_evidence": has_evidence,
-                    "top_ids": [item.node_id for item in ranked_items],
-                }
-            ),
-        )
-        return result
+            result = HybridRetrievalResult(
+                query=cleaned_query,
+                items=ranked_items,
+                has_sufficient_evidence=has_evidence,
+            )
+            output_summary = {
+                "count": len(ranked_items),
+                "has_sufficient_evidence": has_evidence,
+                "top_ids": [item.node_id for item in ranked_items],
+            }
+            span.update(output=output_summary)
+            logger.info("STAGE HybridRetriever.retrieve OUTPUT: %s", dump_json(output_summary))
+            return result

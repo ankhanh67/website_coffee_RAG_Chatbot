@@ -124,4 +124,10 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - `src/api/streaming.py` & `POST /api/v1/chat/stream`: Stream token theo thời gian thực qua Server-Sent Events (SSE).
   - Giao diện Web Chat (`GET /`) hỗ trợ đọc stream trực tiếp hiển thị mượt mà.
   - Toàn bộ **127/127 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
+- **[x] Observability — Langfuse Distributed Tracing (`src/observability/tracing.py` & `docker-compose.yml`):**
+  - Bổ sung `docker-compose.yml` (Langfuse v3 self-hosted gồm `langfuse-web`, `langfuse-worker`, `postgres`, `clickhouse`, `redis`, `minio`) tại `http://localhost:3000` kèm cấu hình Headless Init tự tạo tài khoản `admin@coffee.local` / `AdminCoffee123!` và cặp key `pk-lf-website-coffee-local` / `sk-lf-website-coffee-local`.
+  - Bổ sung dependency `langfuse` qua `uv add langfuse` và các biến cấu hình `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, `LANGFUSE_BASE_URL` (mặc định `http://localhost:3000`), `LANGFUSE_TRACING_ENABLED` trong `src/config.py`, `.env.example`, và `.env`.
+  - Tạo `src/observability/tracing.py` (`configure_tracing`, `shutdown_tracing`, `trace_chat_request`, `trace_observation`, `get_langchain_callbacks`), tự động chạy ở chế độ no-op an toàn khi chưa điền key hoặc khi chạy `pytest`.
+  - Gắn tracing hợp nhất toàn bộ 1 lượt chat vào 1 root trace `chat_request` (kèm `session_id` và `job_id`), bao gồm cả các bước ngoài LangChain (`Router.route`, `ModelClient.decide`, `SemanticCache.lookup`/`store`, `HybridRetriever.retrieve`, `EmbeddingsClient.get_embeddings_batch`) và `CallbackHandler` cho `DeepAgent`, `OrderAgent`, `ConsultantAgent`, `FAQAgent`, `ModelClient`.
+  - Toàn bộ **138/138 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
 

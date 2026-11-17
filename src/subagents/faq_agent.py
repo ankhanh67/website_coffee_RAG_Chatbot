@@ -9,6 +9,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langgraph.checkpoint.memory import InMemorySaver
 
 from src.observability.logging import dump_json
+from src.observability.tracing import get_langchain_callbacks, trace_observation
 from src.prompt.faq_agent import FAQ_AGENT_SYSTEM_PROMPT
 from src.rag.retrieval.base import BaseRetriever
 from src.schema.router import RouterAction
@@ -67,28 +68,33 @@ class FAQAgent(BaseSubAgent):
         return self._model_client.get_chat_model(model=self._model, temperature=0.1)
 
     async def handle(self, message: str, session_id: str) -> str:
-        logger.info(
-            "STAGE FAQAgent.handle INPUT: %s",
-            dump_json({"session_id": session_id, "message": message, "model": self._model}),
-        )
-        chat_model = self._resolve_chat_model()
-        tools = build_faq_tools(self._retriever, top_k=self._top_k)
-        agent = create_agent(
-            model=chat_model,
-            tools=tools,
-            system_prompt=FAQ_AGENT_SYSTEM_PROMPT,
-            checkpointer=self._checkpointer,
-        )
+        input_payload = {"session_id": session_id, "message": message, "model": self._model}
+        logger.info("STAGE FAQAgent.handle INPUT: %s", dump_json(input_payload))
+        with trace_observation("FAQAgent.handle", as_type="agent", input=input_payload) as span:
+            chat_model = self._resolve_chat_model()
+            tools = build_faq_tools(self._retriever, top_k=self._top_k)
+            agent = create_agent(
+                model=chat_model,
+                tools=tools,
+                system_prompt=FAQ_AGENT_SYSTEM_PROMPT,
+                checkpointer=self._checkpointer,
+            )
 
-        result = await agent.ainvoke(
-            {"messages": [{"role": "user", "content": message}]},
-            config={"configurable": {"thread_id": f"faq:{session_id}"}},
-        )
-        messages = result.get("messages", [])
-        reply = str(messages[-1].content).strip() if messages else ""
+            invoke_config: dict[str, Any] = {"configurable": {"thread_id": f"faq:{session_id}"}}
+            callbacks = get_langchain_callbacks()
+            if callbacks:
+                invoke_config["callbacks"] = callbacks
 
-        logger.info(
-            "STAGE FAQAgent.handle OUTPUT: %s",
-            dump_json({"session_id": session_id, "reply": reply}),
-        )
-        return reply
+            result = await agent.ainvoke(
+                {"messages": [{"role": "user", "content": message}]},
+                config=invoke_config,
+            )
+            messages = result.get("messages", [])
+            reply = str(messages[-1].content).strip() if messages else ""
+
+            span.update(output={"reply": reply})
+            logger.info(
+                "STAGE FAQAgent.handle OUTPUT: %s",
+                dump_json({"session_id": session_id, "reply": reply}),
+            )
+            return reply

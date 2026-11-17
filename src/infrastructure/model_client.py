@@ -18,6 +18,7 @@ from src.agent.llm import (
 )
 from src.exceptions import ModelServiceUnavailableError
 from src.observability.logging import dump_json
+from src.observability.tracing import get_langchain_callbacks, trace_observation
 
 logger = logging.getLogger(__name__)
 RETRYABLE_STATUS = {408, 429, 500, 502, 503, 504}
@@ -113,7 +114,24 @@ class ModelClient:
     async def decide(self, model: str, state: dict, questions: dict) -> dict:
         """Call a System One model (Jev). Returns the raw JSON response (answers, usage, ...)."""
         payload = {"model": model, "state": state, "questions": questions}
-        return await self._post_with_retry(self._decisions_url, payload, "ModelClient.decide")
+        with trace_observation(
+            "ModelClient.decide",
+            as_type="generation",
+            model=model,
+            input={"state": state, "questions": questions},
+        ) as gen:
+            raw = await self._post_with_retry(self._decisions_url, payload, "ModelClient.decide")
+            usage_raw = raw.get("usage") if isinstance(raw, dict) else None
+            usage_details = (
+                {k: int(v) for k, v in usage_raw.items() if isinstance(v, int)}
+                if isinstance(usage_raw, dict)
+                else None
+            )
+            gen.update(
+                output=raw.get("answers", raw) if isinstance(raw, dict) else raw,
+                usage_details=usage_details or None,
+            )
+            return raw
 
     async def generate_text(
         self,
@@ -131,8 +149,11 @@ class ModelClient:
         try:
             chat_model = self.get_chat_model(model=model, temperature=temperature)
             chain = build_text_chain(chat_model)
+            callbacks = get_langchain_callbacks()
+            config: dict[str, Any] | None = {"callbacks": callbacks} if callbacks else None
             reply = await chain.ainvoke(
-                {"system_prompt": system_prompt, "user_message": user_message}
+                {"system_prompt": system_prompt, "user_message": user_message},
+                config=config,
             )
             elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
             logger.info(
@@ -171,8 +192,11 @@ class ModelClient:
                 model_kwargs={"response_format": {"type": "json_object"}},
             )
             chain = build_structured_chain(chat_model, response_model)
+            callbacks = get_langchain_callbacks()
+            config: dict[str, Any] | None = {"callbacks": callbacks} if callbacks else None
             result = await chain.ainvoke(
-                {"system_prompt": system_prompt, "user_message": user_message}
+                {"system_prompt": system_prompt, "user_message": user_message},
+                config=config,
             )
             elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
             logger.info(

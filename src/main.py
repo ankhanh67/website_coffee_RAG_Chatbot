@@ -13,6 +13,7 @@ from src.api.routes.health import router as health_router
 from src.api.routes.metrics import router as metrics_router
 from src.api.routes.ui import router as ui_router
 from src.observability.logging import setup_logging
+from src.observability.tracing import configure_tracing, shutdown_tracing
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -20,7 +21,9 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    configure_tracing()
     yield
+    shutdown_tracing()
     if get_model_client.cache_info().currsize:
         await get_model_client().aclose()
         get_model_client.cache_clear()

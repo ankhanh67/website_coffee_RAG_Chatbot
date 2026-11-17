@@ -14,6 +14,7 @@ from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
 from src.exceptions import AgentExecutionError
 from src.observability.logging import dump_json
+from src.observability.tracing import get_langchain_callbacks, trace_observation
 from src.prompt.deep_agent import DEEP_AGENT_SYSTEM_PROMPT
 from src.rag.cache.semantic_cache import SemanticCache
 from src.schema.chat import ChatRequest, ChatResponse
@@ -168,91 +169,109 @@ class DeepAgent:
         return bool(callable(has_pending) and has_pending(session_id))
 
     async def handle(self, request: ChatRequest) -> ChatResponse:
-        logger.info(
-            "STAGE DeepAgent.handle INPUT: %s", dump_json(request.model_dump(mode="json"))
-        )
-        decision = await self._router.route(request.message)
-        action = decision.action
+        req_dump = request.model_dump(mode="json")
+        logger.info("STAGE DeepAgent.handle INPUT: %s", dump_json(req_dump))
+        with trace_observation("DeepAgent.handle", as_type="agent", input=req_dump) as agent_span:
+            decision = await self._router.route(request.message)
+            action = decision.action
 
-        if action is RouterAction.IGNORE and self._should_override_ignore_to_order(
-            request.session_id, request.message
-        ):
-            logger.info(
-                "STAGE DeepAgent.handle OVERRIDE: ignore -> order (pending order confirmation for session_id=%s)",
-                request.session_id,
-            )
-            action = RouterAction.ORDER
-        elif (
-            action is RouterAction.IGNORE
-            and request.session_id in self._seen_sessions
-            and self._model_client is not None
-        ):
-            logger.info(
-                "STAGE DeepAgent.handle OVERRIDE: ignore -> consultant (active multi-turn session_id=%s)",
-                request.session_id,
-            )
-            action = RouterAction.CONSULTANT
+            if action is RouterAction.IGNORE and self._should_override_ignore_to_order(
+                request.session_id, request.message
+            ):
+                logger.info(
+                    "STAGE DeepAgent.handle OVERRIDE: ignore -> order (pending order confirmation for session_id=%s)",
+                    request.session_id,
+                )
+                action = RouterAction.ORDER
+            elif (
+                action is RouterAction.IGNORE
+                and request.session_id in self._seen_sessions
+                and self._model_client is not None
+            ):
+                logger.info(
+                    "STAGE DeepAgent.handle OVERRIDE: ignore -> consultant (active multi-turn session_id=%s)",
+                    request.session_id,
+                )
+                action = RouterAction.CONSULTANT
 
-        if action is RouterAction.IGNORE:
-            response = ChatResponse(
-                session_id=request.session_id,
-                action=RouterAction.IGNORE,
-                reply=self._ignore_reply,
-            )
-            logger.info(
-                "STAGE DeepAgent.handle OUTPUT (ignore): %s",
-                dump_json(response.model_dump(mode="json")),
-            )
-            return response
-
-        # Check SemanticCache only for non-stateful routes (CONSULTANT / FAQ)
-        if self._semantic_cache is not None and self._semantic_cache.is_cacheable(action):
-            cached = await self._semantic_cache.lookup(request.message)
-            if cached is not None:
-                entry, _ = cached
+            if action is RouterAction.IGNORE:
                 response = ChatResponse(
                     session_id=request.session_id,
-                    action=entry.action,
-                    reply=entry.reply,
+                    action=RouterAction.IGNORE,
+                    reply=self._ignore_reply,
                 )
+                agent_span.update(output=response.model_dump(mode="json"))
                 logger.info(
-                    "STAGE DeepAgent.handle OUTPUT (cache_hit): %s",
+                    "STAGE DeepAgent.handle OUTPUT (ignore): %s",
                     dump_json(response.model_dump(mode="json")),
                 )
                 return response
 
-        called_actions: list[RouterAction] = []
-        tools = build_subagent_tools(self._registry, request.session_id, called_actions)
-        chat_model = self._resolve_chat_model(action, request.message)
+            # Check SemanticCache only for non-stateful routes (CONSULTANT / FAQ)
+            if self._semantic_cache is not None and self._semantic_cache.is_cacheable(action):
+                cached = await self._semantic_cache.lookup(request.message)
+                if cached is not None:
+                    entry, score = cached
+                    response = ChatResponse(
+                        session_id=request.session_id,
+                        action=entry.action,
+                        reply=entry.reply,
+                    )
+                    agent_span.update(
+                        output=response.model_dump(mode="json"),
+                        metadata={"cache_hit": True, "cache_score": round(score, 4)},
+                    )
+                    logger.info(
+                        "STAGE DeepAgent.handle OUTPUT (cache_hit): %s",
+                        dump_json(response.model_dump(mode="json")),
+                    )
+                    return response
 
-        supervisor_agent = create_agent(
-            model=chat_model,
-            tools=tools,
-            system_prompt=f"{DEEP_AGENT_SYSTEM_PROMPT}\nGợi ý phân luồng từ Router: {action.value}",
-            checkpointer=self._checkpointer,
-        )
+            called_actions: list[RouterAction] = []
+            tools = build_subagent_tools(self._registry, request.session_id, called_actions)
+            chat_model = self._resolve_chat_model(action, request.message)
 
-        result = await supervisor_agent.ainvoke(
-            {"messages": [{"role": "user", "content": request.message}]},
-            config={"configurable": {"thread_id": f"supervisor:{request.session_id}"}},
-        )
-        self._seen_sessions.add(request.session_id)
-        messages = result.get("messages", [])
-        reply = str(messages[-1].content).strip() if messages else ""
-        final_action = called_actions[-1] if called_actions else action
+            supervisor_agent = create_agent(
+                model=chat_model,
+                tools=tools,
+                system_prompt=f"{DEEP_AGENT_SYSTEM_PROMPT}\nGợi ý phân luồng từ Router: {action.value}",
+                checkpointer=self._checkpointer,
+            )
 
-        # Store in SemanticCache only when a single cacheable intent was executed (never ORDER)
-        if (
-            self._semantic_cache is not None
-            and RouterAction.ORDER not in called_actions
-            and self._semantic_cache.is_cacheable(final_action)
-        ):
-            await self._semantic_cache.store(request.message, final_action, reply)
+            invoke_config: dict[str, Any] = {
+                "configurable": {"thread_id": f"supervisor:{request.session_id}"}
+            }
+            callbacks = get_langchain_callbacks()
+            if callbacks:
+                invoke_config["callbacks"] = callbacks
 
-        response = ChatResponse(
-            session_id=request.session_id,
-            action=final_action,
-            reply=reply,
-        )
-        logger.info("STAGE DeepAgent.handle OUTPUT: %s", dump_json(response.model_dump(mode="json")))
-        return response
+            result = await supervisor_agent.ainvoke(
+                {"messages": [{"role": "user", "content": request.message}]},
+                config=invoke_config,
+            )
+            self._seen_sessions.add(request.session_id)
+            messages = result.get("messages", [])
+            reply = str(messages[-1].content).strip() if messages else ""
+            final_action = called_actions[-1] if called_actions else action
+
+            # Store in SemanticCache only when a single cacheable intent was executed (never ORDER)
+            if (
+                self._semantic_cache is not None
+                and RouterAction.ORDER not in called_actions
+                and self._semantic_cache.is_cacheable(final_action)
+            ):
+                await self._semantic_cache.store(request.message, final_action, reply)
+
+            response = ChatResponse(
+                session_id=request.session_id,
+                action=final_action,
+                reply=reply,
+            )
+            agent_span.update(
+                output=response.model_dump(mode="json"),
+                metadata={"cache_hit": False, "routed_action": action.value},
+            )
+            logger.info(
+                "STAGE DeepAgent.handle OUTPUT: %s", dump_json(response.model_dump(mode="json"))
+            )
+            return response
