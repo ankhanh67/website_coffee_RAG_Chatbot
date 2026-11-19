@@ -3,9 +3,11 @@
 import asyncio
 import logging
 import time
-from typing import Any, TypeVar
+from collections.abc import Mapping
+from typing import TypeVar
 
 import httpx2 as httpx
+from langchain_core.runnables import RunnableConfig
 from langchain_openai import ChatOpenAI
 from openai import OpenAIError
 from pydantic import BaseModel, ValidationError
@@ -55,7 +57,7 @@ class ModelClient:
         self,
         model: str,
         temperature: float = 0.0,
-        model_kwargs: dict[str, Any] | None = None,
+        model_kwargs: dict[str, object] | None = None,
     ) -> ChatOpenAI:
         """Create a LangChain ChatOpenAI instance sharing this client's async HTTP transport."""
         return build_chat_model(
@@ -69,7 +71,12 @@ class ModelClient:
             model_kwargs=model_kwargs,
         )
 
-    async def _post_with_retry(self, url: str, payload: dict, stage_name: str) -> dict:
+    async def _post_with_retry(
+        self,
+        url: str,
+        payload: dict[str, object],
+        stage_name: str,
+    ) -> dict[str, object]:
         logger.info("STAGE %s INPUT: %s", stage_name, dump_json({"url": url, "payload": payload}))
         last_error = ""
         for attempt in range(self._max_retries + 1):
@@ -100,7 +107,7 @@ class ModelClient:
                     resp.text[:300],
                 )
                 raise ModelServiceUnavailableError(f"HTTP {resp.status_code}: {resp.text[:200]}")
-            data = resp.json()
+            data: dict[str, object] = resp.json()
             logger.info(
                 "STAGE %s OUTPUT: %s",
                 stage_name,
@@ -111,9 +118,14 @@ class ModelClient:
             f"{stage_name} failed after {self._max_retries + 1} attempts: {last_error}"
         )
 
-    async def decide(self, model: str, state: dict, questions: dict) -> dict:
+    async def decide(
+        self,
+        model: str,
+        state: Mapping[str, object],
+        questions: Mapping[str, object],
+    ) -> dict[str, object]:
         """Call a System One model (Jev). Returns the raw JSON response (answers, usage, ...)."""
-        payload = {"model": model, "state": state, "questions": questions}
+        payload: dict[str, object] = {"model": model, "state": dict(state), "questions": dict(questions)}
         with trace_observation(
             "ModelClient.decide",
             as_type="generation",
@@ -150,7 +162,7 @@ class ModelClient:
             chat_model = self.get_chat_model(model=model, temperature=temperature)
             chain = build_text_chain(chat_model)
             callbacks = get_langchain_callbacks()
-            config: dict[str, Any] | None = {"callbacks": callbacks} if callbacks else None
+            config: RunnableConfig | None = {"callbacks": callbacks} if callbacks else None
             reply = await chain.ainvoke(
                 {"system_prompt": system_prompt, "user_message": user_message},
                 config=config,
@@ -193,7 +205,7 @@ class ModelClient:
             )
             chain = build_structured_chain(chat_model, response_model)
             callbacks = get_langchain_callbacks()
-            config: dict[str, Any] | None = {"callbacks": callbacks} if callbacks else None
+            config: RunnableConfig | None = {"callbacks": callbacks} if callbacks else None
             result = await chain.ainvoke(
                 {"system_prompt": system_prompt, "user_message": user_message},
                 config=config,

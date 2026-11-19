@@ -1,9 +1,10 @@
-"""LangChain ChatOpenAI and LCEL chain builders for OpenRouter LLM interactions."""
+"""LangChain ChatOpenAI, ChatModelProvider protocol, and LCEL chain builders."""
 
 import re
-from typing import Any, TypeVar
+from typing import Protocol, TypeVar
 
 import httpx2 as httpx
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableLambda
@@ -13,6 +14,28 @@ from pydantic import BaseModel, SecretStr
 T = TypeVar("T", bound=BaseModel)
 
 _CODE_FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
+
+
+class ChatModelProvider(Protocol):
+    """Protocol for any client capable of constructing a configured LangChain `BaseChatModel`."""
+
+    def get_chat_model(
+        self,
+        model: str,
+        temperature: float = 0.0,
+        model_kwargs: dict[str, object] | None = None,
+    ) -> BaseChatModel: ...
+
+
+def resolve_chat_model(
+    provider: ChatModelProvider | BaseChatModel,
+    model: str,
+    temperature: float = 0.0,
+) -> BaseChatModel:
+    """Return `provider` directly if it is a `BaseChatModel`, else request a configured model."""
+    if isinstance(provider, BaseChatModel):
+        return provider
+    return provider.get_chat_model(model=model, temperature=temperature)
 
 
 def strip_json_fences(raw: str) -> str:
@@ -41,7 +64,7 @@ def build_chat_model(
     timeout_seconds: float = 30.0,
     max_retries: int = 2,
     http_async_client: httpx.AsyncClient | None = None,
-    model_kwargs: dict[str, Any] | None = None,
+    model_kwargs: dict[str, object] | None = None,
 ) -> ChatOpenAI:
     """Instantiate a LangChain ChatOpenAI model pointing to OpenRouter."""
     return ChatOpenAI(
@@ -52,11 +75,11 @@ def build_chat_model(
         timeout=timeout_seconds,
         max_retries=max_retries,
         http_async_client=http_async_client,
-        model_kwargs=model_kwargs or {},
+        model_kwargs=dict(model_kwargs) if model_kwargs else {},
     )
 
 
-def build_text_chain(chat_model: ChatOpenAI) -> Runnable[dict[str, Any], str]:
+def build_text_chain(chat_model: ChatOpenAI) -> Runnable[dict[str, str], str]:
     """Build an LCEL chain: ChatPromptTemplate | ChatOpenAI | StrOutputParser."""
     prompt = build_chat_prompt()
     return prompt | chat_model | StrOutputParser() | RunnableLambda(lambda s: s.strip())
@@ -65,7 +88,7 @@ def build_text_chain(chat_model: ChatOpenAI) -> Runnable[dict[str, Any], str]:
 def build_structured_chain(
     chat_model: ChatOpenAI,
     response_model: type[T],
-) -> Runnable[dict[str, Any], T]:
+) -> Runnable[dict[str, str], T]:
     """Build an LCEL chain that parses and validates LLM JSON output into a Pydantic model."""
     prompt = build_chat_prompt()
 

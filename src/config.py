@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     llm_max_retries: int = Field(2, ge=0)
     cache_similarity_threshold: float = Field(0.90, ge=0.0, le=1.0)
     router_confidence_threshold: float = Field(0.5, ge=0.0, le=1.0)
+    rag_min_score: float = Field(0.60, ge=0.0, le=1.0)
+    rag_evidence_threshold: float = Field(0.70, ge=0.0, le=1.0)
 
     # Langfuse Observability / Tracing (Self-hosted via docker-compose at http://localhost:3000)
     langfuse_public_key: SecretStr | None = None

@@ -1,6 +1,7 @@
 """Route a customer message to order / consultant / faq / ignore using Jev."""
 
 import logging
+from collections.abc import Mapping
 
 from pydantic import ValidationError
 
@@ -61,13 +62,19 @@ class Router:
             return decision
 
     @staticmethod
-    def _parse(raw: dict) -> RouterDecision:
+    def _parse(raw: Mapping[str, object]) -> RouterDecision:
         try:
-            answer = raw["answers"][ROUTE_QUESTION_KEY]
+            answers = raw["answers"]
+            if not isinstance(answers, Mapping):
+                raise TypeError("answers must be a mapping")
+            answer = answers[ROUTE_QUESTION_KEY]
+            if not isinstance(answer, Mapping):
+                raise TypeError("route answer must be a mapping")
+            probabilities = answer.get("probabilities", {})
             return RouterDecision(
                 action=answer["choice"],
                 confidence=answer["confidence"],
-                probabilities=answer.get("probabilities", {}),
+                probabilities=probabilities if isinstance(probabilities, Mapping) else {},
             )
         except (KeyError, TypeError, ValidationError) as e:
             raise RouterOutputError(f"Unexpected Jev response: {raw!r:.300}") from e

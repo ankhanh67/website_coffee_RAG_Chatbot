@@ -1,34 +1,21 @@
-"""OrderAgent built with `langchain.agents.create_agent` and `@tool`."""
+"""OrderAgent built with `ToolEnabledSubAgent` and `@tool`."""
 
-import logging
-from typing import Any, Protocol
+from collections.abc import Sequence
 
-from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_core.tools import BaseTool
 from langgraph.checkpoint.memory import InMemorySaver
 
-from src.observability.logging import dump_json
-from src.observability.tracing import get_langchain_callbacks, trace_observation
+from src.agent.llm import ChatModelProvider
 from src.prompt.order_agent import ORDER_AGENT_SYSTEM_PROMPT
 from src.schema.order import OrderExtraction, OrderIntentType, OrderItemInput
 from src.schema.router import RouterAction
 from src.services.order_service import OrderService
-from src.subagents.base import BaseSubAgent
-
-logger = logging.getLogger(__name__)
+from src.subagents.base import ToolEnabledSubAgent
 
 
-class ChatModelProvider(Protocol):
-    def get_chat_model(
-        self,
-        model: str,
-        temperature: float = 0.0,
-        model_kwargs: dict[str, Any] | None = None,
-    ) -> BaseChatModel: ...
-
-
-def build_order_tools(order_service: OrderService, session_id: str) -> list[Any]:
+def build_order_tools(order_service: OrderService, session_id: str) -> list[BaseTool]:
     """Create LangChain `@tool` functions bound to `order_service` and `session_id`."""
 
     @tool
@@ -98,8 +85,10 @@ def build_order_tools(order_service: OrderService, session_id: str) -> list[Any]
     ]
 
 
-class OrderAgent(BaseSubAgent):
+class OrderAgent(ToolEnabledSubAgent):
     action = RouterAction.ORDER
+    system_prompt = ORDER_AGENT_SYSTEM_PROMPT
+    default_temperature = 0.2
 
     def __init__(
         self,
@@ -108,47 +97,11 @@ class OrderAgent(BaseSubAgent):
         model: str = "google/gemini-2.5-flash",
         checkpointer: InMemorySaver | None = None,
     ) -> None:
-        self._model_client = model_client
+        super().__init__(model_client=model_client, model=model, checkpointer=checkpointer)
         self._order_service = order_service
-        self._model = model
-        self._checkpointer = checkpointer or InMemorySaver()
-
-    def _resolve_chat_model(self) -> BaseChatModel:
-        if isinstance(self._model_client, BaseChatModel):
-            return self._model_client
-        return self._model_client.get_chat_model(model=self._model, temperature=0.2)
 
     def has_pending_order(self, session_id: str) -> bool:
         return self._order_service.has_pending_order(session_id)
 
-    async def handle(self, message: str, session_id: str) -> str:
-        input_payload = {"session_id": session_id, "message": message, "model": self._model}
-        logger.info("STAGE OrderAgent.handle INPUT: %s", dump_json(input_payload))
-        with trace_observation("OrderAgent.handle", as_type="agent", input=input_payload) as span:
-            chat_model = self._resolve_chat_model()
-            tools = build_order_tools(self._order_service, session_id)
-            agent = create_agent(
-                model=chat_model,
-                tools=tools,
-                system_prompt=ORDER_AGENT_SYSTEM_PROMPT,
-                checkpointer=self._checkpointer,
-            )
-
-            invoke_config: dict[str, Any] = {"configurable": {"thread_id": f"order:{session_id}"}}
-            callbacks = get_langchain_callbacks()
-            if callbacks:
-                invoke_config["callbacks"] = callbacks
-
-            result = await agent.ainvoke(
-                {"messages": [{"role": "user", "content": message}]},
-                config=invoke_config,
-            )
-            messages = result.get("messages", [])
-            reply = str(messages[-1].content).strip() if messages else ""
-
-            span.update(output={"reply": reply})
-            logger.info(
-                "STAGE OrderAgent.handle OUTPUT: %s",
-                dump_json({"session_id": session_id, "reply": reply}),
-            )
-            return reply
+    def _build_tools(self, session_id: str) -> Sequence[BaseTool]:
+        return build_order_tools(self._order_service, session_id)

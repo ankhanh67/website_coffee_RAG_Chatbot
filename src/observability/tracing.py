@@ -4,8 +4,9 @@ import logging
 import os
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any
+from typing import Protocol
 
+from langchain_core.callbacks import BaseCallbackHandler
 from langfuse import Langfuse, ObservationTypeLiteral, propagate_attributes
 from langfuse._client.resource_manager import LangfuseResourceManager
 from langfuse.langchain import CallbackHandler
@@ -21,13 +22,20 @@ _langfuse_client: Langfuse | None = None
 _initialized: bool = False
 
 
+class ObservationHandle(Protocol):
+    """Protocol for an active Langfuse observation or a safe no-op fallback."""
+
+    def update(self, **kwargs: object) -> object: ...
+    def score(self, **kwargs: object) -> object: ...
+
+
 class _NoOpObservation:
     """No-op observation object returned when Langfuse tracing is disabled."""
 
-    def update(self, **_: Any) -> "_NoOpObservation":
+    def update(self, **_: object) -> "_NoOpObservation":
         return self
 
-    def score(self, **_: Any) -> "_NoOpObservation":
+    def score(self, **_: object) -> "_NoOpObservation":
         return self
 
 
@@ -98,7 +106,7 @@ def shutdown_tracing() -> None:
     _initialized = False
 
 
-def get_langchain_callbacks() -> list[Any]:
+def get_langchain_callbacks() -> list[BaseCallbackHandler]:
     """Return a list containing a Langfuse `CallbackHandler` if tracing is enabled, else `[]`."""
     client = get_langfuse_client()
     if client is None or client._resources is None:
@@ -111,7 +119,7 @@ def trace_chat_request(
     session_id: str,
     message: str,
     job_id: str | None = None,
-) -> Iterator[Any]:
+) -> Iterator[ObservationHandle]:
     """Start the root Langfuse trace span for a customer chat turn with propagated session & job metadata."""
     client = get_langfuse_client()
     if client is None:
@@ -141,17 +149,17 @@ def trace_observation(
     name: str,
     *,
     as_type: ObservationTypeLiteral = "span",
-    input: Any = None,
+    input: object = None,
     model: str | None = None,
-    metadata: dict[str, Any] | None = None,
-) -> Iterator[Any]:
+    metadata: dict[str, object] | None = None,
+) -> Iterator[ObservationHandle]:
     """Create a nested Langfuse observation (span, generation, retriever, embedding, etc.)."""
     client = get_langfuse_client()
     if client is None:
         yield _NOOP_OBSERVATION
         return
 
-    kwargs: dict[str, Any] = {
+    kwargs: dict[str, object] = {
         "name": name,
         "as_type": as_type,
         "input": input,

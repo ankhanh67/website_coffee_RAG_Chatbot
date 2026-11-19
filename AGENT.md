@@ -130,4 +130,9 @@ Tài liệu này lưu lại toàn bộ quyết định kỹ thuật, trạng th�
   - Tạo `src/observability/tracing.py` (`configure_tracing`, `shutdown_tracing`, `trace_chat_request`, `trace_observation`, `get_langchain_callbacks`), tự động chạy ở chế độ no-op an toàn khi chưa điền key hoặc khi chạy `pytest`.
   - Gắn tracing hợp nhất toàn bộ 1 lượt chat vào 1 root trace `chat_request` (kèm `session_id` và `job_id`), bao gồm cả các bước ngoài LangChain (`Router.route`, `ModelClient.decide`, `SemanticCache.lookup`/`store`, `HybridRetriever.retrieve`, `EmbeddingsClient.get_embeddings_batch`) và `CallbackHandler` cho `DeepAgent`, `OrderAgent`, `ConsultantAgent`, `FAQAgent`, `ModelClient`.
   - Toàn bộ **138/138 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
+- **[x] Refactor — Chuẩn hóa DRY & Explicit Types theo `AGENTS.md`:**
+  - Tạo `ChatModelProvider` & `resolve_chat_model` dùng chung trong `src/agent/llm.py` và lớp cơ sở `ToolEnabledSubAgent` trong `src/subagents/base.py`, xóa bỏ toàn bộ code lặp khởi tạo/gọi `create_agent` ở `OrderAgent`, `ConsultantAgent`, `FAQAgent` và `DeepAgent`.
+  - Định kiểu tường minh (`Pydantic` / `TypedDict` / `Protocol` / `RunnableConfig`), loại bỏ `dict[str, Any]` và `# noqa: BLE001` ở `src/api/routes/health.py`, `src/api/routes/metrics.py`, `src/prompt/router.py`, `src/infrastructure/model_client.py`, `src/observability/tracing.py`, `src/observability/logging.py`, `src/api/streaming.py`.
+  - Đưa ngưỡng RAG (`rag_min_score`, `rag_evidence_threshold`) về `Settings` trong `src/config.py`.
+  - Toàn bộ **140/140 tests (`unit` + `e2e`) pass**, `ruff check` sạch.
 

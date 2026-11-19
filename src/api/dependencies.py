@@ -71,11 +71,12 @@ def get_order_service() -> OrderService:
 
 @lru_cache
 def get_hybrid_retriever() -> HybridRetriever:
+    s = get_settings()
     return HybridRetriever(
         repository=get_neo4j_repository(),
         embeddings_client=get_embeddings_client(),
-        min_score=0.60,
-        evidence_threshold=0.70,
+        min_score=s.rag_min_score,
+        evidence_threshold=s.rag_evidence_threshold,
     )
 
 

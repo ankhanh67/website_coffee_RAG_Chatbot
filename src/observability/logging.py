@@ -7,7 +7,6 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 from uuid import uuid4
 
 DEFAULT_LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
@@ -17,9 +16,9 @@ _current_job_id: ContextVar[str | None] = ContextVar("current_job_id", default=N
 _current_job_date: ContextVar[str | None] = ContextVar("current_job_date", default=None)
 
 
-def dump_json(data: Any) -> str:
+def dump_json(payload: object) -> str:
     """Serialize any dict/model/value as single-line UTF-8 JSON for detailed stage logs."""
-    return json.dumps(data, ensure_ascii=False, default=str)
+    return json.dumps(payload, ensure_ascii=False, default=str)
 
 
 def get_job_id() -> str | None:

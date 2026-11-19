@@ -14,6 +14,8 @@ def test_defaults_load():
     s = make()
     assert s.vector_dimensions == 768
     assert s.cache_similarity_threshold == 0.90
+    assert s.rag_min_score == 0.60
+    assert s.rag_evidence_threshold == 0.70
     assert s.llm_api_key.get_secret_value() == "k"
     assert s.langfuse_public_key is None
     assert s.langfuse_secret_key is None
@@ -45,6 +47,8 @@ def test_secrets_hidden_in_repr():
     [
         ("cache_similarity_threshold", 1.5),
         ("cache_similarity_threshold", -0.1),
+        ("rag_min_score", 1.2),
+        ("rag_evidence_threshold", -0.5),
         ("llm_timeout_seconds", 0),
         ("vector_dimensions", 0),
         ("llm_max_retries", -1),

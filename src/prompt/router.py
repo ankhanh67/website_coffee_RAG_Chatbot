@@ -1,8 +1,19 @@
 """Jev `choice` question used to route a customer message to one of 4 flows."""
 
+from typing import Literal, TypedDict
+
 from src.schema.router import RouterAction
 
 ROUTE_QUESTION_KEY = "route"
+
+
+class RouterChoiceQuestion(TypedDict):
+    type: Literal["choice"]
+    instructions: str
+    criteria: dict[str, str]
+
+
+RouterQuestionsMap = dict[str, RouterChoiceQuestion]
 
 ROUTER_INSTRUCTIONS = (
     "Bạn là bộ phân luồng cho chatbot của một chuỗi quán cà phê. "
@@ -30,7 +41,7 @@ ROUTER_CRITERIA: dict[RouterAction, str] = {
 }
 
 
-def build_router_questions() -> dict:
+def build_router_questions() -> RouterQuestionsMap:
     return {
         ROUTE_QUESTION_KEY: {
             "type": "choice",

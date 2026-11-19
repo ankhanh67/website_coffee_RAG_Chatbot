@@ -1,8 +1,7 @@
 """Server-Sent Events (SSE) streaming helpers for the chat endpoint."""
 
 import asyncio
-from collections.abc import AsyncIterator
-from typing import Any
+from collections.abc import AsyncIterator, Mapping
 
 from src.observability.logging import dump_json
 from src.schema.chat import ChatRequest
@@ -10,9 +9,9 @@ from src.services.chat_service import ChatService
 from src.services.tts_service import TTSService
 
 
-def format_sse(data: dict[str, Any]) -> str:
+def format_sse(payload: Mapping[str, object]) -> str:
     """Format dictionary into standard Server-Sent Event data line."""
-    return f"data: {dump_json(data)}\n\n"
+    return f"data: {dump_json(payload)}\n\n"
 
 
 async def stream_chat_response(

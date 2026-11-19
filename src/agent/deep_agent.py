@@ -1,15 +1,19 @@
 """Supervisor Agent (DeepAgent) built with `langchain.agents.create_agent` and `@tool` subagents."""
 
 import logging
-from typing import Any, Protocol
+from collections.abc import Sequence
 
 from langchain.agents import create_agent
 from langchain.tools import tool
+from langchain_core.callbacks import Callbacks
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
+from langchain_core.runnables import RunnableConfig
+from langchain_core.tools import BaseTool
 from langgraph.checkpoint.memory import InMemorySaver
 
+from src.agent.llm import ChatModelProvider, resolve_chat_model
 from src.agent.router import Router
 from src.agent.subagent_registry import SubAgentRegistry
 from src.exceptions import AgentExecutionError
@@ -33,15 +37,6 @@ _ACTION_TO_TOOL_NAME: dict[RouterAction, str] = {
 }
 
 
-class ChatModelProvider(Protocol):
-    def get_chat_model(
-        self,
-        model: str,
-        temperature: float = 0.0,
-        model_kwargs: dict[str, Any] | None = None,
-    ) -> BaseChatModel: ...
-
-
 class _RouterGuidedChatModel(BaseChatModel):
     """Lightweight BaseChatModel adapter that dispatches the Jev Router decision as a tool call when no external LLM is injected."""
 
@@ -52,16 +47,18 @@ class _RouterGuidedChatModel(BaseChatModel):
     def _llm_type(self) -> str:
         return "router-guided-chat-model"
 
-    def bind_tools(self, tools: Any, **kwargs: Any) -> BaseChatModel:
+    def bind_tools(self, tools: Sequence[object], **kwargs: object) -> BaseChatModel:
+        del tools, kwargs
         return self
 
     def _generate(
         self,
         messages: list[BaseMessage],
         stop: list[str] | None = None,
-        run_manager: Any = None,
-        **kwargs: Any,
+        run_manager: Callbacks = None,
+        **kwargs: object,
     ) -> ChatResult:
+        del stop, run_manager, kwargs
         # Look only at messages since the latest HumanMessage in this turn
         last_human_idx = -1
         for i, m in enumerate(messages):
@@ -90,7 +87,7 @@ def build_subagent_tools(
     registry: SubAgentRegistry,
     session_id: str,
     called_actions: list[RouterAction],
-) -> list[Any]:
+) -> list[BaseTool]:
     """Wrap registered SubAgents as LangChain `@tool` functions for the DeepAgent supervisor."""
 
     @tool
@@ -150,10 +147,8 @@ class DeepAgent:
         self._seen_sessions: set[str] = set()
 
     def _resolve_chat_model(self, routed_action: RouterAction, message: str) -> BaseChatModel:
-        if isinstance(self._model_client, BaseChatModel):
-            return self._model_client
         if self._model_client is not None:
-            return self._model_client.get_chat_model(model=self._model, temperature=0.0)
+            return resolve_chat_model(self._model_client, model=self._model, temperature=0.0)
         target_tool = _ACTION_TO_TOOL_NAME.get(routed_action, "call_faq_agent")
         return _RouterGuidedChatModel(target_tool=target_tool, query=message)
 
@@ -238,7 +233,7 @@ class DeepAgent:
                 checkpointer=self._checkpointer,
             )
 
-            invoke_config: dict[str, Any] = {
+            invoke_config: RunnableConfig = {
                 "configurable": {"thread_id": f"supervisor:{request.session_id}"}
             }
             callbacks = get_langchain_callbacks()
