@@ -1,6 +1,7 @@
 """Deterministic OrderService: menu matching (Text + Vector fallback), pricing, and cart state machine."""
 
 import logging
+from collections.abc import Sequence
 from typing import Literal, Protocol
 
 from src.observability.logging import dump_json
@@ -122,9 +123,9 @@ class OrderService:
 
     @staticmethod
     def _calculate_totals(
-        items: list[MenuMatch],
+        items: Sequence[MenuMatch],
         status: OrderStatus,
-        unmatched_items: list[str] | None = None,
+        unmatched_items: Sequence[str] = (),
         message_hint: str = "",
     ) -> OrderCalculation:
         subtotal = sum(item.line_total_vnd for item in items)
@@ -134,7 +135,7 @@ class OrderService:
             subtotal_vnd=subtotal,
             discount_vnd=0,
             total_vnd=subtotal,
-            unmatched_items=list(unmatched_items or []),
+            unmatched_items=list(unmatched_items),
             message_hint=message_hint,
         )
 

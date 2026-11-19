@@ -43,7 +43,7 @@ async def rate_limit_and_metrics_middleware(
         )
 
     # Bind Job ID Context & Record Metrics
-    with job_context(request.headers.get("X-Job-ID")) as job_id:
+    with job_context(request.headers.get("X-Job-ID", "")) as job_id:
         t0 = time.perf_counter()
         metrics_collector.record_request_start()
         logger.info(

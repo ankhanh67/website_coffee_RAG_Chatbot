@@ -12,8 +12,8 @@ from uuid import uuid4
 DEFAULT_LOG_DIR = Path(__file__).resolve().parents[2] / "logs"
 LOG_FORMAT = "%(asctime)s | %(levelname)-7s | [%(job_id)s] %(name)s | %(message)s"
 
-_current_job_id: ContextVar[str | None] = ContextVar("current_job_id", default=None)
-_current_job_date: ContextVar[str | None] = ContextVar("current_job_date", default=None)
+_current_job_id: ContextVar[str] = ContextVar("current_job_id", default="")
+_current_job_date: ContextVar[str] = ContextVar("current_job_date", default="")
 
 
 def dump_json(payload: object) -> str:
@@ -21,12 +21,12 @@ def dump_json(payload: object) -> str:
     return json.dumps(payload, ensure_ascii=False, default=str)
 
 
-def get_job_id() -> str | None:
+def get_job_id() -> str:
     return _current_job_id.get()
 
 
 @contextmanager
-def job_context(job_id: str | None = None) -> Iterator[str]:
+def job_context(job_id: str = "") -> Iterator[str]:
     """Bind a job_id for the duration of a request/task so all logs go to its own file."""
     now = datetime.now()
     active_id = job_id or f"{now.strftime('%H%M%S')}_{uuid4().hex[:8]}"

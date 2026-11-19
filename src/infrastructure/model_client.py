@@ -4,6 +4,7 @@ import asyncio
 import logging
 import time
 from collections.abc import Mapping
+from types import MappingProxyType
 from typing import TypeVar
 
 import httpx2 as httpx
@@ -25,6 +26,7 @@ from src.observability.tracing import get_langchain_callbacks, trace_observation
 logger = logging.getLogger(__name__)
 RETRYABLE_STATUS = {408, 429, 500, 502, 503, 504}
 T = TypeVar("T", bound=BaseModel)
+_EMPTY_MODEL_KWARGS: Mapping[str, object] = MappingProxyType({})
 
 # Keep backward-compatible helper alias
 _strip_json_fences = strip_json_fences
@@ -57,7 +59,7 @@ class ModelClient:
         self,
         model: str,
         temperature: float = 0.0,
-        model_kwargs: dict[str, object] | None = None,
+        model_kwargs: Mapping[str, object] = _EMPTY_MODEL_KWARGS,
     ) -> ChatOpenAI:
         """Create a LangChain ChatOpenAI instance sharing this client's async HTTP transport."""
         return build_chat_model(
@@ -125,7 +127,11 @@ class ModelClient:
         questions: Mapping[str, object],
     ) -> dict[str, object]:
         """Call a System One model (Jev). Returns the raw JSON response (answers, usage, ...)."""
-        payload: dict[str, object] = {"model": model, "state": dict(state), "questions": dict(questions)}
+        payload: dict[str, object] = {
+            "model": model,
+            "state": dict(state),
+            "questions": dict(questions),
+        }
         with trace_observation(
             "ModelClient.decide",
             as_type="generation",
@@ -133,16 +139,16 @@ class ModelClient:
             input={"state": state, "questions": questions},
         ) as gen:
             raw = await self._post_with_retry(self._decisions_url, payload, "ModelClient.decide")
-            usage_raw = raw.get("usage") if isinstance(raw, dict) else None
-            usage_details = (
+            usage_raw = raw.get("usage")
+            usage_details: dict[str, int] = (
                 {k: int(v) for k, v in usage_raw.items() if isinstance(v, int)}
-                if isinstance(usage_raw, dict)
-                else None
+                if isinstance(usage_raw, Mapping)
+                else {}
             )
-            gen.update(
-                output=raw.get("answers", raw) if isinstance(raw, dict) else raw,
-                usage_details=usage_details or None,
-            )
+            update_kwargs: dict[str, object] = {"output": raw.get("answers", raw)}
+            if usage_details:
+                update_kwargs["usage_details"] = usage_details
+            gen.update(**update_kwargs)
             return raw
 
     async def generate_text(
@@ -161,8 +167,7 @@ class ModelClient:
         try:
             chat_model = self.get_chat_model(model=model, temperature=temperature)
             chain = build_text_chain(chat_model)
-            callbacks = get_langchain_callbacks()
-            config: RunnableConfig | None = {"callbacks": callbacks} if callbacks else None
+            config: RunnableConfig = {"callbacks": get_langchain_callbacks()}
             reply = await chain.ainvoke(
                 {"system_prompt": system_prompt, "user_message": user_message},
                 config=config,
@@ -204,8 +209,7 @@ class ModelClient:
                 model_kwargs={"response_format": {"type": "json_object"}},
             )
             chain = build_structured_chain(chat_model, response_model)
-            callbacks = get_langchain_callbacks()
-            config: RunnableConfig | None = {"callbacks": callbacks} if callbacks else None
+            config: RunnableConfig = {"callbacks": get_langchain_callbacks()}
             result = await chain.ainvoke(
                 {"system_prompt": system_prompt, "user_message": user_message},
                 config=config,

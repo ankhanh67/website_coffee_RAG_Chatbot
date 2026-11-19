@@ -1,6 +1,8 @@
 """LangChain ChatOpenAI, ChatModelProvider protocol, and LCEL chain builders."""
 
 import re
+from collections.abc import Mapping
+from types import MappingProxyType
 from typing import Protocol, TypeVar
 
 import httpx2 as httpx
@@ -14,6 +16,7 @@ from pydantic import BaseModel, SecretStr
 T = TypeVar("T", bound=BaseModel)
 
 _CODE_FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
+_EMPTY_MODEL_KWARGS: Mapping[str, object] = MappingProxyType({})
 
 
 class ChatModelProvider(Protocol):
@@ -23,7 +26,7 @@ class ChatModelProvider(Protocol):
         self,
         model: str,
         temperature: float = 0.0,
-        model_kwargs: dict[str, object] | None = None,
+        model_kwargs: Mapping[str, object] = _EMPTY_MODEL_KWARGS,
     ) -> BaseChatModel: ...
 
 
@@ -63,8 +66,9 @@ def build_chat_model(
     temperature: float = 0.0,
     timeout_seconds: float = 30.0,
     max_retries: int = 2,
-    http_async_client: httpx.AsyncClient | None = None,
-    model_kwargs: dict[str, object] | None = None,
+    *,
+    http_async_client: httpx.AsyncClient,
+    model_kwargs: Mapping[str, object] = _EMPTY_MODEL_KWARGS,
 ) -> ChatOpenAI:
     """Instantiate a LangChain ChatOpenAI model pointing to OpenRouter."""
     return ChatOpenAI(
@@ -75,7 +79,7 @@ def build_chat_model(
         timeout=timeout_seconds,
         max_retries=max_retries,
         http_async_client=http_async_client,
-        model_kwargs=dict(model_kwargs) if model_kwargs else {},
+        model_kwargs=dict(model_kwargs),
     )
 
 

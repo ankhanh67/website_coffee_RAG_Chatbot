@@ -2,8 +2,9 @@
 
 import logging
 import os
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
+from types import MappingProxyType
 from typing import Protocol
 
 from langchain_core.callbacks import BaseCallbackHandler
@@ -40,6 +41,7 @@ class _NoOpObservation:
 
 
 _NOOP_OBSERVATION = _NoOpObservation()
+_EMPTY_METADATA: Mapping[str, object] = MappingProxyType({})
 
 
 def configure_tracing(
@@ -118,7 +120,7 @@ def get_langchain_callbacks() -> list[BaseCallbackHandler]:
 def trace_chat_request(
     session_id: str,
     message: str,
-    job_id: str | None = None,
+    job_id: str = "",
 ) -> Iterator[ObservationHandle]:
     """Start the root Langfuse trace span for a customer chat turn with propagated session & job metadata."""
     client = get_langfuse_client()
@@ -126,7 +128,7 @@ def trace_chat_request(
         yield _NOOP_OBSERVATION
         return
 
-    meta = {"job_id": job_id} if job_id else None
+    meta: dict[str, str] = {"job_id": job_id} if job_id else {}
     with (
         client.start_as_current_observation(
             as_type="span",
@@ -149,9 +151,9 @@ def trace_observation(
     name: str,
     *,
     as_type: ObservationTypeLiteral = "span",
-    input: object = None,
-    model: str | None = None,
-    metadata: dict[str, object] | None = None,
+    input: object = "",
+    model: str = "",
+    metadata: Mapping[str, object] = _EMPTY_METADATA,
 ) -> Iterator[ObservationHandle]:
     """Create a nested Langfuse observation (span, generation, retriever, embedding, etc.)."""
     client = get_langfuse_client()
@@ -163,9 +165,10 @@ def trace_observation(
         "name": name,
         "as_type": as_type,
         "input": input,
-        "metadata": metadata,
     }
-    if model is not None and as_type in ("generation", "embedding"):
+    if metadata:
+        kwargs["metadata"] = dict(metadata)
+    if model and as_type in ("generation", "embedding"):
         kwargs["model"] = model
 
     with client.start_as_current_observation(**kwargs) as obs:

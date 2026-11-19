@@ -2,7 +2,7 @@
 
 import json
 import logging
-from typing import Any
+from collections.abc import Mapping
 
 from src.exceptions import RetrievalError
 from src.observability.logging import dump_json
@@ -13,7 +13,7 @@ from src.schema.retrieval import ChunkRecord, EntityRecord, MenuItemRecord
 logger = logging.getLogger(__name__)
 
 
-def _parse_chunk_dict(raw: dict[str, Any]) -> ChunkRecord:
+def _parse_chunk_dict(raw: Mapping[str, object]) -> ChunkRecord:
     data = dict(raw)
     meta = data.get("metadata")
     if isinstance(meta, str):

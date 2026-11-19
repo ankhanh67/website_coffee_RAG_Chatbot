@@ -1,8 +1,8 @@
 """Pydantic schemas for Neo4j retrieval and graph entities."""
 
-from typing import Any
-
 from pydantic import BaseModel, Field
+
+MetadataValue = str | int | float | bool | list[str]
 
 
 class MenuItemRecord(BaseModel):
@@ -27,7 +27,7 @@ class MenuItemRecord(BaseModel):
 class VectorSearchResult(BaseModel):
     node_id: str
     score: float
-    properties: dict[str, Any] = Field(default_factory=dict)
+    properties: dict[str, MetadataValue] = Field(default_factory=dict)
 
 
 class ChunkRecord(BaseModel):
@@ -38,7 +38,7 @@ class ChunkRecord(BaseModel):
     doc_id: str = ""
     order: int = 0
     file: str = ""
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, MetadataValue] = Field(default_factory=dict)
 
 
 class EntityRecord(BaseModel):
@@ -54,7 +54,7 @@ class RetrievedItem(BaseModel):
     text: str
     score: float
     hop_type: str = "vector"
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, MetadataValue] = Field(default_factory=dict)
 
 
 class HybridRetrievalResult(BaseModel):
